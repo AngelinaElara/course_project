@@ -1,0 +1,4 @@
+{
+  "mongoUrl": "mongodb+srv://admin:123qwe@cluster0.jnbtzqk.mongodb.net/?retryWrites=true&w=majority",
+  "jwtSecret": "Fullstack"
+}
