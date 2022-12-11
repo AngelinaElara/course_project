@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react'
+import React, { useCallback, useMemo, useState, useEffect , useContext} from 'react'
 import { useDropzone } from 'react-dropzone'
+import {Context} from '../../../../context/Context'
 import CloseButton from 'react-bootstrap/CloseButton'
 
 const baseStyle = {
@@ -28,13 +29,21 @@ const rejectStyle = {
   borderColor: '#ff1744'
 }
 
-const DropzoneComponent = () => {
+const DropzoneComponent = ({
+  inputTitleValue
+}) => {
   const [files, setFiles] = useState([])
+
+  const context = useContext(Context)
 
   const onDrop = useCallback(acceptedFiles => {
     setFiles(acceptedFiles.map(file => Object.assign(file, {
       preview: URL.createObjectURL(file)
     })))
+    acceptedFiles.map(files => {
+      const file = URL.createObjectURL(files)
+      context.imageUrl = file
+    })
   }, [])
 
   const handleFilesDelete = () => {
@@ -80,7 +89,6 @@ const DropzoneComponent = () => {
 
   useEffect(() => () => {
     files.forEach(file => URL.revokeObjectURL(file.preview))
-    console.log(files)
   }, [files])
 
   return (

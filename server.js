@@ -11,7 +11,7 @@ app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/review', require('./routes/review.routes'))
 
 const PORT = 5000
-
+ 
 async function start() {
   try {
     await mongoose.connect(config.get('mongoUrl'), {

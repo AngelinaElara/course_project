@@ -19,6 +19,31 @@ const Authorization = () => {
   const [isFormReset, setIsFormReset] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
+  useEffect(() => {
+    if (isFormReset) {
+      setInputNameValue('')
+      setInputEmailValue('')
+      setInputPasswordValue('')
+      setInputConfirmPasswordValue('')
+    }
+  }, [isFormReset])
+
+  useEffect(() => {
+    if( validateInputNameValue(inputNameValue)
+      && validateInputEmailValue(inputEmailValue)
+      && validateInputPasswordValue(inputPasswordValue)
+      && inputPasswordValue === inputConfirmPasswordValue) {
+        setIsButtonDisabled(false)
+    } else {
+      setIsButtonDisabled(true)
+    }
+  }, [
+    inputNameValue,
+    inputEmailValue,
+    inputPasswordValue,
+    inputConfirmPasswordValue
+  ])
+
   const {loading, error, request} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
@@ -50,31 +75,6 @@ const Authorization = () => {
       : 'm-2 p-2 shadow-sm rounded border-danger'
     : 'm-2 p-2 shadow-sm rounded border border-light'
 
-  useEffect(() => {
-    if (isFormReset) {
-      setInputNameValue('')
-      setInputEmailValue('')
-      setInputPasswordValue('')
-      setInputConfirmPasswordValue('')
-    }
-  }, [isFormReset])
-
-  useEffect(() => {
-    if( validateInputNameValue(inputNameValue)
-      && validateInputEmailValue(inputEmailValue)
-      && validateInputPasswordValue(inputPasswordValue)
-      && inputPasswordValue === inputConfirmPasswordValue) {
-        setIsButtonDisabled(false)
-    } else {
-      setIsButtonDisabled(true)
-    }
-  }, [
-    inputNameValue,
-    inputEmailValue,
-    inputPasswordValue,
-    inputConfirmPasswordValue
-  ])
-
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     try {
@@ -85,8 +85,9 @@ const Authorization = () => {
           password: inputPasswordValue,
         }
         const data = await request('api/auth/register', 'POST', form)
+        console.log(data)
         setIsFormReset(true)
-        context.login(data.token, data.UserId)
+        context.login(data.token, data.UserId, data.name)
         navigate('/')
       }
     } catch (error) {

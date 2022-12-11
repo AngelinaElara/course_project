@@ -6,14 +6,14 @@ import { Container } from 'react-bootstrap'
 import { Context } from './context/Context'
 
 const App = () => {
-  const {token, login, logout, userId} = useAuth()
+  const {token, login, logout, userId, userName} = useAuth()
   const {ratingAuth, imageUrl} = useReview()
   const isAuth = !!token
   const routes = useRoutes(isAuth)
 
   return (
     <Context.Provider value={{
-      token, userId, login, logout, isAuth, ratingAuth, imageUrl
+      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl
     }}>
       <div style={{background: 'lavender'}}>
         {routes}

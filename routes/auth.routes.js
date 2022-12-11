@@ -43,7 +43,7 @@ router.post(
       {expiresIn: '1h'}
     )
 
-    res.json({token, UserId: user.id})
+    res.json({token, UserId: user.id, name})
   } catch (e) {
     res.status(500).json({message: 'Oooops. Something went wrong...'})
   }
@@ -93,7 +93,7 @@ router.post(
       {expiresIn: '1h'}
     )
 
-    res.json({token, UserId: user.id})
+    res.json({token, UserId: user.id, name})
   } catch (e) {
     res.status(500).json({message: 'Oooops. Something went wrong...'})
   }

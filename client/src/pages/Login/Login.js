@@ -21,10 +21,8 @@ const Login = () => {
         email: inputEmailValue,
         password: inputPasswordValue
       }     
-      console.log(form)
       const data = await request('/api/auth/login', 'POST', form)
-      console.log(data)
-      context.login(data.token, data.UserId)
+      context.login(data.token, data.UserId, data.name)
       navigate('/')
     } catch (error) {
       console.error(error)
