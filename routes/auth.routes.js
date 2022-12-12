@@ -4,6 +4,7 @@ const {check, validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
+const passport = require('passport')
 const router = Router()
 
 router.post(
@@ -31,11 +32,30 @@ router.post(
       return res.status(400).json({message: 'User with this email exists'})
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12)
+    if(password) {
+      const hashedPassword = await bcrypt.hash(password, 12)
+      const user = new User({name, email, password: hashedPassword})
+      await user.save()
 
-    const user = new User({name, email, password: hashedPassword})
+      const token = jwt.sign(
+      {userId: user.id},
+      config.jwtSecret,
+      {expiresIn: '1h'}
+      )
 
-    await user.save()
+      res.json({token, UserId: user.id, name})
+    } else {
+      const user = new User({name, email})
+      await user.save()
+
+      const token = jwt.sign(
+        {userId: user.id},
+        config.jwtSecret,
+        {expiresIn: '1h'}
+      )
+  
+      res.json({token, UserId: user.id, name})
+    }
 
     const token = jwt.sign(
       {userId: user.id},

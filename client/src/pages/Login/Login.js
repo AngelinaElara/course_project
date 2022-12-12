@@ -5,12 +5,22 @@ import { Context } from '../../context/Context'
 import {useHttp} from '../../hooks/http.hook'
 import {Link, useNavigate} from 'react-router-dom'
 import {GoogleLogin} from 'react-google-login'
+import { gapi } from 'gapi-script'
 
 const Login = () => {
   const [inputEmailValue, setInputEmailValue] = useState('')
   const [inputPasswordValue, setInputPasswordValue] = useState('')
 
-  const {loading, error, request} = useHttp()
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: '821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com',
+        scope: ''
+      })
+    }
+  }, [])
+
+  const {loading, request} = useHttp()
   const context = useContext(Context)
 
   const navigate = useNavigate()
@@ -21,12 +31,31 @@ const Login = () => {
         email: inputEmailValue,
         password: inputPasswordValue
       }     
-      const data = await request('/api/auth/login', 'POST', form)
+      const data = await request('/auth/login', 'POST', form)
       context.login(data.token, data.UserId, data.name)
       navigate('/')
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const onSucces = async (res) => {
+    console.log('Success', res.profileObj)
+    try {
+      const form = {
+        name: res.profileObj.givenName,
+        email: res.profileObj.email,
+      }
+      const data = await request('auth/register', 'POST', form)
+      context.login(data.token, data.UserId, data.name)
+      navigate('/')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onFailure = (res) => {
+    console.log('Login failed', res)
   }
 
   return (
@@ -61,6 +90,13 @@ const Login = () => {
         </Button>
       </Form>
       <p>Don't have an account? <Link to='/authorization'>Authorization</Link></p>
+      <GoogleLogin 
+        clientId={'821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com'}
+        onSuccess={onSucces}
+        onFailure={onFailure}
+        cookiePolicy={'single_host_origin'}
+        isSignedIn={true}
+      />
     </div>
   )
 }

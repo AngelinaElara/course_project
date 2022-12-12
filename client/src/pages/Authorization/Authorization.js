@@ -10,6 +10,8 @@ import {
 } from '../../utils/helpers'
 import { Context } from '../../context/Context'
 import { useAuth } from '../../hooks/auth.hook'
+import {GoogleLogin} from 'react-google-login'
+import { gapi } from 'gapi-script'
 
 const Authorization = () => {
   const [inputNameValue, setInputNameValue] = useState('')
@@ -43,6 +45,15 @@ const Authorization = () => {
     inputPasswordValue,
     inputConfirmPasswordValue
   ])
+
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: '821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com',
+        scope: ''
+      })
+    }
+  }, [])
 
   const {loading, error, request} = useHttp()
   const context = useContext(Context)
@@ -84,7 +95,7 @@ const Authorization = () => {
           email: inputEmailValue,
           password: inputPasswordValue,
         }
-        const data = await request('api/auth/register', 'POST', form)
+        const data = await request('auth/register', 'POST', form)
         console.log(data)
         setIsFormReset(true)
         context.login(data.token, data.UserId, data.name)
@@ -93,6 +104,25 @@ const Authorization = () => {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const onSucces = async (res) => {
+    console.log('Success')
+    try {
+      const form = {
+        name: res.profileObj.givenName,
+        email: res.profileObj.email,
+      }
+      const data = await request('auth/register', 'POST', form)
+      context.login(data.token, data.UserId, data.name)
+      navigate('/')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const onFailure = (res) => {
+    console.log('Login failed', res)
   }
 
   return (
@@ -147,6 +177,14 @@ const Authorization = () => {
         </Button >
       </Form>
       <p>Do you have account? <Link to='/login'>Login</Link></p>
+
+      <GoogleLogin 
+        clientId={'821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com'}
+        onSuccess={onSucces}
+        onFailure={onFailure}
+        cookiePolicy={'single_host_origin'}
+        isSignedIn={true}
+      />
     </div>
   )
 }
