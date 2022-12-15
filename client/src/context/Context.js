@@ -10,5 +10,6 @@ export const Context = createContext({
   logout: noop,
   isAuth: false,
   ratingAuth: null,
-  imageUrl: null
+  imageUrl: null,
+  lightTheme: true
 })

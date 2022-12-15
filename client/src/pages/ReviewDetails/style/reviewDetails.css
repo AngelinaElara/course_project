@@ -1,0 +1,19 @@
+.img-container {
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+} 
+
+@media(min-width: 690px) {
+  .img-container {
+    width: 350px;
+    height: 250px;
+  }
+}
+
+ @media(min-width: 930px) {
+  .img-container {
+    width: 450px;
+    height: 350px;
+  }
+}

@@ -3,6 +3,8 @@ import Main from '../pages/Main'
 import Login from '../pages/Login'
 import Authorization from '../pages/Authorization'
 import Review from '../pages/Review'
+import Profile from '../pages/Profile'
+import ReviewDetails from '../pages/ReviewDetails'
 
 export const useRoutes = (isAuth) => {
   if (isAuth) {
@@ -11,6 +13,8 @@ export const useRoutes = (isAuth) => {
         <Route path='*' element={<Main />} />
         <Route path='/' element={<Main />} />
         <Route path='/review' element={<Review />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile/:id' element={<ReviewDetails />} />
       </Routes>
     )
   }

@@ -20,41 +20,6 @@ const Authorization = () => {
   const [inputConfirmPasswordValue, setInputConfirmPasswordValue] = useState('')
   const [isFormReset, setIsFormReset] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
-
-  useEffect(() => {
-    if (isFormReset) {
-      setInputNameValue('')
-      setInputEmailValue('')
-      setInputPasswordValue('')
-      setInputConfirmPasswordValue('')
-    }
-  }, [isFormReset])
-
-  useEffect(() => {
-    if( validateInputNameValue(inputNameValue)
-      && validateInputEmailValue(inputEmailValue)
-      && validateInputPasswordValue(inputPasswordValue)
-      && inputPasswordValue === inputConfirmPasswordValue) {
-        setIsButtonDisabled(false)
-    } else {
-      setIsButtonDisabled(true)
-    }
-  }, [
-    inputNameValue,
-    inputEmailValue,
-    inputPasswordValue,
-    inputConfirmPasswordValue
-  ])
-
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId: '821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com',
-        scope: ''
-      })
-    }
-  }, [])
-
   const {loading, error, request} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
@@ -113,7 +78,7 @@ const Authorization = () => {
         name: res.profileObj.givenName,
         email: res.profileObj.email,
       }
-      const data = await request('auth/register', 'POST', form)
+      const data = await request('google/auth/login', 'POST', form)
       context.login(data.token, data.UserId, data.name)
       navigate('/')
     } catch (error) {
@@ -124,6 +89,40 @@ const Authorization = () => {
   const onFailure = (res) => {
     console.log('Login failed', res)
   }
+
+  useEffect(() => {
+    if (isFormReset) {
+      setInputNameValue('')
+      setInputEmailValue('')
+      setInputPasswordValue('')
+      setInputConfirmPasswordValue('')
+    }
+  }, [isFormReset])
+
+  useEffect(() => {
+    if( validateInputNameValue(inputNameValue)
+      && validateInputEmailValue(inputEmailValue)
+      && validateInputPasswordValue(inputPasswordValue)
+      && inputPasswordValue === inputConfirmPasswordValue) {
+        setIsButtonDisabled(false)
+    } else {
+      setIsButtonDisabled(true)
+    }
+  }, [
+    inputNameValue,
+    inputEmailValue,
+    inputPasswordValue,
+    inputConfirmPasswordValue
+  ])
+
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: process.env.REACT_APP_GOOGLE_ID,
+        scope: ''
+      })
+    }
+  }, [])
 
   return (
     <div className='d-flex flex-column justify-content-center align-items-center'>
@@ -179,7 +178,7 @@ const Authorization = () => {
       <p>Do you have account? <Link to='/login'>Login</Link></p>
 
       <GoogleLogin 
-        clientId={'821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com'}
+        clientId={process.env.REACT_APP_GOOGLE_ID}
         onSuccess={onSucces}
         onFailure={onFailure}
         cookiePolicy={'single_host_origin'}

@@ -1,6 +1,4 @@
 {
   "mongoUrl": "mongodb+srv://admin:123qwe@cluster0.jnbtzqk.mongodb.net/?retryWrites=true&w=majority",
-  "jwtSecret": "Fullstack",
-  "GOOGLE_CLIENT_ID": "821249073341-te07r8lu2hcjju3i271dn69mrqn1dsb6.apps.googleusercontent.com",
-  "GOOGLE_CLIENT_SECRET": "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"
+  "jwtSecret": "Fullstack"
 }

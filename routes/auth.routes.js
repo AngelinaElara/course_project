@@ -32,30 +32,10 @@ router.post(
       return res.status(400).json({message: 'User with this email exists'})
     }
 
-    if(password) {
-      const hashedPassword = await bcrypt.hash(password, 12)
-      const user = new User({name, email, password: hashedPassword})
-      await user.save()
+    const hashedPassword = await bcrypt.hash(password, 12)
+    const user = new User({name, email, password: hashedPassword})
 
-      const token = jwt.sign(
-      {userId: user.id},
-      config.jwtSecret,
-      {expiresIn: '1h'}
-      )
-
-      res.json({token, UserId: user.id, name})
-    } else {
-      const user = new User({name, email})
-      await user.save()
-
-      const token = jwt.sign(
-        {userId: user.id},
-        config.jwtSecret,
-        {expiresIn: '1h'}
-      )
-  
-      res.json({token, UserId: user.id, name})
-    }
+    await user.save()
 
     const token = jwt.sign(
       {userId: user.id},
@@ -93,12 +73,6 @@ router.post(
 
     if(!user) {
       return res.result(400).json({message: 'User was not find'})
-    }
-
-    const candidate = await User.findOne({email: email})
-
-    if (!candidate) {
-      return res.status(400).json({message: 'You account was disabled'})
     }
 
     const isMatch = bcrypt.compare(password, user.password) 

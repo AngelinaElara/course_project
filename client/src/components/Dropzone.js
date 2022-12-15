@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState, useEffect , useContext} from 'react'
 import { useDropzone } from 'react-dropzone'
-import {Context} from '../../../../context/Context'
+import {Context} from '../context/Context'
 import CloseButton from 'react-bootstrap/CloseButton'
 
 const baseStyle = {
@@ -10,7 +10,7 @@ const baseStyle = {
   padding: '20px',
   borderWidth: 2,
   borderRadius: 2,
-  borderColor: '#eeeeee',
+  borderColor: 'blue',
   borderStyle: 'dashed',
   backgroundColor: '#fafafa',
   color: '#bdbdbd',
@@ -29,9 +29,7 @@ const rejectStyle = {
   borderColor: '#ff1744'
 }
 
-const DropzoneComponent = ({
-  inputTitleValue
-}) => {
+const DropzoneComponent = () => {
   const [files, setFiles] = useState([])
 
   const context = useContext(Context)
@@ -41,8 +39,7 @@ const DropzoneComponent = ({
       preview: URL.createObjectURL(file)
     })))
     acceptedFiles.map(files => {
-      const file = URL.createObjectURL(files)
-      context.imageUrl = file
+      context.imageUrl = files
     })
   }, [])
 
@@ -73,11 +70,15 @@ const DropzoneComponent = ({
   ])
 
   const thumbs = files.map(file => (
-    <div key={file.name} style={{position: 'relative'}}>
+    <div 
+      key={file.name} 
+      style={{position: 'relative', width: '300px', height: '200px', overflow: 'hidden'}} 
+      className='d-flex justify-content-center align-items-center'
+    >
       <img
         src={file.preview}
         alt={file.name}
-        style={{width: '120px', height: '150px'}}
+        style={{height: '100%'}}
       />
       <CloseButton 
         style={{position: 'absolute', top: '0', right: '0'}}
@@ -92,11 +93,14 @@ const DropzoneComponent = ({
   }, [files])
 
   return (
-    <div className='d-flex flex-row gap-4'>
-      <div {...getRootProps({style})}>
-        <input {...getInputProps()} />
-        <div>Drag and drop your images here.</div>
-      </div>
+    <div className=''>
+      {files.length 
+        ? '' 
+        : <div {...getRootProps({style})}>
+            <input {...getInputProps()} />
+            <div>Drag and drop your images here.</div>
+          </div>
+      }
       <aside>
         {thumbs}
       </aside>

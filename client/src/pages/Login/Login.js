@@ -10,19 +10,8 @@ import { gapi } from 'gapi-script'
 const Login = () => {
   const [inputEmailValue, setInputEmailValue] = useState('')
   const [inputPasswordValue, setInputPasswordValue] = useState('')
-
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId: '821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com',
-        scope: ''
-      })
-    }
-  }, [])
-
   const {loading, request} = useHttp()
   const context = useContext(Context)
-
   const navigate = useNavigate()
 
   const handleFormSubmit = async () => {
@@ -40,13 +29,13 @@ const Login = () => {
   }
 
   const onSucces = async (res) => {
-    console.log('Success', res.profileObj)
+    console.log('Success')
     try {
       const form = {
         name: res.profileObj.givenName,
         email: res.profileObj.email,
       }
-      const data = await request('auth/register', 'POST', form)
+      const data = await request('google/auth/login', 'POST', form)
       context.login(data.token, data.UserId, data.name)
       navigate('/')
     } catch (error) {
@@ -57,6 +46,15 @@ const Login = () => {
   const onFailure = (res) => {
     console.log('Login failed', res)
   }
+
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId: process.env.REACT_APP_GOOGLE_ID,
+        scope: ''
+      })
+    }
+  }, [])
 
   return (
     <div className='d-flex flex-column justify-content-center align-items-center'>
@@ -91,7 +89,7 @@ const Login = () => {
       </Form>
       <p>Don't have an account? <Link to='/authorization'>Authorization</Link></p>
       <GoogleLogin 
-        clientId={'821249073341-h8c7v2inrg8gsrvj5qjkpg7bfge1ubn6.apps.googleusercontent.com'}
+        clientId={process.env.REACT_APP_GOOGLE_ID}
         onSuccess={onSucces}
         onFailure={onFailure}
         cookiePolicy={'single_host_origin'}

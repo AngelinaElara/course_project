@@ -1,5 +1,5 @@
 import {useState, useContext} from 'react'
-import {Context} from '../../../../context/Context'
+import {Context} from '../../context/Context'
 import './StarRating.css'
 
 const StarRating = ({
