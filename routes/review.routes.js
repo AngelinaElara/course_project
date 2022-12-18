@@ -1,4 +1,3 @@
-// toUTCString()
 const {Router} = require('express')
 const Review = require('../models/Review')
 const mongoose = require('mongoose')
@@ -6,7 +5,7 @@ const mongoose = require('mongoose')
 const router = Router()
 
 router.post('/create', async (req, res) => {
-  const {from, idFrom, title, category, description, tags, ratingAuth, randomId} = req.body
+  const {from, idFrom, title, category, description, tags, img, ratingAuth, randomId} = req.body
 
   try {
    const review = new Review({
@@ -15,7 +14,8 @@ router.post('/create', async (req, res) => {
     title,
     category, 
     description, 
-    tags, 
+    tags,
+    img,
     ratingAuth,
     randomId
   })
@@ -53,6 +53,15 @@ router.get('/:id', async (req, res) => {
   }  
 })
 
+router.get('/', async (req, res) => {
+  try {
+    const reviews = await Review.find()
+    res.json(reviews)
+  } catch (error) {
+    console.log(error)
+  }
+})
+ 
 router.delete('/', async (req, res) => {
   try { 
     const {id} = req.body
@@ -67,11 +76,9 @@ router.delete('/', async (req, res) => {
 router.patch('/change/:id', async (req, res) => {
   try {
     const {id} = req.params || {}
-    console.log(req.params)
-    console.log(req.body)
-    const {title, category, description, tags, ratingAuth} = req.body
+    const {title, category, description, tags, img, ratingAuth} = req.body
     if(!id) throw new Error('Wrong params!')
-    await Review.findByIdAndUpdate(id, { title: title, category: category, description: description, tags: tags, ratingAuth: ratingAuth},
+    await Review.findByIdAndUpdate(id, { title: title, category: category, description: description, tags: tags, img: img, ratingAuth: ratingAuth},
       function (err, docs) {
         if (err){ 
         console.log(err)

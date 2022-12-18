@@ -26,6 +26,9 @@ const Modal = ({
     contentType: 'image/jpeg',
   }
   const storageRef = ref(storage, `reviews/c${review.randomId}`)
+  const styleModal = context.lightTheme 
+    ? {border: '1px solid gray', borderRadius: '5px', background: 'white', width: '80%', padding: '10px', color: 'black'} 
+    : {border: '1px solid gray', borderRadius: '5px', background: '#A0A0A0', width: '80%', padding: '10px', color: 'white'}
 
   const handleAddTags = event => {
 		if (event.target.value !== '') {
@@ -42,7 +45,6 @@ const Modal = ({
   const handleCloseBtnClick = () => {
     setReview(false)
   }
-  console.log(inputTitleValue)
 
   const handleSubmitBtnClick = async () => {
     try {
@@ -74,7 +76,7 @@ const Modal = ({
     >
       <Container 
         className='position-relative'
-        style={{border: '1px solid gray', borderRadius: '5px', background: 'white', width: '80%', padding: '10px'}}
+        style={styleModal}
       >
         <h1 style={{marginTop: '10px', textAlign: 'center'}}>Change review</h1>
         <CloseButton className='position-absolute' style={{top: '10px', right: '10px'}} onClick={handleCloseBtnClick}/>

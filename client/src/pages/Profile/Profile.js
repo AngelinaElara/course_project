@@ -20,6 +20,7 @@ const Profile = () => {
   const {token} = useAuth()
   const {request} = useHttp()
   const context = useContext(Context)
+  const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
 
   const fetchReviews = useCallback(async () => {
     try { 
@@ -134,7 +135,7 @@ const Profile = () => {
         </Form.Select>
       </div>
       {dataReviews.length 
-        ? <Table>
+        ? <Table style={tableStyle}>
             <thead>
               <tr>
                 <th scope='col' className='d-flex gap-2 flex-row justify-content-start align-items-center'>

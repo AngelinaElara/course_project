@@ -1,10 +1,11 @@
-import {useState, useEffect, useCallback} from 'react'
+import {useState, useEffect, useCallback, useContext} from 'react'
 import {Link} from 'react-router-dom'
 import ReactWordcloud from 'react-wordcloud'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import ListGroup from 'react-bootstrap/ListGroup'
+import { Context } from '../../context/Context'
 import {useHttp} from '../../hooks/http.hook'
 import { storage } from '../../firebase/index'
 import { ref, getDownloadURL} from 'firebase/storage'
@@ -16,6 +17,10 @@ const Main = () => {
   const [ratedReviews, setRatedReviews] = useState([])
   const [tags, setTags] = useState([])
   const {request} = useHttp()
+  const context = useContext(Context)
+  const listStyle = context.lightTheme 
+    ? {background: '#ccccff', color: 'black'} 
+    : {background: '#A0A0A0', color: 'white'}
 
   const fetchAllReviews = useCallback(async () => {
     try { 
@@ -56,7 +61,6 @@ const Main = () => {
             xhr.open('GET', url)
             xhr.send()
             const img = document.querySelectorAll(`#${review.randomId}`)
-            console.log(img) 
             img.forEach(image => image.setAttribute('src', url))
           })
           .catch((error) => {
@@ -73,15 +77,27 @@ const Main = () => {
         <Col>
         <div>
           <h1 style={{fontSize: '30.605px'}}>Latest Reviews</h1>
-          <ListGroup>
+          <ListGroup as='ul'>
             {latestReviews && latestReviews.map(review => {
               return (
-                <ListGroup.Item key={review._id}>
+                <ListGroup.Item 
+                  as='li' 
+                  key={review._id} 
+                  style={listStyle}
+                >
                   <Link 
                     to={`${review._id}`} 
-                    className={review.img ? 'd-flex flex-row justify-content-center align-items-center' : ''} 
+                    className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
                     style={{textDecoration: 'none'}}
                   >
+                    <div>
+                      <p>{review.title}</p>
+                      <p>Category: {review.category}</p>
+                      <p className='d-flex flex-row gap-2' style={{color: 'black'}}>
+                        Users rating: {review.ratingUsers} 
+                        <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
+                      </p>
+                    </div>
                     {review.img 
                       ? <div style={{width: '200px', height: '100px', overflow: 'hidden'}}>
                           <img 
@@ -93,14 +109,6 @@ const Main = () => {
                         </div>
                       : ''
                     }
-                    <div className='d-flex flex-column gap-2'>
-                      <p>{review.title}</p>
-                      <p>Category: {review.category}</p>
-                      <p className='d-flex flex-row gap-2' style={{color: 'black'}}>
-                        Users rating: {review.ratingUsers} 
-                        <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
-                      </p>
-                    </div>
                   </Link>
                 </ListGroup.Item>
               )
@@ -109,16 +117,28 @@ const Main = () => {
         </div>
         </Col>
         <Col>
-            <h2>Top rated reviews</h2>
-            <ListGroup>
+          <h2>Top rated reviews</h2>
+          <ListGroup as='ul'>
             {ratedReviews && ratedReviews.map(review => {
               return (
-                <ListGroup.Item key={review._id}>
+                <ListGroup.Item 
+                  as='li' 
+                  key={review._id} 
+                  style={listStyle}
+                >
                   <Link 
                     to={`${review._id}`} 
-                    className={review.img ? 'd-flex flex-row justify-content-center align-items-center' : ''} 
+                    className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
                     style={{textDecoration: 'none'}}
                   >
+                    <div>
+                      <p>{review.title}</p>
+                      <p>Category: {review.category}</p>
+                      <p className='d-flex flex-row gap-2' style={{color: 'black'}}>
+                        Users rating: {review.ratingUsers} 
+                        <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
+                      </p>
+                    </div>
                     {review.img 
                       ? <div style={{width: '200px', height: '100px', overflow: 'hidden'}}>
                           <img 
@@ -130,23 +150,13 @@ const Main = () => {
                         </div>
                       : ''
                     }
-                    <div className='d-flex flex-column gap-2'>
-                      <p>{review.title}</p>
-                      <p>Category: {review.category}</p>
-                      <p className='d-flex flex-row gap-2' style={{color: 'black'}}>
-                        Users rating: {review.ratingUsers} 
-                        <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
-                      </p>
-                    </div>
                   </Link>
                 </ListGroup.Item>
               )
             })}
           </ListGroup>
-          
-            <h3>Tags</h3>
-            {data && <ReactWordcloud words={tags} />}
-          
+          <h3>Tags</h3>
+          {/* {data && <ReactWordcloud words={tags} />} */}
         </Col>
       </Row>
     </Container>
