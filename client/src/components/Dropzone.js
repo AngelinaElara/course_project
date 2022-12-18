@@ -41,10 +41,12 @@ const DropzoneComponent = () => {
     acceptedFiles.map(files => {
       context.imageUrl = files
     })
+    context.isImage = true
   }, [])
 
   const handleFilesDelete = () => {
     setFiles([])
+    context.isImage = false
   }
 
   const {

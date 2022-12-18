@@ -25,7 +25,7 @@ const Review = () => {
   const metadata = {
     contentType: 'image/jpeg',
   }
-  const storageRef = ref(storage, `reviews/${randomId}`)
+  const storageRef = ref(storage, `reviews/c${randomId}`)
 
   const handleDeleteTags = (indexToRemove) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)])
@@ -48,15 +48,18 @@ const Review = () => {
       rating !== 0
       ) {
       try {
+        const tagList = []
+        tags.map(tag => tagList.push({text: tag, value: 0}))
         const review = {
           from: userName,
           idFrom: userId,
           title : inputTitleValue,
           category: categoryValue,
           description: inputDescriptionValue,
-          tags: tags, 
+          tags: tagList, 
+          img: context.isImage,
           ratingAuth: rating,
-          randomId: randomId
+          randomId: `c${randomId}`
         }
         if(context.imageUrl !== null) {
           uploadBytes(storageRef, context.imageUrl, metadata).then((snapshot) => {
@@ -84,7 +87,7 @@ const Review = () => {
   return (
     <div 
       className='d-flex justify-content-center align-items-center flex-column' 
-      style={{maxHeight: '100vh', overflowY: 'auto', paddingTop: '120px'}}
+      style={{paddingTop: '60px'}}
     >
       <h1 style={{marginTop: '10px'}}>New review</h1>
       <Form 
@@ -109,8 +112,9 @@ const Review = () => {
           <Form.Label>Category</Form.Label>
           <Form.Select 
             onChange={(event) => setCategoryValue(event.target.value)} 
+            value={categoryValue}
           >
-            <option></option>
+            <option value=''></option>
             <option value='films'>Films</option>
             <option value='books'>Books</option>
             <option value='games'>Games</option>

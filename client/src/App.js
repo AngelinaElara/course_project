@@ -9,6 +9,7 @@ import Header from './components/Header'
 
 const App = () => {
   const [isLightTheme, setIsLightTheme] = useState(true)
+  const [isImage, setIsImage] = useState(false)
   const {token, login, logout, userId, userName} = useAuth()
   const {ratingAuth, imageUrl} = useReview()
   const isAuth = !!token
@@ -16,9 +17,12 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isLightTheme
+      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, isLightTheme
     }}>
-      <div style={{background: 'lavender'}} className='position-fixed fixed-top fixed-right fixed-left fixed-bottom'>
+      <div 
+        style={{maxHeight: '100vh', overflowY: 'auto', background: 'lavender'}} 
+        className='position-fixed fixed-top fixed-right fixed-left fixed-bottom'
+      >
         <Header />
         {routes}
       </div>

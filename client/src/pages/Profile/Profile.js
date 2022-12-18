@@ -86,7 +86,7 @@ const Profile = () => {
   return (
     <div 
       className='d-flex justify-content-center align-items-center flex-column position-relative' 
-      style={{maxHeight: '100vh', overflowY: 'auto', padding: '60px 20px'}}
+      style={{padding: '60px 20px'}}
     >
       <h1>My reviews</h1>
       <Link 

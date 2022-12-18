@@ -14,7 +14,6 @@ import './style/reviewDetails.css'
 
 const ReviewDetails = () => {
   const [review, setReview] = useState({})
-  const [isImg, setIsImg] = useState(false)
   const [isModalActive, setIsModalActive] = useState(false)
   let {id}  = useParams()
   const {token} = useAuth()
@@ -38,24 +37,23 @@ const ReviewDetails = () => {
   }, [fetchReview]) 
 
   useEffect(() => {
-    getDownloadURL(ref(storage, `reviews/${review.randomId}`))
-    .then((url) => {
-      const xhr = new XMLHttpRequest()
-      xhr.responseType = 'blob'
-      xhr.onload = (event) => {
-        const blob = xhr.response
-      }
-      xhr.open('GET', url)
-      xhr.send()
-      if(url) {
-        setIsImg(true)
+    if(review.img) {
+      getDownloadURL(ref(storage, `reviews/${review.randomId}`))
+      .then((url) => {
+        const xhr = new XMLHttpRequest()
+        xhr.responseType = 'blob'
+        xhr.onload = (event) => {
+          const blob = xhr.response
+        }
+        xhr.open('GET', url)
+        xhr.send()
         const img = document.getElementById(`${review.randomId}`)
         img.setAttribute('src', url)
-      }
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
   }, [review])
 
   if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
@@ -63,17 +61,17 @@ const ReviewDetails = () => {
   return (
     <Container 
       className='position-relative'
-      style={{padding: '60px 20px', maxHeight: '100vh', overflowY: 'auto'}}
+      style={{padding: '60px 20px'}}
     >
       <Row>
-        {isImg 
+        {review.img 
           ? <Col sm>
               <div
                 className='d-flex justify-content-center align-items-center img-container'
               >
                 <img 
                   style={{height: '100%'}}
-                  id={review.randomId}
+                  id={`${review.randomId}`}
                   src={gray}
                   alt={'img'}
                 /> 
@@ -87,7 +85,7 @@ const ReviewDetails = () => {
           <div className='d-flex flex-row gap-2'>
             <p>Tags:</p>
             <div className='d-flex flex-row gap-2'>
-              {review.tags.map(tag => <p>#{tag}</p>)}
+              {review.tags.map(tag => <p>#{tag.text}</p>)}
             </div>
           </div>
           <p className='d-flex flex-row gap-2'>

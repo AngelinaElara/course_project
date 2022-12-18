@@ -25,13 +25,14 @@ const Modal = ({
   const metadata = {
     contentType: 'image/jpeg',
   }
-  const storageRef = ref(storage, `reviews/${review.randomId}`)
+  const storageRef = ref(storage, `reviews/c${review.randomId}`)
 
   const handleAddTags = event => {
 		if (event.target.value !== '') {
-			setTags([...tags, event.target.value])
+			setTags([...tags, {text: event.target.value, value: 0}])
 			event.target.value = ''
 		}
+    console.log(tags)
 	}
 
   const handleDeleteTags = (indexToRemove) => {
@@ -50,6 +51,7 @@ const Modal = ({
         category: categoryValue,
         description: inputDescriptionValue,
         tags: tags, 
+        img: context.isImage,
         ratingAuth: rating,
       } 
       if(context.imageUrl !== null) {
@@ -98,6 +100,7 @@ const Modal = ({
             <Form.Label>Category</Form.Label>
             <Form.Select 
               onChange={(event) => setCategoryValue(event.target.value)} 
+              value={categoryValue}
             >
               <option></option>
               <option value='films'>Films</option>
@@ -126,7 +129,7 @@ const Modal = ({
 			        <ul id='tags'>
 				      {tags.map((tag, index) => (
 				  	    <li key={index} className='tag'>
-				  		    <span className='tag-title'>{tag}</span>
+				  		    <span className='tag-title'>{tag.text}</span>
 				  		    <span className='tag-close-icon'
 				  			    onClick={() => handleDeleteTags(index)}
 				  		    >
