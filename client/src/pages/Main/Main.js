@@ -76,7 +76,7 @@ const Main = () => {
       <Row>
         <Col>
         <div>
-          <h1 style={{fontSize: '30.605px'}}>Latest Reviews</h1>
+          <h1 style={{fontSize: '25px'}}>Latest Reviews</h1>
           <ListGroup as='ul'>
             {latestReviews && latestReviews.map(review => {
               return (
@@ -88,12 +88,17 @@ const Main = () => {
                   <Link 
                     to={`${review._id}`} 
                     className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
-                    style={{textDecoration: 'none'}}
+                    style={context.lightTheme ? {textDecoration: 'none', color: 'black'} : {textDecoration: 'none', color: 'white'}}
                   >
                     <div>
-                      <p>{review.title}</p>
-                      <p>Category: {review.category}</p>
-                      <p className='d-flex flex-row gap-2' style={{color: 'black'}}>
+                      <h2 style={{fontSize: '20px'}}>{review.title}</h2>
+                      <p className='d-flex gap-2 flex-row'>
+                        Category: 
+                        <span style={{textTransform: 'capitalize'}}>
+                          {review.category}
+                        </span>
+                      </p>
+                      <p className='d-flex flex-row gap-2'>
                         Users rating: {review.ratingUsers} 
                         <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
                       </p>
@@ -117,7 +122,7 @@ const Main = () => {
         </div>
         </Col>
         <Col>
-          <h2>Top rated reviews</h2>
+          <h2 style={{fontSize: '25px'}}>Top rated reviews</h2>
           <ListGroup as='ul'>
             {ratedReviews && ratedReviews.map(review => {
               return (
@@ -129,12 +134,17 @@ const Main = () => {
                   <Link 
                     to={`${review._id}`} 
                     className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
-                    style={{textDecoration: 'none'}}
+                    style={context.lightTheme ? {textDecoration: 'none', color: 'black'} : {textDecoration: 'none', color: 'white'}}
                   >
                     <div>
-                      <p>{review.title}</p>
-                      <p>Category: {review.category}</p>
-                      <p className='d-flex flex-row gap-2' style={{color: 'black'}}>
+                      <h2 style={{fontSize: '20px'}}>{review.title}</h2>
+                      <p className='d-flex gap-2 flex-row'>
+                        Category: 
+                        <span style={{textTransform: 'capitalize'}}>
+                          {review.category}
+                        </span>
+                      </p>
+                      <p className='d-flex flex-row gap-2'>
                         Users rating: {review.ratingUsers} 
                         <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
                       </p>
@@ -155,7 +165,7 @@ const Main = () => {
               )
             })}
           </ListGroup>
-          <h3>Tags</h3>
+          <h3 style={{marginTop: '20px'}}>Tags</h3>
           {/* {data && <ReactWordcloud words={tags} />} */}
         </Col>
       </Row>

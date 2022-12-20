@@ -1,23 +1,27 @@
-import {useState, useEffect, useCallback} from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
+import {useParams} from 'react-router-dom'
 import { useHttp } from '../../hooks/http.hook'
-import {useAuth} from '../../hooks/auth.hook'
+import { useAuth } from '../../hooks/auth.hook'
+import {Context} from '../../context/Context'
+import { storage } from '../../firebase/index'
+import { ref, getDownloadURL} from 'firebase/storage'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import { useParams } from 'react-router-dom'
-import { storage } from '../../firebase/index'
-import { ref, getDownloadURL} from 'firebase/storage'
-import Modal from './components/Modal'
+import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
 import gray from '../../ui/gray.jpg'
-import './style/reviewDetails.css'
 
 const ReviewDetails = () => {
   const [review, setReview] = useState({})
-  const [isModalActive, setIsModalActive] = useState(false)
+  const [commentValue, setCommentValue] = useState('')
+  const [commentsArray, setCommentsArray] = useState([])
+  const [quantityCreatorLike, setQuantityCreatorLike] = useState(0)
   let {id}  = useParams()
-  const {token} = useAuth()
   const {request} = useHttp()
+  const {userId, userName, token} = useAuth()
+  const isAuth = !!token
 
   const fetchReview = useCallback(async () => {
     try { 
@@ -26,15 +30,37 @@ const ReviewDetails = () => {
     } catch (e) {
       console.error(e)
     } 
-  }, [token, request])
-  
-  const handleBtnChangeClick = () => {
-    setIsModalActive(true)
+  }, [id])
+
+  const fetchComments = useCallback(async () => {
+    if(review) {
+      try { 
+        setTimeout( async () => {
+          const getComments = await request(`review/comment/${review._id}`, 'GET')
+          setCommentsArray(getComments)
+        }, 2000)
+      } catch (e) {
+        console.error(e)
+      } 
+    }
+  }, [review])
+
+  const handleCommentBtnClick = async () => {
+    try {
+      const comment = {
+        from: userName, 
+        text: commentValue,
+        date: new Date(Date.now()).toLocaleString().split(',')[0]
+      }
+      const sendData = await request(`review/comment/${review._id}`, 'PATCH', comment)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  useEffect(() => {  
-    fetchReview()  
-  }, [fetchReview]) 
+  useEffect(() => {
+    fetchComments()
+  }, [review])
 
   useEffect(() => {
     if(review.img) {
@@ -55,6 +81,10 @@ const ReviewDetails = () => {
       })
     }
   }, [review])
+
+  useEffect(() => {  
+    fetchReview()  
+  }, [fetchReview])
 
   if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
 
@@ -89,25 +119,44 @@ const ReviewDetails = () => {
             </div>
           </div>
           <p className='d-flex flex-row gap-2'>
-            You rating: {review.ratingAuth} 
-            <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
-          </p>
-          <p className='d-flex flex-row gap-2'>
             Users rating: {review.ratingUsers} 
             <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
           </p>
+          <p className='d-flex gap-2 flex-row'>
+            Review from: 
+            <span style={{textTransform: 'capitalize'}}>
+              {review.from}
+            </span>
+          </p>
         </Col>
       </Row> 
-      <Button 
-        className='position-absolute' 
-        style={{right: '40px'}}
-        onClick={handleBtnChangeClick}
-      >
-        Change review
-      </Button>
-      {isModalActive 
-        ? <Modal review={review} setReview={setReview} setIsModalActive={setIsModalActive}/> 
-        : ''}
+      <Row style={{marginTop: '40px'}}>
+        <Form style={{padding: '10px', width: '50%'}}>
+          <Form.Group className='d-flex flex-row gap-2' style={{position: 'relative'}}>
+            {isAuth 
+              ? <Form.Control 
+                  placeholder='Leave your opinion' 
+                  value={commentValue} 
+                  onChange={(event) => setCommentValue(event.target.value)}
+                />
+              : <Form.Control placeholder='Leave your opinion' disabled/>
+            }
+            <Button 
+              onClick={handleCommentBtnClick}
+            >
+              Send
+            </Button>
+          </Form.Group>
+        </Form>
+        <ListGroup as='ul'>
+            {commentsArray.length ? commentsArray.map((comment, index) => {
+              <ListGroup.Item as='li' key={index}>
+                <p>{comment.from}</p>
+                <p>{comment.text}</p>
+              </ListGroup.Item>
+            }) : ''}
+        </ListGroup>
+      </Row>
     </Container>
   )
 }

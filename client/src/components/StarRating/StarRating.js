@@ -4,7 +4,8 @@ import './StarRating.css'
 
 const StarRating = ({
   rating,
-  setRating
+  setRating,
+  lengthArray
 }) => {
   const [hover, setHover] = useState(0)
 
@@ -16,7 +17,7 @@ const StarRating = ({
 
   return (
     <div>
-      {[...Array(10)].map((star, index) => {
+      {[...Array(lengthArray)].map((star, index) => {
         index += 1
         return (
           <button

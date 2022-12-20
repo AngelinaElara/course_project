@@ -125,7 +125,7 @@ const Authorization = () => {
   }, [])
 
   return (
-    <div className='d-flex flex-column justify-content-center align-items-center'>
+    <div className='d-flex flex-column justify-content-center align-items-center' style={{marginTop: '40px'}}>
       <h1 className='text-secondary'>Authorization</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
         <input 

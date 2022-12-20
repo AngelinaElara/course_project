@@ -1,30 +1,33 @@
 import {useState, useEffect, useCallback, useContext} from 'react'
 import { useHttp } from '../../hooks/http.hook'
 import {useAuth} from '../../hooks/auth.hook'
+import { useAuth0 } from '@auth0/auth0-react'
 import { Context } from '../../context/Context'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
+import { storage } from '../../firebase/index'
+import { getStorage, ref, deleteObject } from 'firebase/storage'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 import trash from '../../ui/trash.png'
 import addBtn from '../../ui/addBtn.png'
 
 const Profile = () => {
-  const [currentId, setCurrentId] = useState(JSON.parse(localStorage.getItem('userData')).userId || {})
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
   const [dataReviews, setDataReviews] = useState([])
   const [data, setData] = useState([])
-  const {token} = useAuth()
+  const {token, userId} = useAuth()
   const {request} = useHttp()
   const context = useContext(Context)
+  const { isAuthenticated, logout } = useAuth0()
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
 
   const fetchReviews = useCallback(async () => {
     try { 
-      let getData = await request(`/review/get/${currentId}`, 'GET') 
+      let getData = await request(`/review/get/${userId}`, 'GET') 
       setDataReviews(getData)
       setData(getData)
     } catch (e) {
@@ -76,6 +79,17 @@ const Profile = () => {
   const handleDeleteBtn = async () => {
     if(isCheck.length) {
       const data = await request(`/review`, 'DELETE', {id: isCheck})
+    }
+    for(let checkItem of isCheck) {
+      const findReview = dataReviews.filter(review => review._id === checkItem)
+      if (findReview.img) {
+        const desertRef = ref(storage, `reviews/${findReview.randomId}`)
+        deleteObject(desertRef).then(() => {
+          console.log('Image was deleted')
+        }).catch((error) => {
+          console.log('Image was not deleted')
+        })
+      }
     }
     window.location.reload()
   }

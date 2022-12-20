@@ -63,7 +63,6 @@ const Modal = ({
       }
       setReview(false)
       const sendData = await request(`/review/change/${reviewId}`, 'PATCH', modifiedReview)
-      console.log('Data sended')
     } catch (error) {
       console.error(error)
     }
@@ -154,6 +153,7 @@ const Modal = ({
           <StarRating 
             rating={rating}
             setRating={setRating}
+            lengthArray={10}
           />
           <Button style={{marginTop: '20px'}} onClick={handleSubmitBtnClick}>Change review</Button>
         </Form>

@@ -1,10 +1,12 @@
-import {useEffect, useContext} from 'react'
+import {useState, useEffect, useContext, useMemo} from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
-import NavDropdown from 'react-bootstrap/NavDropdown'
 import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
 import {Link} from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
+import { useHttp } from '../hooks/http.hook'
 import { Context } from '../context/Context'
 import user from '../ui/user.png'
 import enter from '../ui/enter.png'
@@ -13,18 +15,46 @@ import moon from '../ui/moon.png'
 
 const Header = ({
   isLightTheme,
-  setIsLightTheme
+  setIsLightTheme,
+  data
 }) => {
+  const [filterData, setFilterData] = useState([])
+  const [searchValue, setSearchValue] = useState('')
+  const {request} = useHttp()
   const {token} = useAuth()
   const isAuth = !!token
   const context = useContext(Context)
-
   const headerStyle = isLightTheme ? {height: '60px', background: '#b0c4de'} : {height: '60px', background: '#202020'}
+
+  useMemo(() => {
+    const found = []
+    if(searchValue && data) {
+      const hasValue = (item, searchValue) => {
+        item = item instanceof Array ? item : item.toLowerCase(); 
+        return item.includes(searchValue.toLowerCase())
+      }
+      for(const review of data){
+        for(const field of ['title', 'description', 'category', 'tags']){
+          let compareValue = review[field]
+          if(field === 'tags') compareValue = compareValue.map(i => i.text)
+          if(hasValue(compareValue, searchValue)){
+            found.push(review)
+            break
+          }
+        }
+      }
+      setFilterData(found)
+    }
+  }, [searchValue])
 
   const handleThemeButtonClick = () => {
     setIsLightTheme(prevValue => !prevValue)
     context.lightTheme = isLightTheme
-    console.log(context.lightTheme)
+  }
+
+  const handleListItemClick = () => {
+    setSearchValue('')
+    setFilterData([])
   }
 
   useEffect(() => {
@@ -39,8 +69,29 @@ const Header = ({
         <Container>
           <Link to='/'>Logo</Link>
 
-          <Form className='d-flex justify-content-center align-items-center gap-2' style={{width: '50%'}}>
-            <Form.Control type='search' placeholder='Search'/>
+          <Form className='d-flex justify-content-center align-items-center gap-2 position-relative' style={{width: '50%'}}>
+            <Form.Control 
+              type='search' placeholder='Search' 
+              value={searchValue} 
+              onChange={(event) => setSearchValue(event.target.value)}
+            />
+            <ListGroup 
+              as='ul' 
+              className='position-absolute' 
+              style={{width: '100%', top: '38px', zIndex: '2', maxHeight: '200px', height: 'auto', overflow: 'auto'}}
+            >
+              {searchValue && filterData
+                ? filterData.map((data, index) => {
+                  return ( 
+                    <ListGroup.Item key={index} onClick={handleListItemClick}>
+                      <Link to={`/${data._id}`}>
+                        {data.title}
+                      </Link>
+                    </ListGroup.Item>
+                  )
+                })
+                : ''}
+            </ListGroup>
           </Form>
 
           <button 

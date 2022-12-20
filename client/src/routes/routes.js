@@ -2,8 +2,9 @@ import {Routes, Route} from 'react-router-dom'
 import Main from '../pages/Main'
 import Login from '../pages/Login'
 import Authorization from '../pages/Authorization'
-import Review from '../pages/Review'
+import CreateReview from '../pages/CreateReview'
 import Profile from '../pages/Profile'
+import AuthReviewDetails from '../pages/AuthReviewDetails'
 import ReviewDetails from '../pages/ReviewDetails'
 
 export const useRoutes = (isAuth) => {
@@ -12,9 +13,10 @@ export const useRoutes = (isAuth) => {
       <Routes>
         <Route path='*' element={<Main />} />
         <Route path='/' element={<Main />} />
-        <Route path='/review' element={<Review />} />
+        <Route path='/:id' element={<ReviewDetails />} />
+        <Route path='/review' element={<CreateReview />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/profile/:id' element={<ReviewDetails />} />
+        <Route path='/profile/:id' element={<AuthReviewDetails />} />
       </Routes>
     )
   }
@@ -23,6 +25,7 @@ export const useRoutes = (isAuth) => {
     <Routes>
       <Route path='*' element={<Main />} />
       <Route path='/' element={<Main />} />
+      <Route path='/:id' element={<ReviewDetails />} />
       <Route path='/login' element={<Login />} />
       <Route path='/authorization' element={<Authorization />} />
     </Routes>

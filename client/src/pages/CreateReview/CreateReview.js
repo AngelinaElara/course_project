@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button'
 import CloseButton from 'react-bootstrap/CloseButton'
 import './style/tags.css'
 
-const Review = () => {
+const CreateReview = () => {
   const [inputTitleValue, setInputTitleValue] = useState('')
   const [categoryValue, setCategoryValue] = useState('')
   const [inputDescriptionValue, setInputDescriptionValue] = useState('')
@@ -161,16 +161,17 @@ const Review = () => {
 
         <Dropzone />
 
-        <Form.Group
+        <div
           className='d-flex flex-column'
           style={{width: '90%'}}
         >
-          <Form.Label>Leave your rating:</Form.Label>
+          <p>Leave your rating:</p>
           <StarRating 
             rating={rating}
             setRating={setRating}
+            lengthArray={10}
           />
-        </Form.Group>
+        </div>
         
         <Button 
           className='mt-2' 
@@ -185,4 +186,4 @@ const Review = () => {
   )
 }
 
-export default Review
+export default CreateReview
