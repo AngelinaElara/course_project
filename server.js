@@ -22,8 +22,8 @@ app.use(bodyParser.json())
 app.use(express.json({extended: true}))
 app.use('/auth', require('./routes/auth.routes'))
 app.use('/review', require('./routes/review.routes'))
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
-// app.use(cors({ origin: 'http://5-180-180-221.cloud-xip.com:5000', credentials: true }))
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
+app.use(cors({ origin: 'http://5-180-180-221.cloud-xip.com:5000', credentials: true }))
 app.use(
   cookieSession({
     maxAge: 24 * 60 * 60 * 1000,

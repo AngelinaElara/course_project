@@ -52,7 +52,7 @@ router.post(
 
 router.post('/login', async (req, res) => {
   try {
-    const {name, email, password} = req.body
+    const {email, password} = req.body
     const user = await User.findOne({email})
     
     if(!user) {
@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
       config.jwtSecret,
       {expiresIn: '1h'}
     )
-    res.json({token, UserId: user.id, name, loginMethod})
+    res.json({token, UserId: user.id, name: user.name})
   } catch (e) {
     res.status(500).json({message: 'Oooops. Something went wrong...'})
   }

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { Context } from '../../context/Context'
 import Button from 'react-bootstrap/Button'
 import {ReactComponent as GoogleIcon} from '../../ui/googleIcon.svg'
-import {ReactComponent as FBIcon} from '../../ui/facebookIcon.svg'
 
 const OAuth = () => {
   const context = useContext(Context)
@@ -12,7 +11,7 @@ const OAuth = () => {
 
   const fetchAuthUser = async (route) => {
     const response = await axios
-      .get(`http://localhost:5000/${route}`, { withCredentials: true })
+      .get(`http://5-180-180-221.cloud-xip.com:5000/${route}`, { withCredentials: true })
       .catch((err) => {
         navigate('/login/error')
       })
@@ -25,7 +24,7 @@ const OAuth = () => {
 
   const handleGoogleClick = async () => {
     let timer
-    const login = 'http://localhost:5000/api/v1/login/google'
+    const login = 'http://5-180-180-221.cloud-xip.com:5000/api/v1/login/google'
     const newWindow = window.open(login, '_blank', 'width=500,height=600')
     if (newWindow) {
       timer = setInterval(() => {
@@ -40,7 +39,7 @@ const OAuth = () => {
 
   const handleVKClick = () => {
     let timer
-    const login = 'http://localhost:5000/api/login/vk'
+    const login = 'http://5-180-180-221.cloud-xip.com:5000/api/login/vk'
     const newWindow = window.open(login, '_blank', 'width=500,height=600')
     if (newWindow) {
       timer = setInterval(() => {

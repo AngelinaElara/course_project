@@ -21,21 +21,13 @@ const Login = () => {
         password: inputPasswordValue
       }     
       const data = await request('/auth/login', 'POST', form)
+      console.log(data)
       context.login(data.token, data.UserId, data.name)
       navigate('/')
     } catch (error) {
       console.error(error)
     }
   }
-
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_GOOGLE_ID,
-        scope: ''
-      })
-    }
-  }, [])
 
   return (
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}>

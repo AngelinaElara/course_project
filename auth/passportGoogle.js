@@ -4,8 +4,8 @@ const User = require('../models/User')
 const config = require('config')
 const jwt = require('jsonwebtoken')
 
-// const GOOGLE_CALLBACK_URL = 'http://5-180-180-221.cloud-xip.com:5000/api/v1/auth/google/callback'
-const GOOGLE_CALLBACK_URL = 'http://localhost:5000/api/v1/auth/google/callback'
+const GOOGLE_CALLBACK_URL = 'http://5-180-180-221.cloud-xip.com:5000/api/v1/auth/google/callback'
+// const GOOGLE_CALLBACK_URL = 'http://localhost:5000/api/v1/auth/google/callback'
 
 passport.use(new GoogleStrategy({
   clientID: config.get('GOOGLE_CLIENT_ID'),
