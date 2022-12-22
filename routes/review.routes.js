@@ -90,5 +90,28 @@ router.patch('/change/:id', async (req, res) => {
   }
 })
 
+router.patch('/comment/:id', async (req, res) => {
+  try {
+    const {id} = req.params || {}
+    const review = await Review.findById(id)
+    review.comments.push(req.body)
+    await review.save()
+    res.json(review)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+router.get('/comment/:id', async (req, res) => {
+  try {
+    const {id} = req.params || {}
+    const review = await Review.findById(id)
+    console.log(review)
+    res.json(review.comments)
+  } catch (error) {
+    console.log(error)
+  }
+})
+
  
 module.exports = router

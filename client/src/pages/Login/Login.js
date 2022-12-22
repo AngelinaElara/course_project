@@ -4,13 +4,13 @@ import {useState, useEffect, useContext} from 'react'
 import { Context } from '../../context/Context'
 import {useHttp} from '../../hooks/http.hook'
 import {Link, useNavigate} from 'react-router-dom'
-import {GoogleLogin} from 'react-google-login'
 import { gapi } from 'gapi-script'
+import OAuth from '../../components/OAuth/OAuth'
 
 const Login = () => {
   const [inputEmailValue, setInputEmailValue] = useState('')
   const [inputPasswordValue, setInputPasswordValue] = useState('')
-  const {loading, request} = useHttp()
+  const {request} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
 
@@ -28,25 +28,6 @@ const Login = () => {
     }
   }
 
-  const onSucces = async (res) => {
-    console.log('Success')
-    try {
-      const form = {
-        name: res.profileObj.givenName,
-        email: res.profileObj.email,
-      }
-      const data = await request('google/auth/login', 'POST', form)
-      context.login(data.token, data.UserId, data.name)
-      navigate('/')
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const onFailure = (res) => {
-    console.log('Login failed', res)
-  }
-
   useEffect(() => {
     const start = () => {
       gapi.client.init({
@@ -57,7 +38,7 @@ const Login = () => {
   }, [])
 
   return (
-    <div className='d-flex flex-column justify-content-center align-items-center' style={{marginTop: '40px'}}>
+    <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}>
       <h1 className='text-secondary'>Login</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
         <Form.Control 
@@ -88,13 +69,7 @@ const Login = () => {
         </Button>
       </Form>
       <p>Don't have an account? <Link to='/authorization'>Authorization</Link></p>
-      <GoogleLogin 
-        clientId={process.env.REACT_APP_GOOGLE_ID}
-        onSuccess={onSucces}
-        onFailure={onFailure}
-        cookiePolicy={'single_host_origin'}
-        isSignedIn={true}
-      />
+      <OAuth />
     </div>
   )
 }

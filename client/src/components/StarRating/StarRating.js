@@ -1,6 +1,6 @@
 import {useState, useContext} from 'react'
 import {Context} from '../../context/Context'
-import './StarRating.css'
+import '../../style/StarRating.css'
 
 const StarRating = ({
   rating,

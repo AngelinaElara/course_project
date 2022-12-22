@@ -11,7 +11,8 @@ const schema = new Schema({
   ratingAuth: {type: Number, required: true, default: 0},
   ratingUsers: {type: Number, required: true, default: 0},
   randomId: {type: String, required: true},
-  publishDate: {type: Date, required: true, default: Date.now}
+  publishDate: {type: Date, required: true, default: Date.now},
+  comments: {type: Array, required: true}
 }, {versionKey: false}) 
  
-module.exports = model('Review', schema)   
+module.exports = model('Review', schema)    

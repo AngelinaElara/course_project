@@ -26,7 +26,7 @@ export const useAuth = () => {
 
     localStorage.removeItem(storageName)
     navigate('/')
-  }, [navigate])
+  }, [])
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem(storageName) || '{}')

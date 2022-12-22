@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useCallback, useContext, useMemo } from 'react'
 import {useParams} from 'react-router-dom'
 import { useHttp } from '../../hooks/http.hook'
 import { useAuth } from '../../hooks/auth.hook'
@@ -32,18 +32,12 @@ const ReviewDetails = () => {
     } 
   }, [id])
 
-  const fetchComments = useCallback(async () => {
-    if(review) {
-      try { 
-        setTimeout( async () => {
-          const getComments = await request(`review/comment/${review._id}`, 'GET')
-          setCommentsArray(getComments)
-        }, 2000)
-      } catch (e) {
-        console.error(e)
-      } 
-    }
-  }, [review])
+  useEffect(() => {
+    setTimeout(async () => {
+      const getComments = await request(`review/comment/${id}`, 'GET')
+      setCommentsArray(getComments)
+    }, 2000)
+  }, [])
 
   const handleCommentBtnClick = async () => {
     try {
@@ -57,10 +51,6 @@ const ReviewDetails = () => {
       console.log(error)
     }
   }
-
-  useEffect(() => {
-    fetchComments()
-  }, [review])
 
   useEffect(() => {
     if(review.img) {
@@ -149,12 +139,13 @@ const ReviewDetails = () => {
           </Form.Group>
         </Form>
         <ListGroup as='ul'>
-            {commentsArray.length ? commentsArray.map((comment, index) => {
-              <ListGroup.Item as='li' key={index}>
-                <p>{comment.from}</p>
-                <p>{comment.text}</p>
-              </ListGroup.Item>
-            }) : ''}
+            {commentsArray.map((comment, index) => {
+              return (
+                <ListGroup.Item as='li' key={index}>
+                  <p>{comment.from}</p>
+                  <p>{comment.text}</p>
+                </ListGroup.Item>
+              )})}
         </ListGroup>
       </Row>
     </Container>

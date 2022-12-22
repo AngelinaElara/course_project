@@ -4,15 +4,14 @@ import { useHttp } from './hooks/http.hook'
 import {useAuth} from './hooks/auth.hook'
 import {useReview} from './hooks/reviews.hook'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container } from 'react-bootstrap'
 import Header from './components/Header'
 import { Context } from './context/Context'
-import { useAuth0 } from '@auth0/auth0-react'
 
 const App = () => {
   const [lightTheme, setLightTheme] = useState(JSON.parse(localStorage.getItem('theme') || true))
   const [data, setData] = useState([])
   const [isImage, setIsImage] = useState(false)
+  const [loginMethod, setLoginMethod] = useState('')
   const {request} = useHttp()
   const {token, login, logout, userId, userName} = useAuth()
   const {ratingAuth, imageUrl} = useReview()
@@ -37,7 +36,7 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme
+      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme, loginMethod
     }}>
       <div 
         style={styleBody} 

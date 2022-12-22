@@ -1,10 +1,7 @@
 import {useState, useCallback} from 'react'
 
 export const useHttp = () => {
-  const [loading, setLoading] = useState(false)
-
   const request = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
-    setLoading(true)
 
   try {
     if (body) {
@@ -18,14 +15,11 @@ export const useHttp = () => {
     if(!response.ok) {
       throw new Error (data.message || 'Something went wrong')
     }
-
-    setLoading(false)
     return data
   } catch (e) {
-    setLoading(false)
     throw e
   }
 }, [])
 
-return {loading, request}
+return {request}
 }

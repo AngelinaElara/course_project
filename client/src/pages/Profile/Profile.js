@@ -1,28 +1,26 @@
 import {useState, useEffect, useCallback, useContext} from 'react'
 import { useHttp } from '../../hooks/http.hook'
 import {useAuth} from '../../hooks/auth.hook'
-import { useAuth0 } from '@auth0/auth0-react'
 import { Context } from '../../context/Context'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/Container'
 import { storage } from '../../firebase/index'
-import { getStorage, ref, deleteObject } from 'firebase/storage'
+import { ref, deleteObject } from 'firebase/storage'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
 import trash from '../../ui/trash.png'
 import addBtn from '../../ui/addBtn.png'
+import axios from 'axios'
 
 const Profile = () => {
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
   const [dataReviews, setDataReviews] = useState([])
   const [data, setData] = useState([])
-  const {token, userId} = useAuth()
+  const {token, userId, method} = useAuth() 
   const {request} = useHttp()
   const context = useContext(Context)
-  const { isAuthenticated, logout } = useAuth0()
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
 
   const fetchReviews = useCallback(async () => {
@@ -94,6 +92,12 @@ const Profile = () => {
     window.location.reload()
   }
 
+  const handleLogoutBtnClick = async () => {
+    context.logout()
+    const response = await axios.get('http://localhost:5000/logout', {withCredentials: true}).catch(err => console.log(err))
+    window.location.reload()
+  }
+
   useEffect(() => { 
     fetchReviews()
   }, [fetchReviews]) 
@@ -119,10 +123,11 @@ const Profile = () => {
         variant='secondary' 
         className='position-absolute' 
         style={{top: '10px', right: '20px'}}
-        onClick={() => context.logout()}
+        onClick={handleLogoutBtnClick} 
       >
         Logout
       </Button>
+      
       <div className='d-flex justify-content-between align-items-center flex-row gap-4'>  
         <button 
           className='btn d-flex justify-content-center align-items-center'

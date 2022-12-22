@@ -1,5 +1,4 @@
 import {useState, useEffect, useContext, useMemo} from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Form from 'react-bootstrap/Form'
@@ -65,7 +64,7 @@ const Header = ({
     <header 
       style={headerStyle}
     >
-      <Navbar expand='lg'>
+      <Navbar expand='lg' className='d-flex justify-content-between align-items-center'>
         <Container>
           <Link to='/'>Logo</Link>
 
@@ -117,7 +116,7 @@ const Header = ({
               <img 
                 src={enter}
                 alt='enter icon'
-                style={{width: '30px', height: '30px', transform: 'translateY(15%)'}}
+                style={{width: '35px', height: '35px'}}
                 />
             </Link>
           }

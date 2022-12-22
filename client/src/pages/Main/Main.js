@@ -21,6 +21,7 @@ const Main = () => {
   const listStyle = context.lightTheme 
     ? {background: '#ccccff', color: 'black'} 
     : {background: '#A0A0A0', color: 'white'}
+    
 
   const fetchAllReviews = useCallback(async () => {
     try { 
@@ -73,11 +74,11 @@ const Main = () => {
 
   return (
     <Container style={{padding: '60px 20px'}}>
-      <Row>
+      <Row className='gy-5'>
         <Col>
         <div>
           <h1 style={{fontSize: '25px'}}>Latest Reviews</h1>
-          <ListGroup as='ul'>
+          <ListGroup as='ul' style={{marginTop: '20px'}}>
             {latestReviews && latestReviews.map(review => {
               return (
                 <ListGroup.Item 
@@ -123,7 +124,7 @@ const Main = () => {
         </Col>
         <Col>
           <h2 style={{fontSize: '25px'}}>Top rated reviews</h2>
-          <ListGroup as='ul'>
+          <ListGroup as='ul' style={{marginTop: '20px'}}>
             {ratedReviews && ratedReviews.map(review => {
               return (
                 <ListGroup.Item 

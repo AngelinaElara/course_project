@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const config = require('config')
 const passport = require('passport')
 const router = Router()
+const isUserAuthenticated = require('../middlewares/auth')
 
 router.post(
   '/register',
@@ -49,48 +50,31 @@ router.post(
   }
 })
 
-router.post(
-  '/login',
-  [
-    check('email', 'Enter correct email').normalizeEmail().isEmail(),
-    check('password', 'Enter correct password').exists()
-  ],
-  async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    const errors = validationResult(req)
-
-    if(!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-        message : 'Invalid login details'
-      })
-    }
-    
-    const {email, password} = req.body
-    console.log(req.body)
-
+    const {name, email, password} = req.body
     const user = await User.findOne({email})
-
+    
     if(!user) {
       return res.result(400).json({message: 'User was not find'})
     }
 
     const isMatch = bcrypt.compare(password, user.password) 
-
     if(!isMatch) {
       return res.status(400).json({message: 'Invalid password'})
     }
- 
     const token = jwt.sign(
       {userId: user.id},
       config.jwtSecret,
       {expiresIn: '1h'}
     )
-
-    res.json({token, UserId: user.id, name})
+    res.json({token, UserId: user.id, name, loginMethod})
   } catch (e) {
     res.status(500).json({message: 'Oooops. Something went wrong...'})
   }
 })
+
+
+
 
 module.exports = router

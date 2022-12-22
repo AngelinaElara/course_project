@@ -1,4 +1,11 @@
 {
   "mongoUrl": "mongodb+srv://admin:123qwe@cluster0.jnbtzqk.mongodb.net/?retryWrites=true&w=majority",
-  "jwtSecret": "Fullstack"
-}
+  "jwtSecret": "Fullstack",
+  "cookieKey": "12345678",
+  "GOOGLE_CLIENT_ID": "821249073341-kluqnadlgu2hmmigcagkscs4ql21qski.apps.googleusercontent.com",
+  "GOOGLE_CLIENT_SECRET": "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",
+  "GITHUB_ID": "8b5cacca463a84c27193",
+  "GITHUB_SECRET_KEY": "3d88ddfc47fd5b00f8863f30907227fb07d1045a",
+  "VK_ID": "51509782",
+  "VK_SECRET_KEY": "PJlWpD9g0nxHLDt0NjzF"
+} 

@@ -9,9 +9,7 @@ import {
   validateInputPasswordValue
 } from '../../utils/helpers'
 import { Context } from '../../context/Context'
-import { useAuth } from '../../hooks/auth.hook'
-import {GoogleLogin} from 'react-google-login'
-import { gapi } from 'gapi-script'
+import OAuth from '../../components/OAuth/OAuth'
 
 const Authorization = () => {
   const [inputNameValue, setInputNameValue] = useState('')
@@ -61,7 +59,6 @@ const Authorization = () => {
           password: inputPasswordValue,
         }
         const data = await request('auth/register', 'POST', form)
-        console.log(data)
         setIsFormReset(true)
         context.login(data.token, data.UserId, data.name)
         navigate('/')
@@ -69,25 +66,6 @@ const Authorization = () => {
     } catch (error) {
       console.error(error)
     }
-  }
-
-  const onSucces = async (res) => {
-    console.log('Success')
-    try {
-      const form = {
-        name: res.profileObj.givenName,
-        email: res.profileObj.email,
-      }
-      const data = await request('google/auth/login', 'POST', form)
-      context.login(data.token, data.UserId, data.name)
-      navigate('/')
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const onFailure = (res) => {
-    console.log('Login failed', res)
   }
 
   useEffect(() => {
@@ -115,17 +93,8 @@ const Authorization = () => {
     inputConfirmPasswordValue
   ])
 
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId: process.env.REACT_APP_GOOGLE_ID,
-        scope: ''
-      })
-    }
-  }, [])
-
   return (
-    <div className='d-flex flex-column justify-content-center align-items-center' style={{marginTop: '40px'}}>
+    <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}> 
       <h1 className='text-secondary'>Authorization</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
         <input 
@@ -176,14 +145,7 @@ const Authorization = () => {
         </Button >
       </Form>
       <p>Do you have account? <Link to='/login'>Login</Link></p>
-
-      <GoogleLogin 
-        clientId={process.env.REACT_APP_GOOGLE_ID}
-        onSuccess={onSucces}
-        onFailure={onFailure}
-        cookiePolicy={'single_host_origin'}
-        isSignedIn={true}
-      />
+      <OAuth />
     </div>
   )
 }

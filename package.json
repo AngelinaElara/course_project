@@ -4,17 +4,18 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": " node server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
     "server": "nodemon server.js",
     "client": "npm run start --prefix client",
     "client:install": "npm install --prefix client",
     "client:build": "npm run build --prefix client",
-    "dev": "concurrently \"npm run server \" \"npm run client"
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run server \" \"npm run client"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
     "cloudinary": "^1.32.0",
     "concurrently": "^7.6.0",
     "config": "^3.3.8",
@@ -26,9 +27,14 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.5",
     "nodemon": "^2.0.20",
-    "passport": "^0.6.0",
+    "passport": "^0.5.3",
+    "passport-facebook": "^3.0.0",
+    "passport-github": "^1.1.0",
+    "passport-github2": "^0.1.12",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0",
+    "passport-vkontakte": "^0.5.0",
     "react-router-dom": "^6.4.4"
   }
 }
