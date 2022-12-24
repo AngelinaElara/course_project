@@ -1,10 +1,9 @@
+import {useState, useContext} from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import {useState, useEffect, useContext} from 'react'
 import { Context } from '../../context/Context'
 import {useHttp} from '../../hooks/http.hook'
 import {Link, useNavigate} from 'react-router-dom'
-import { gapi } from 'gapi-script'
 import OAuth from '../../components/OAuth/OAuth'
 
 const Login = () => {
@@ -21,9 +20,9 @@ const Login = () => {
         password: inputPasswordValue
       }     
       const data = await request('/auth/login', 'POST', form)
-      console.log(data)
       context.login(data.token, data.UserId, data.name)
       navigate('/')
+      window.location.reload()
     } catch (error) {
       console.error(error)
     }

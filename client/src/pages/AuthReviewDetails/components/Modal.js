@@ -32,10 +32,9 @@ const Modal = ({
 
   const handleAddTags = event => {
 		if (event.target.value !== '') {
-			setTags([...tags, {text: event.target.value, value: 0}])
+			setTags([...tags, {value: event.target.value, count: 0}])
 			event.target.value = ''
 		}
-    console.log(tags)
 	}
 
   const handleDeleteTags = (indexToRemove) => {
@@ -130,7 +129,7 @@ const Modal = ({
 			        <ul id='tags'>
 				      {tags.map((tag, index) => (
 				  	    <li key={index} className='tag'>
-				  		    <span className='tag-title'>{tag.text}</span>
+				  		    <span className='tag-title'>{tag.value}</span>
 				  		    <span className='tag-close-icon'
 				  			    onClick={() => handleDeleteTags(index)}
 				  		    >

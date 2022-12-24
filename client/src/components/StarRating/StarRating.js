@@ -1,19 +1,40 @@
-import {useState, useContext} from 'react'
-import {Context} from '../../context/Context'
+import {useState, useEffect} from 'react'
 import '../../style/StarRating.css'
+import { useHttp } from '../../hooks/http.hook'
 
 const StarRating = ({
   rating,
   setRating,
-  lengthArray
+  lengthArray,
+  isUserClick,
+  userId,
+  reviewId
 }) => {
   const [hover, setHover] = useState(0)
-
-  const context = useContext(Context)
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+  const {request} = useHttp()
 
   const handleStarButtonClick = (index) => {
     setRating(index)
   }
+
+  const handleUserButtonClick = async (index) => {
+    try {
+      setRating(index)
+      setIsButtonDisabled(true)
+      const userRating = {
+        userId: userId,
+        rating: index
+      }
+      const sendUserRating = await request(`/review/userrating/${reviewId}`, 'PATCH', userRating)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if(rating) setIsButtonDisabled(true)
+  }, [rating])
 
   return (
     <div>
@@ -24,10 +45,11 @@ const StarRating = ({
             type='button'
             key={index}
             className={index <= (hover || rating) ? 'on' : 'off'}
-            onClick={() => handleStarButtonClick(index)}
+            onClick={!isUserClick ? () => handleStarButtonClick(index) : () => handleUserButtonClick(index)}
             onMouseEnter={() => setHover(index)}
             onMouseLeave={() => setHover(rating)}
             style={{backgroundColor: 'transparent', border: 'none', outline: 'none', cursor: 'pointer'}}
+            disabled={isButtonDisabled}
           >
             <span>&#9733;</span>
           </button>

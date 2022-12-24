@@ -5,7 +5,6 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import {Link} from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
-import { useHttp } from '../hooks/http.hook'
 import { Context } from '../context/Context'
 import user from '../ui/user.png'
 import enter from '../ui/enter.png'
@@ -19,7 +18,6 @@ const Header = ({
 }) => {
   const [filterData, setFilterData] = useState([])
   const [searchValue, setSearchValue] = useState('')
-  const {request} = useHttp()
   const {token} = useAuth()
   const isAuth = !!token
   const context = useContext(Context)
@@ -29,13 +27,15 @@ const Header = ({
     const found = []
     if(searchValue && data) {
       const hasValue = (item, searchValue) => {
-        item = item instanceof Array ? item : item.toLowerCase(); 
+        item = item instanceof Array ? item.map(i => i.toLowerCase()).join(' ') : item.toLowerCase()
         return item.includes(searchValue.toLowerCase())
       }
       for(const review of data){
-        for(const field of ['title', 'description', 'category', 'tags']){
+
+        for(const field of ['title', 'description', 'category', 'tags', 'comments']){
           let compareValue = review[field]
-          if(field === 'tags') compareValue = compareValue.map(i => i.text)
+          if(field === 'tags') compareValue = compareValue.map(i => i.value)
+          if(field === 'comments') compareValue = compareValue.map(i => i.text)
           if(hasValue(compareValue, searchValue)){
             found.push(review)
             break

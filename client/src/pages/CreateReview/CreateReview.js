@@ -16,6 +16,7 @@ const CreateReview = () => {
   const [categoryValue, setCategoryValue] = useState('')
   const [inputDescriptionValue, setInputDescriptionValue] = useState('')
   const [tags, setTags] = useState([])
+  const [isResetImg, setIsResetImg] = useState(false)
   const [rating, setRating] = useState(0)
   const [isFromReset, setIsFormReset] = useState(false)
   const context = useContext(Context)
@@ -33,7 +34,7 @@ const CreateReview = () => {
 
   const handleAddTags = event => {
 		if (event.target.value !== '') {
-			setTags([...tags, event.target.value])
+			setTags([...tags, {value: event.target.value, count: 0}])
 			event.target.value = ''
 		}
 	}
@@ -48,15 +49,13 @@ const CreateReview = () => {
       rating !== 0
       ) {
       try {
-        const tagList = []
-        tags.map(tag => tagList.push({text: tag, value: 0}))
         const review = {
           from: userName,
           idFrom: userId,
           title : inputTitleValue,
           category: categoryValue,
           description: inputDescriptionValue,
-          tags: tagList, 
+          tags: tags, 
           img: context.isImage,
           ratingAuth: rating,
           randomId: `c${randomId}`
@@ -80,6 +79,7 @@ const CreateReview = () => {
       setCategoryValue('')
       setInputDescriptionValue('')
       setTags([])
+      setIsResetImg(true)
       setRating(0)
     }
   }, [isFromReset])
@@ -128,6 +128,7 @@ const CreateReview = () => {
           <Form.Control 
             as='textarea' 
             rows={5}
+            maxLength={1500}
             value={inputDescriptionValue}
             onChange={(event) => setInputDescriptionValue(event.target.value)}
           /> 
@@ -141,7 +142,7 @@ const CreateReview = () => {
 			      <ul id='tags'>
 				    {tags.map((tag, index) => (
 					    <li key={index} className='tag'>
-						    <span className='tag-title'>{tag}</span>
+						    <span className='tag-title'>{tag.value}</span>
 						    <span className='tag-close-icon'
 							    onClick={() => handleDeleteTags(index)}
 						    >
@@ -159,7 +160,7 @@ const CreateReview = () => {
 		      </div>
         </Form.Group>
 
-        <Dropzone />
+        <Dropzone isResetImg={isResetImg}/>
 
         <div
           className='d-flex flex-column'
@@ -181,7 +182,6 @@ const CreateReview = () => {
           Leave feedback
         </Button>
       </Form>
-    
     </div>
   )
 }

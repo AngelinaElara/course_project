@@ -1,28 +1,24 @@
-import {useState, useEffect, useCallback, useContext} from 'react'
-import {Link} from 'react-router-dom'
-import ReactWordcloud from 'react-wordcloud'
+import {useState, useEffect, useCallback} from 'react'
+import { useNavigate } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import ListGroup from 'react-bootstrap/ListGroup'
-import { Context } from '../../context/Context'
 import {useHttp} from '../../hooks/http.hook'
-import { storage } from '../../firebase/index'
-import { ref, getDownloadURL} from 'firebase/storage'
-import grayBack from '../../ui/gray.jpg'
+import ButtonsReviews from './components/ButtonsReviews'
+import ReviewList from '../../components/ReviewList'
+import SelectLanguage from './components/SelectLanguage'
+import Tags from './components/Tags'
 
 const Main = () => {
   const [data, setData] = useState([])
-  const [latestReviews, setLatestReviews] = useState([])
-  const [ratedReviews, setRatedReviews] = useState([])
+  const [dataReviews, setDataReviews] = useState([])
+  const [title, setTitle] = useState('')
+  const [isButtonLastActive, setIsButtonLastActive] = useState(false)
+  const [isButtonPopularActive, setIsButtonPopularActive] = useState(true)
   const [tags, setTags] = useState([])
   const {request} = useHttp()
-  const context = useContext(Context)
-  const listStyle = context.lightTheme 
-    ? {background: '#ccccff', color: 'black'} 
-    : {background: '#A0A0A0', color: 'white'}
+  const navigate = useNavigate()
     
-
   const fetchAllReviews = useCallback(async () => {
     try { 
       let getData = await request('/review', 'GET') 
@@ -32,142 +28,60 @@ const Main = () => {
     }  
   }, [request])
 
+  const handlePopularReviewButtonClick = () => {
+    const copy = [...data]
+    const ratedReviews = copy.slice(0,9).sort((a, b) => b.ratingAuth - a.ratingAuth)
+    setDataReviews(ratedReviews)
+    setTitle('Popular Reviews')
+    setIsButtonPopularActive(true)
+    setIsButtonLastActive(false)
+  }
+
+  const handleLastReviewButtonClick = () => {
+    const latestReviews = data.slice(0,9).sort((a,b) => new Date(b.publishDate) - new Date(a.publishDate)) 
+    setDataReviews(latestReviews)
+    setTitle('Latest Reviews')
+    setIsButtonLastActive(true)
+    setIsButtonPopularActive(false)
+  }
+
   useEffect(() => {
     fetchAllReviews()
   }, [fetchAllReviews])
 
   useEffect(() => {
-    const copy = [...data]
-    if(data.length) {
-      const latestReviews = data.slice(0,9).sort((a,b) => new Date(b.publishDate) - new Date(a.publishDate)) 
-      setLatestReviews(latestReviews)
-      const ratedReviews = copy.slice(0,9).sort((a, b) => b.ratingAuth - a.ratingAuth)
-      setRatedReviews(ratedReviews)
-      const tags = data.map((review) => review.tags)
-      setTags(tags.flat())
-    }
-  }, [data])
-
-  useEffect(() => {
     if(data) {
-      data.map(review => {
-        if(review.img) {
-          getDownloadURL(ref(storage, `reviews/${review.randomId}`))
-          .then((url) => {
-            const xhr = new XMLHttpRequest()
-            xhr.responseType = 'blob'
-            xhr.onload = (event) => {
-              const blob = xhr.response
-            }
-            xhr.open('GET', url)
-            xhr.send()
-            const img = document.querySelectorAll(`#${review.randomId}`)
-            img.forEach(image => image.setAttribute('src', url))
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+      const copy = [...data]
+      const ratedReviews = copy.slice(0,9).sort((a, b) => b.ratingAuth - a.ratingAuth)
+      setDataReviews(ratedReviews)
+      const title = 'Popular Reviews' 
+      setTitle(title)
+      data.map(review => tags.push(review.tags))
+      const removeDuplicateObject = tags.flat().reduce((acc, i) => {
+        if(!acc.find(tag => tag.value == i.value)) {
+          acc.push(i)
         }
-      })
+        return acc
+      }, [])
+      setTags(removeDuplicateObject)
     }
   }, [data])
 
   return (
-    <Container style={{padding: '60px 20px'}}>
+    <Container style={{padding: '60px 20px'}} className='position-relative'>
       <Row className='gy-5'>
-        <Col>
-        <div>
-          <h1 style={{fontSize: '25px'}}>Latest Reviews</h1>
-          <ListGroup as='ul' style={{marginTop: '20px'}}>
-            {latestReviews && latestReviews.map(review => {
-              return (
-                <ListGroup.Item 
-                  as='li' 
-                  key={review._id} 
-                  style={listStyle}
-                >
-                  <Link 
-                    to={`${review._id}`} 
-                    className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
-                    style={context.lightTheme ? {textDecoration: 'none', color: 'black'} : {textDecoration: 'none', color: 'white'}}
-                  >
-                    <div>
-                      <h2 style={{fontSize: '20px'}}>{review.title}</h2>
-                      <p className='d-flex gap-2 flex-row'>
-                        Category: 
-                        <span style={{textTransform: 'capitalize'}}>
-                          {review.category}
-                        </span>
-                      </p>
-                      <p className='d-flex flex-row gap-2'>
-                        Users rating: {review.ratingUsers} 
-                        <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
-                      </p>
-                    </div>
-                    {review.img 
-                      ? <div style={{width: '200px', height: '100px', overflow: 'hidden'}}>
-                          <img 
-                            style={{height: '100%'}}
-                            id={review.randomId}
-                            src={grayBack} 
-                            alt={'img'}
-                          /> 
-                        </div>
-                      : ''
-                    }
-                  </Link>
-                </ListGroup.Item>
-              )
-            })}
-          </ListGroup> 
-        </div>
+        <Col sm={8}>
+          <ButtonsReviews 
+            handlePopularReviewButtonClick={handlePopularReviewButtonClick}
+            handleLastReviewButtonClick={handleLastReviewButtonClick}
+            isButtonLastActive={isButtonLastActive}
+            isButtonPopularActive={isButtonPopularActive}
+          />
+          <ReviewList data={dataReviews} title={title}/>
         </Col>
-        <Col>
-          <h2 style={{fontSize: '25px'}}>Top rated reviews</h2>
-          <ListGroup as='ul' style={{marginTop: '20px'}}>
-            {ratedReviews && ratedReviews.map(review => {
-              return (
-                <ListGroup.Item 
-                  as='li' 
-                  key={review._id} 
-                  style={listStyle}
-                >
-                  <Link 
-                    to={`${review._id}`} 
-                    className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
-                    style={context.lightTheme ? {textDecoration: 'none', color: 'black'} : {textDecoration: 'none', color: 'white'}}
-                  >
-                    <div>
-                      <h2 style={{fontSize: '20px'}}>{review.title}</h2>
-                      <p className='d-flex gap-2 flex-row'>
-                        Category: 
-                        <span style={{textTransform: 'capitalize'}}>
-                          {review.category}
-                        </span>
-                      </p>
-                      <p className='d-flex flex-row gap-2'>
-                        Users rating: {review.ratingUsers} 
-                        <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
-                      </p>
-                    </div>
-                    {review.img 
-                      ? <div style={{width: '200px', height: '100px', overflow: 'hidden'}}>
-                          <img 
-                            style={{height: '100%'}}
-                            id={review.randomId}
-                            src={grayBack} 
-                            alt={'img'}
-                          /> 
-                        </div>
-                      : ''
-                    }
-                  </Link>
-                </ListGroup.Item>
-              )
-            })}
-          </ListGroup>
-          <h3 style={{marginTop: '20px'}}>Tags</h3>
-          {/* {data && <ReactWordcloud words={tags} />} */}
+        <Col sm={4} className='d-flex flex-column align-items-end'>
+          <SelectLanguage />
+          <Tags tags={tags}/>
         </Col>
       </Row>
     </Container>

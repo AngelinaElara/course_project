@@ -8,6 +8,7 @@ import AuthReviewDetails from '../pages/AuthReviewDetails'
 import ReviewDetails from '../pages/ReviewDetails'
 import Success from '../components/OAuth/components/Success'
 import Error from '../components/OAuth/components/Error'
+import TagsList from '../pages/TagsList/TagsList'
 
 export const useRoutes = (isAuth) => {
   if (isAuth) {
@@ -19,6 +20,7 @@ export const useRoutes = (isAuth) => {
         <Route path='/review' element={<CreateReview />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/profile/:id' element={<AuthReviewDetails />} />
+        <Route path='/search' element={<TagsList />}/>
       </Routes>
     )
   }
@@ -32,6 +34,7 @@ export const useRoutes = (isAuth) => {
       <Route path='/authorization' element={<Authorization />} />
       <Route path='/login/success' element={<Success />} />
       <Route path='/login/error' element={<Error />} />
+      <Route path='/search' element={<TagsList />}/>
     </Routes>
   )
 }

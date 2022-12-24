@@ -77,6 +77,7 @@ const Profile = () => {
   const handleDeleteBtn = async () => {
     if(isCheck.length) {
       const data = await request(`/review`, 'DELETE', {id: isCheck})
+      window.location.reload()
     }
     for(let checkItem of isCheck) {
       const findReview = dataReviews.filter(review => review._id === checkItem)
@@ -89,12 +90,11 @@ const Profile = () => {
         })
       }
     }
-    window.location.reload()
   }
 
   const handleLogoutBtnClick = async () => {
     context.logout()
-    const response = await axios.get('http://localhost:5000/logout', {withCredentials: true}).catch(err => console.log(err))
+    const response = await axios.get('http://5-180-180-221.cloud-xip.com:5000/auth/logout', {withCredentials: true}).catch(err => console.log(err))
     window.location.reload()
   }
 

@@ -4,9 +4,7 @@ const {check, validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
-const passport = require('passport')
 const router = Router()
-const isUserAuthenticated = require('../middlewares/auth')
 
 router.post(
   '/register',
@@ -74,7 +72,15 @@ router.post('/login', async (req, res) => {
   }
 })
 
-
-
+router.get('/logout', function(req, res, next) {
+  req.session = null
+  res.clearCookie('session')
+  res.end()
+  req.logout(function(err) {
+    if (err) { return next(err) }
+    console.log(req.logout)
+    res.redirect('/')
+  })
+}) 
 
 module.exports = router

@@ -29,7 +29,9 @@ const rejectStyle = {
   borderColor: '#ff1744'
 }
 
-const DropzoneComponent = () => {
+const DropzoneComponent = ({
+  isResetImg
+}) => {
   const [files, setFiles] = useState([])
 
   const context = useContext(Context)
@@ -93,6 +95,10 @@ const DropzoneComponent = () => {
   useEffect(() => () => {
     files.forEach(file => URL.revokeObjectURL(file.preview))
   }, [files])
+
+  useEffect(() => {
+    if(isResetImg) handleFilesDelete()
+  }, [isResetImg])
 
   return (
     <div className=''>

@@ -35,16 +35,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use('/api/v1', apiGoogle)
 app.use('/api', apiVk)
-app.get('/logout', function(req, res, next) {
-  req.session = null
-  res.clearCookie('session')
-  res.end()
-  req.logout(function(err) {
-    if (err) { return next(err) }
-    console.log(req.logout)
-    res.redirect('/')
-  })
-}) 
 
 if(process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, 'client', 'build')))

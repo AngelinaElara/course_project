@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import { storage } from '../../firebase/index'
 import { ref, getDownloadURL} from 'firebase/storage'
 import Modal from './components/Modal'
-import gray from '../../ui/gray.jpg'
+import photoLoad from '../../ui/photoLoad.png'
 import './style/reviewDetails.css'
 
 const AuthReviewDetails = () => {
@@ -72,7 +72,7 @@ const AuthReviewDetails = () => {
                 <img 
                   style={{height: '100%'}}
                   id={`${review.randomId}`}
-                  src={gray}
+                  src={photoLoad}
                   alt={'img'}
                 /> 
               </div>
@@ -85,7 +85,7 @@ const AuthReviewDetails = () => {
           <div className='d-flex flex-row gap-2'>
             <p>Tags:</p>
             <div className='d-flex flex-row gap-2'>
-              {review.tags.map(tag => <p>#{tag.text}</p>)}
+              {review.tags.map(tag => <p>#{tag.value}</p>)}
             </div>
           </div>
           <p className='d-flex flex-row gap-2'>
@@ -93,7 +93,7 @@ const AuthReviewDetails = () => {
             <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
           </p>
           <p className='d-flex flex-row gap-2'>
-            Users rating: {review.ratingUsers} 
+            Users rating: {review.finalRating} 
             <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
           </p>
         </Col>

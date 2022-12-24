@@ -9,10 +9,12 @@ const schema = new Schema({
   tags: {type: Array, required: true},
   img: {type: Boolean, default: false},
   ratingAuth: {type: Number, required: true, default: 0},
-  ratingUsers: {type: Number, required: true, default: 0},
+  ratingUsers: {type: Array},
+  finalRating: {type: Number, required: true, default: 0},
   randomId: {type: String, required: true},
   publishDate: {type: Date, required: true, default: Date.now},
-  comments: {type: Array, required: true}
+  comments: {type: Array},
+  liked: {type: Array}
 }, {versionKey: false}) 
  
 module.exports = model('Review', schema)    
