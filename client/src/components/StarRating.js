@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
-import '../../style/StarRating.css'
-import { useHttp } from '../../hooks/http.hook'
+import '../style/StarRating.css'
+import { useHttp } from '../hooks/http.hook'
 
 const StarRating = ({
   rating,
@@ -8,7 +8,8 @@ const StarRating = ({
   lengthArray,
   isUserClick,
   userId,
-  reviewId
+  reviewId,
+  isAuth
 }) => {
   const [hover, setHover] = useState(0)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
@@ -31,6 +32,10 @@ const StarRating = ({
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    if(!isAuth) setIsButtonDisabled(true)
+  }, [isAuth])
 
   useEffect(() => {
     if(rating) setIsButtonDisabled(true)

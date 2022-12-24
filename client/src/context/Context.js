@@ -13,5 +13,4 @@ export const Context = createContext({
   imageUrl: null,
   isImage: false,
   lightTheme: true,
-  loginMethid: ''
 })

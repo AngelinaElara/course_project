@@ -6,7 +6,8 @@ import { useHttp } from '../../../hooks/http.hook'
 import { storage } from '../../../firebase/index'
 import { ref, getDownloadURL} from 'firebase/storage'
 import {ReactComponent as HeartIcon} from '../../../ui/heart.svg'
-import StarRating from '../../../components/StarRating/StarRating'
+import StarRating from '../../../components/StarRating'
+import {useAuth} from '../../../hooks/auth.hook'
 
 const ReviewDescription = ({
   review,
@@ -17,7 +18,9 @@ const ReviewDescription = ({
   const [isLikeDisabled, setIsLikeDisabled] = useState(false)
   const [authorLikes, setAuthorLikes] = useState(0)
   const [rating, setRating] = useState(0)
-  const {request} = useHttp()
+  const {request} = useHttp() 
+  const {token} = useAuth()
+  const isAuth = !!token
  
   const handleLikeClick = async () => {
     setAuthorLikes(prev => prev+1)
@@ -33,6 +36,10 @@ const ReviewDescription = ({
       console.error(e)
     } 
   }, [authorId])
+
+  useEffect(() => {
+    if(!isAuth) setIsLikeDisabled(true)
+  }, [isAuth])
 
   useEffect(() => {
     getAuthLikes()
@@ -130,6 +137,7 @@ const ReviewDescription = ({
             isUserClick={true}
             userId={userId}
             reviewId={reviewId}
+            isAuth={isAuth}
           />
         </div>
       </Col>

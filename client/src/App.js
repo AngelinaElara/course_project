@@ -11,7 +11,6 @@ const App = () => {
   const [lightTheme, setLightTheme] = useState(JSON.parse(localStorage.getItem('theme') || true))
   const [data, setData] = useState([])
   const [isImage, setIsImage] = useState(false)
-  const [loginMethod, setLoginMethod] = useState('')
   const {request} = useHttp()
   const {token, login, logout, userId, userName} = useAuth()
   const {ratingAuth, imageUrl} = useReview()
@@ -36,7 +35,7 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme, loginMethod
+      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme
     }}>
       <div 
         style={styleBody} 

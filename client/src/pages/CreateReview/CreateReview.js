@@ -1,6 +1,6 @@
 import {useState, useContext, useEffect} from 'react'
 import Dropzone from '../../components/Dropzone'
-import StarRating from '../../components/StarRating/StarRating'
+import StarRating from '../../components/StarRating'
 import {Context} from '../../context/Context'
 import {useAuth} from '../../hooks/auth.hook'
 import {useHttp} from '../../hooks/http.hook'
