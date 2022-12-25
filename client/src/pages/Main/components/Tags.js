@@ -17,7 +17,7 @@ const Tags = ({tags}) => {
       <TagCloud
         minSize={12}
         maxSize={30} 
-        tags={tags}
+        tags={tags.slice(0,80)}
         onClick={tag => handleTagClick(tag.value)}
       />
     </div>

@@ -8,7 +8,9 @@ import Row from 'react-bootstrap/Row'
 import ReviewDescription from './components/ReviewDescription'
 import Comments from './components/Comments'
 
-const ReviewDetails = () => {
+const ReviewDetails = ({
+  data
+}) => {
   const [review, setReview] = useState({})
   const [commentValue, setCommentValue] = useState('')
   const [commentsArray, setCommentsArray] = useState([])
@@ -17,23 +19,6 @@ const ReviewDetails = () => {
   const {request} = useHttp()
   const {userId, userName, token} = useAuth()
   const isAuth = !!token
-
-  const fetchReview = useCallback(async () => {
-    try { 
-      let getData = await request(`/review/${id}`, 'GET')
-      setReview(getData)
-    } catch (e) {
-      console.error(e)
-    } 
-  }, [id])
-
-  useEffect(() => {
-    setInterval(async () => {
-      const getComments = await request(`review/comment/${id}`, 'GET')
-      const sortComments = getComments.sort((a,b) => new Date(a.date) - new Date(b.date))
-      setCommentsArray(sortComments)
-    }, 2000)
-  }, [])
 
   const handleCommentBtnClick = async () => {
     try {
@@ -49,9 +34,20 @@ const ReviewDetails = () => {
     }
   }
 
-  useEffect(() => {  
-    fetchReview() 
-  }, [fetchReview])
+  useEffect(() => {
+    if(data) {
+      const review = data.find(review => review._id === id)
+      setReview(review)
+    }
+  }, [data])
+
+  useEffect(() => {
+    setInterval(async () => {
+      const getComments = await request(`review/comment/${id}`, 'GET')
+      const sortComments = getComments.sort((a,b) => new Date(a.date) - new Date(b.date))
+      setCommentsArray(sortComments)
+    }, 2000)
+  }, [])
 
   if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
 

@@ -53,7 +53,7 @@ const Header = ({
 
   const handleListItemClick = () => {
     setSearchValue('')
-    setFilterData([])
+    setFilterData([]) 
   }
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const Header = ({
               {searchValue && filterData
                 ? filterData.map((data, index) => {
                   return ( 
-                    <ListGroup.Item key={index} onClick={handleListItemClick}>
+                    <ListGroup.Item key={index} onClick={handleListItemClick} as='li'>
                       <Link to={`/${data._id}`}>
                         {data.title}
                       </Link>

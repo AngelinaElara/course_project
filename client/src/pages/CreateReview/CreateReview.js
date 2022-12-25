@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext, useEffect, useMemo} from 'react'
 import Dropzone from '../../components/Dropzone'
 import StarRating from '../../components/StarRating'
 import {Context} from '../../context/Context'
@@ -9,13 +9,18 @@ import {ref, uploadBytes  } from 'firebase/storage'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import CloseButton from 'react-bootstrap/CloseButton'
+import ListGroup from 'react-bootstrap/ListGroup'
 import './style/tags.css'
 
-const CreateReview = () => {
+const CreateReview = ({
+  listTags
+}) => {
   const [inputTitleValue, setInputTitleValue] = useState('')
   const [categoryValue, setCategoryValue] = useState('')
   const [inputDescriptionValue, setInputDescriptionValue] = useState('')
   const [tags, setTags] = useState([])
+  const [tagValue, setTagValue] = useState('')
+  const [filterTags, setFilterTags] = useState([])
   const [isResetImg, setIsResetImg] = useState(false)
   const [rating, setRating] = useState(0)
   const [isFromReset, setIsFormReset] = useState(false)
@@ -73,6 +78,11 @@ const CreateReview = () => {
     }
   }
 
+  const handleTagsListClick = (event) => {
+    setTags([...tags, {value: event.target.textContent, count: 0}])
+    setTagValue('')
+  }
+
   useEffect(() => {
     if(isFromReset) {
       setInputTitleValue('')
@@ -83,6 +93,15 @@ const CreateReview = () => {
       setRating(0)
     }
   }, [isFromReset])
+
+  useMemo(() => {
+    if(tagValue && listTags) {
+      const foundTags = listTags.filter(tag => {
+        return tag.value.toLowerCase().includes(tagValue.toLowerCase())
+      })
+      setFilterTags(foundTags)
+    }
+  }, [tagValue])
 
   return (
     <div 
@@ -136,6 +155,7 @@ const CreateReview = () => {
 
         <Form.Group 
           style={{width: '90%'}}
+          
         >
           <Form.Label htmlFor='tags'>Tags</Form.Label>
           <div className='tags-input' style={{width: '100%'}}>
@@ -151,13 +171,36 @@ const CreateReview = () => {
 					    </li>
 				    ))}
 			      </ul>
-			      <Form.Control
-				      type='text'
-				      onKeyUp={event => event.key === 'Enter' ? handleAddTags(event) : null}
-				      placeholder='Press enter to add tags'
-              style={{textTransform: 'lowercase'}}
-			      />
-		      </div>
+            <div className='position-relative' style={{width: '100%'}}>
+			        <Form.Control
+				        type='text'
+				        onKeyUp={event => event.key === 'Enter' ? handleAddTags(event) : null}
+                onChange={(event) => setTagValue(event.target.value)}
+				        placeholder='Press enter to add tags'
+                style={{textTransform: 'lowercase', width: '100%'}}
+                value={tagValue}
+			        />
+              <ListGroup 
+                  as='ul' 
+                  className='position-absolute' 
+                  style={{width: '100%', top: '40px', maxHeight: '150px', height: 'auto', overflow: 'auto', padding: '0 8px'}}
+                >
+                  {tagValue && filterTags
+                    ? filterTags.map((tag, index) => {
+                      return ( 
+                        <ListGroup.Item 
+                          key={index} 
+                          as='li'
+                          onClick={(event) => handleTagsListClick(event)} 
+                        >
+                          {tag.value}
+                        </ListGroup.Item>
+                      )
+                    })
+                    : ''}
+              </ListGroup>
+		        </div>
+          </div>
         </Form.Group>
 
         <Dropzone isResetImg={isResetImg}/>

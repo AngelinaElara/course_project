@@ -1,6 +1,4 @@
-import {useState, useEffect, useCallback} from 'react'
-import { useHttp } from '../../hooks/http.hook'
-import {useAuth} from '../../hooks/auth.hook'
+import {useState, useEffect} from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -12,29 +10,23 @@ import Modal from './components/Modal'
 import photoLoad from '../../ui/photoLoad.png'
 import './style/reviewDetails.css'
 
-const AuthReviewDetails = () => {
+const AuthReviewDetails = ({
+  data
+}) => {
   const [review, setReview] = useState({})
   const [isModalActive, setIsModalActive] = useState(false)
   let {id}  = useParams()
-  const {token} = useAuth()
-  const {request} = useHttp()
-
-  const fetchReview = useCallback(async () => {
-    try { 
-      let getData = await request(`/review/${id}`, 'GET')
-      setReview(getData)
-    } catch (e) {
-      console.error(e)
-    } 
-  }, [token, request])
   
   const handleBtnChangeClick = () => {
     setIsModalActive(true)
   }
 
-  useEffect(() => {  
-    fetchReview()  
-  }, [fetchReview]) 
+  useEffect(() => {
+    if(data) {
+      const findedReview = data.find(review => review._id  === id)
+      setReview(findedReview)
+    }
+  }, [data])
 
   useEffect(() => {
     if(review.img) {

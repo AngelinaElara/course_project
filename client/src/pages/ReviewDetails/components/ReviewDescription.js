@@ -64,7 +64,7 @@ const ReviewDescription = ({
       })
     }
     if(review) {
-      const findRatingFromUser = review.ratingUsers.find(user => user.userId === userId)
+      const findRatingFromUser = review?.ratingUsers.find(user => user.userId === userId)
       if(findRatingFromUser) setRating(findRatingFromUser.rating)
     }
   }, [review])
@@ -92,7 +92,7 @@ const ReviewDescription = ({
         <div className='d-flex flex-row gap-2'>
           <p>Tags:</p>
           <div className='d-flex flex-row gap-2'>
-            {review.tags.map(tag => <p>#{tag.value}</p>)}
+            {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
           </div>
         </div>
         <p className='d-flex flex-row gap-2'>

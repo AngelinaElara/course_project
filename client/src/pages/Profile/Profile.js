@@ -13,25 +13,23 @@ import trash from '../../ui/trash.png'
 import addBtn from '../../ui/addBtn.png'
 import axios from 'axios'
 
-const Profile = () => {
+const Profile = ({
+  data
+}) => {
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
   const [dataReviews, setDataReviews] = useState([])
-  const [data, setData] = useState([])
-  const {token, userId, method} = useAuth() 
+  const {userId} = useAuth() 
   const {request} = useHttp()
   const context = useContext(Context)
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
 
-  const fetchReviews = useCallback(async () => {
-    try { 
-      let getData = await request(`/review/get/${userId}`, 'GET') 
-      setDataReviews(getData)
-      setData(getData)
-    } catch (e) {
-      console.error(e)
-    } 
-  }, [token, request]) 
+  useEffect(() => {
+    if(data) {
+      const userReviews = data.filter(review => review.idFrom === userId)
+      setDataReviews(userReviews) 
+    }
+  }, [data])
 
   const handleSelectAllCheckboxes = e => {
     setIsCheckAll(!isCheckAll)
@@ -97,10 +95,6 @@ const Profile = () => {
     const response = await axios.get('http://5-180-180-221.cloud-xip.com:5000/auth/logout', {withCredentials: true}).catch(err => console.log(err))
     window.location.reload()
   }
-
-  useEffect(() => { 
-    fetchReviews()
-  }, [fetchReviews]) 
 
   return (
     <div 

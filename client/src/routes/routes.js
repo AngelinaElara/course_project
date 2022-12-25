@@ -10,16 +10,38 @@ import Success from '../components/OAuth/components/Success'
 import Error from '../components/OAuth/components/Error'
 import TagsList from '../pages/TagsList/TagsList'
 
-export const useRoutes = (isAuth) => {
+export const useRoutes = (
+  isAuth,
+  tags,
+  data
+) => {
   if (isAuth) {
     return (
       <Routes>
-        <Route path='*' element={<Main />} />
-        <Route path='/' element={<Main />} />
-        <Route path='/:id' element={<ReviewDetails />} />
-        <Route path='/review' element={<CreateReview />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/profile/:id' element={<AuthReviewDetails />} />
+        <Route 
+          path='*' 
+          element={<Main tags={tags} data={data} />} 
+        />
+        <Route 
+          path='/' 
+          element={<Main tags={tags} data={data}/>} 
+        />
+        <Route 
+          path='/:id' 
+          element={<ReviewDetails data={data}/>} 
+        />
+        <Route 
+          path='/review' 
+          element={<CreateReview listTags={tags}/>} 
+        />
+        <Route 
+          path='/profile' 
+          element={<Profile data={data}/>} 
+        />
+        <Route 
+          path='/profile/:id' 
+          element={<AuthReviewDetails data={data}/>} 
+        />
         <Route path='/search' element={<TagsList />}/>
       </Routes>
     )
@@ -27,9 +49,18 @@ export const useRoutes = (isAuth) => {
 
   return (
     <Routes>
-      <Route path='*' element={<Main />} />
-      <Route path='/' element={<Main />} />
-      <Route path='/:id' element={<ReviewDetails />} />
+      <Route 
+        path='*' 
+        element={<Main tags={tags} data={data}/>} 
+      />
+      <Route 
+        path='/' 
+        element={<Main tags={tags} data={data}/>} 
+      />
+      <Route 
+        path='/:id' 
+        element={<ReviewDetails data={data}/>} 
+      />
       <Route path='/login' element={<Login />} />
       <Route path='/authorization' element={<Authorization />} />
       <Route path='/login/success' element={<Success />} />
