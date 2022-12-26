@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import { Context } from '../../context/Context'
 import Button from 'react-bootstrap/Button'
 import {ReactComponent as GoogleIcon} from '../../ui/googleIcon.svg'
+import { useTranslation } from 'react-i18next'
 
 const OAuth = () => {
   const context = useContext(Context)
   const navigate = useNavigate('/')
+  const { t } = useTranslation()
 
   const fetchAuthUser = async (route) => {
     const response = await axios
@@ -62,13 +64,13 @@ const OAuth = () => {
         <div>
           <GoogleIcon style={{width: '30px', height: '30px'}}/>
         </div>
-        <span>Sing in with Google</span>
+        <span>{t('google')}</span>
       </Button>
       <Button    
         onClick={handleVKClick} 
         className='d-flex align-items-center justify-content-center flex-row gap-3'
       >
-        <span>Sing in with Vkontakte</span>
+        <span>{t('vk')}</span>
       </Button>
     </div>
   ) 

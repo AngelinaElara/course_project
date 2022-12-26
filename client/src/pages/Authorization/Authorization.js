@@ -10,6 +10,7 @@ import {
 } from '../../utils/helpers'
 import { Context } from '../../context/Context'
 import OAuth from '../../components/OAuth/OAuth'
+import { useTranslation } from 'react-i18next'
 
 const Authorization = () => {
   const [inputNameValue, setInputNameValue] = useState('')
@@ -18,9 +19,10 @@ const Authorization = () => {
   const [inputConfirmPasswordValue, setInputConfirmPasswordValue] = useState('')
   const [isFormReset, setIsFormReset] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
-  const {loading, error, request} = useHttp()
+  const {request} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const inputNameClassName = inputNameValue.length
     ? ` m-2 p-2 shadow-sm rounded ${validateInputNameValue(inputNameValue)
@@ -95,13 +97,13 @@ const Authorization = () => {
 
   return (
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}> 
-      <h1 className='text-secondary'>Authorization</h1>
+      <h1 className='text-secondary'>{t('authorization')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
         <input 
           className={inputNameClassName}
           style={{height: '40px', outline: 'none'}} 
           type={'text'} 
-          placeholder='Name'
+          placeholder={t('nameLog')}
           name='name'
           value={inputNameValue}
           onChange={(event) => setInputNameValue(event.target.value)}
@@ -119,7 +121,7 @@ const Authorization = () => {
           className={inputPasswordClassName}
           style={{height: '40px', outline: 'none'}} 
           type={'password'} 
-          placeholder='Password'
+          placeholder={t('password')}
           name='password'
           value={inputPasswordValue}
           onChange={(event) => setInputPasswordValue(event.target.value)}
@@ -128,7 +130,7 @@ const Authorization = () => {
           className={inputConfirmPasswordClassName} 
           style={{height: '40px', outline: 'none'}} 
           type={'password'} 
-          placeholder='Confirm password'
+          placeholder={t('confirmPassword')}
           name='confirmPassword'
           value={inputConfirmPasswordValue}
           onChange={(event) => setInputConfirmPasswordValue(event.target.value)}
@@ -141,10 +143,10 @@ const Authorization = () => {
           onClick={handleFormSubmit}
           disabled={isButtonDisabled}
         >
-          Registration
+          {t('authorization')}
         </Button >
       </Form>
-      <p>Do you have account? <Link to='/login'>Login</Link></p>
+      <p>{t('haveAccount')} <Link to='/login'>{t('login')}</Link></p>
       <OAuth />
     </div>
   )

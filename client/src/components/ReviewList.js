@@ -5,11 +5,13 @@ import photoLoad from '../ui/photoLoad.png'
 import { storage } from '../firebase/index'
 import { ref, getDownloadURL} from 'firebase/storage'
 import { Context } from '../context/Context'
+import { useTranslation } from 'react-i18next'
 
 const ReviewList = ({
   data,
   title
 }) => {
+  const { t } = useTranslation()
   const context = useContext(Context)
   const listStyle = context.lightTheme 
     ? {background: '#ccccff', color: 'black'} 
@@ -41,7 +43,7 @@ const ReviewList = ({
 
   return (
     <div style={{marginTop: '20px'}}>
-      <h1 style={{fontSize: '25px'}}>{title}</h1>
+      <h1 style={{fontSize: '25px'}}>{title === 'Popular reviews' ? t('popularReviews') : t('latestReviews')}</h1>
       <ListGroup as='ul' style={{marginTop: '20px'}}>
         {data && data.map(review => {
           return (
@@ -58,13 +60,13 @@ const ReviewList = ({
                 <div>
                   <h2 style={{fontSize: '20px'}}>{review.title}</h2>
                   <p className='d-flex gap-2 flex-row'>
-                    Category: 
+                    {t('category')}:
                     <span style={{textTransform: 'capitalize'}}>
                       {review.category}
                     </span>
                   </p>
                   <p className='d-flex flex-row gap-2'>
-                    Users rating: {review.finalRating} 
+                    {t('userRating')}: {review.finalRating} 
                     <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
                   </p>
                 </div>

@@ -5,6 +5,7 @@ import { Context } from '../../context/Context'
 import {useHttp} from '../../hooks/http.hook'
 import {Link, useNavigate} from 'react-router-dom'
 import OAuth from '../../components/OAuth/OAuth'
+import { useTranslation } from 'react-i18next'
 
 const Login = () => {
   const [inputEmailValue, setInputEmailValue] = useState('')
@@ -12,6 +13,7 @@ const Login = () => {
   const {request} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const handleFormSubmit = async () => {
     try {
@@ -30,7 +32,7 @@ const Login = () => {
 
   return (
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}>
-      <h1 className='text-secondary'>Login</h1>
+      <h1 className='text-secondary'>{t('login')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
         <Form.Control 
           className='m-2 p-2 shadow-sm border border-light rounded' 
@@ -45,7 +47,7 @@ const Login = () => {
           className='m-2  p-2 shadow-sm border border-light rounded' 
           style={{height: '40px'}} 
           type={'password'} 
-          placeholder='Password'
+          placeholder={t('password')}
           name='password'
           value={inputPasswordValue}
           onChange={(event) => setInputPasswordValue(event.target.value)}
@@ -56,10 +58,10 @@ const Login = () => {
           className='m-2' 
           onClick={handleFormSubmit}
         >
-          Login
+          {t('login')}
         </Button>
       </Form>
-      <p>Don't have an account? <Link to='/authorization'>Authorization</Link></p>
+      <p>{t("haven'tAccount")} <Link to='/authorization'>{t('authorization')}</Link></p>
       <OAuth />
     </div>
   )

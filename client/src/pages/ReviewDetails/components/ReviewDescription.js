@@ -8,6 +8,7 @@ import { ref, getDownloadURL} from 'firebase/storage'
 import {ReactComponent as HeartIcon} from '../../../ui/heart.svg'
 import StarRating from '../../../components/StarRating'
 import {useAuth} from '../../../hooks/auth.hook'
+import { useTranslation } from 'react-i18next'
 
 const ReviewDescription = ({
   review,
@@ -21,6 +22,7 @@ const ReviewDescription = ({
   const {request} = useHttp() 
   const {token} = useAuth()
   const isAuth = !!token
+  const { t } = useTranslation()
  
   const handleLikeClick = async () => {
     setAuthorLikes(prev => prev+1)
@@ -90,18 +92,18 @@ const ReviewDescription = ({
         <h2>{review.title}</h2>
         <p>{review.description}</p>
         <div className='d-flex flex-row gap-2'>
-          <p>Tags:</p>
+          <p>{t('tags')}</p>
           <div className='d-flex flex-row gap-2'>
             {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
           </div>
         </div>
         <p className='d-flex flex-row gap-2'>
-          Users rating: {review.finalRating} 
+          {t("userRating")}: {review.finalRating} 
           <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
         </p>
         <div className='d-flex gap-4 flex-row  align-items-center'>
           <div className='d-flex gap-2 flex-row justify-content-center align-items-center'>
-            Review from: 
+            {t('reviewFrom')}: 
             <span style={{textTransform: 'capitalize'}}>
               {review.from}
             </span>
@@ -124,12 +126,12 @@ const ReviewDescription = ({
                 height={'20px'} 
                 fill={isLikeDisabled ? 'red' : 'black'}
               />
-              <span>Like the author</span>
+              <span>{t('likeAuthor')}</span>
             </Button>
           </div>
         </div>
         <div>
-          <span>Rate the review</span>
+          <span>{t('rateReview')}</span>
           <StarRating 
             lengthArray={5}
             rating={rating}

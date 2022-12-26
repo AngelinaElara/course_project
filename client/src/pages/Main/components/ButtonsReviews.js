@@ -1,4 +1,5 @@
 import Button from 'react-bootstrap/Button'
+import { useTranslation } from 'react-i18next'
 
 const ButtonsReviews = ({
   handlePopularReviewButtonClick,
@@ -6,19 +7,21 @@ const ButtonsReviews = ({
   isButtonPopularActive,
   isButtonLastActive
 }) => {
+  const { t } = useTranslation()
+
   return (
     <div className='d-flex flex-row gap-2'> 
       <Button 
         onClick={handlePopularReviewButtonClick}
         className={isButtonPopularActive ? 'btn-primary' : 'btn-light'}
       >
-        Popular Reviews
+        {t('popularReviews')}
       </Button>
       <Button 
         onClick={handleLastReviewButtonClick}
         className={isButtonLastActive ? 'btn-primary' : 'btn-light'}
       >
-        Latest Reviews
+        {t('latestReviews')}
       </Button>
     </div>
   )

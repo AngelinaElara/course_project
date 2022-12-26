@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button'
 import CloseButton from 'react-bootstrap/CloseButton'
 import ListGroup from 'react-bootstrap/ListGroup'
 import './style/tags.css'
+import { useTranslation } from 'react-i18next'
 
 const CreateReview = ({
   listTags
@@ -32,6 +33,7 @@ const CreateReview = ({
     contentType: 'image/jpeg',
   }
   const storageRef = ref(storage, `reviews/c${randomId}`)
+  const { t } = useTranslation()
 
   const handleDeleteTags = (indexToRemove) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)])
@@ -108,7 +110,7 @@ const CreateReview = ({
       className='d-flex justify-content-center align-items-center flex-column' 
       style={{paddingTop: '60px'}}
     >
-      <h1 style={{marginTop: '10px'}}>New review</h1>
+      <h1 style={{marginTop: '10px'}}>{t('newReview')}</h1>
       <Form 
         className='d-flex justify-content-center align-items-center flex-column gap-3 p-3 mb-5' 
         style={{width: '100%'}}
@@ -116,10 +118,9 @@ const CreateReview = ({
         <Form.Group 
           style={{width: '90%'}}
         >
-          <Form.Label htmlFor='title'>Title</Form.Label>
+          <Form.Label htmlFor='title'>{t('title')}</Form.Label>
           <Form.Control 
             id='title' 
-            placeholder='Name of the book/film and etc...' 
             value={inputTitleValue}
             onChange={(event) => setInputTitleValue(event.target.value)}
           />
@@ -128,7 +129,7 @@ const CreateReview = ({
         <Form.Group 
           style={{width: '90%'}}
         >
-          <Form.Label>Category</Form.Label>
+          <Form.Label>{t('category')}</Form.Label>
           <Form.Select 
             onChange={(event) => setCategoryValue(event.target.value)} 
             value={categoryValue}
@@ -143,7 +144,7 @@ const CreateReview = ({
         <Form.Group 
           style={{width: '90%'}}
         >
-          <Form.Label>Description</Form.Label>
+          <Form.Label>{t('description')}</Form.Label>
           <Form.Control 
             as='textarea' 
             rows={5}
@@ -157,7 +158,7 @@ const CreateReview = ({
           style={{width: '90%'}}
           
         >
-          <Form.Label htmlFor='tags'>Tags</Form.Label>
+          <Form.Label htmlFor='tags'>{t('tags')}</Form.Label>
           <div className='tags-input' style={{width: '100%'}}>
 			      <ul id='tags'>
 				    {tags.map((tag, index) => (
@@ -168,7 +169,7 @@ const CreateReview = ({
 						    >
 							    <CloseButton />
 						    </span>
-					    </li>
+					    </li> 
 				    ))}
 			      </ul>
             <div className='position-relative' style={{width: '100%'}}>
@@ -176,7 +177,7 @@ const CreateReview = ({
 				        type='text'
 				        onKeyUp={event => event.key === 'Enter' ? handleAddTags(event) : null}
                 onChange={(event) => setTagValue(event.target.value)}
-				        placeholder='Press enter to add tags'
+				        placeholder={t('pressEnter')}
                 style={{textTransform: 'lowercase', width: '100%'}}
                 value={tagValue}
 			        />
@@ -209,7 +210,7 @@ const CreateReview = ({
           className='d-flex flex-column'
           style={{width: '90%'}}
         >
-          <p>Leave your rating:</p>
+          <p>{t('leaveRating')}:</p>
           <StarRating 
             rating={rating}
             setRating={setRating}
@@ -222,7 +223,7 @@ const CreateReview = ({
           type='submit'
           onClick={handleSubmitButtonClick}
         >
-          Leave feedback
+          {t('leaveFeedback')}
         </Button>
       </Form>
     </div>

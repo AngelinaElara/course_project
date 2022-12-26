@@ -10,6 +10,7 @@ import user from '../ui/user.png'
 import enter from '../ui/enter.png'
 import sun from '../ui/sun.png'
 import moon from '../ui/moon.png'
+import { useTranslation } from 'react-i18next'
 
 const Header = ({
   isLightTheme,
@@ -22,6 +23,7 @@ const Header = ({
   const isAuth = !!token
   const context = useContext(Context)
   const headerStyle = isLightTheme ? {height: '60px', background: '#b0c4de'} : {height: '60px', background: '#202020'}
+  const { t } = useTranslation()
 
   useMemo(() => {
     const found = []
@@ -70,7 +72,7 @@ const Header = ({
 
           <Form className='d-flex justify-content-center align-items-center gap-2 position-relative' style={{width: '50%'}}>
             <Form.Control 
-              type='search' placeholder='Search' 
+              type='search' placeholder={t('search')} 
               value={searchValue} 
               onChange={(event) => setSearchValue(event.target.value)}
             />

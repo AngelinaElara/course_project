@@ -6,6 +6,7 @@ import ButtonsReviews from './components/ButtonsReviews'
 import ReviewList from '../../components/ReviewList'
 import SelectLanguage from './components/SelectLanguage'
 import Tags from './components/Tags'
+import { useTranslation } from 'react-i18next'
 
 const Main = ({
   data,
@@ -15,12 +16,13 @@ const Main = ({
   const [title, setTitle] = useState('')
   const [isButtonLastActive, setIsButtonLastActive] = useState(false)
   const [isButtonPopularActive, setIsButtonPopularActive] = useState(true)
+  const { t } = useTranslation()
 
   const handlePopularReviewButtonClick = () => {
     const copy = [...data]
     const ratedReviews = copy.slice(0,9).sort((a, b) => b.ratingAuth - a.ratingAuth)
     setDataReviews(ratedReviews)
-    setTitle('Popular Reviews')
+    setTitle('Popular reviews')
     setIsButtonPopularActive(true)
     setIsButtonLastActive(false)
   }
@@ -28,7 +30,7 @@ const Main = ({
   const handleLastReviewButtonClick = () => {
     const latestReviews = data.slice(0,9).sort((a,b) => new Date(b.publishDate) - new Date(a.publishDate)) 
     setDataReviews(latestReviews)
-    setTitle('Latest Reviews')
+    setTitle('Latest reviews')
     setIsButtonLastActive(true)
     setIsButtonPopularActive(false)
   }
@@ -37,9 +39,8 @@ const Main = ({
     if(data) {
       const copy = [...data]
       const ratedReviews = copy.slice(0,9).sort((a, b) => b.ratingAuth - a.ratingAuth)
-      setDataReviews(ratedReviews)
-      const title = 'Popular Reviews' 
-      setTitle(title)
+      setDataReviews(ratedReviews) 
+      setTitle('Popular reviews')
     }
   }, [data])
 

@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState, useEffect , useContext} from 're
 import { useDropzone } from 'react-dropzone'
 import {Context} from '../context/Context'
 import CloseButton from 'react-bootstrap/CloseButton'
+import { useTranslation } from 'react-i18next'
 
 const baseStyle = {
   display: 'flex',
@@ -33,8 +34,8 @@ const DropzoneComponent = ({
   isResetImg
 }) => {
   const [files, setFiles] = useState([])
-
   const context = useContext(Context)
+  const { t } = useTranslation()
 
   const onDrop = useCallback(acceptedFiles => {
     setFiles(acceptedFiles.map(file => Object.assign(file, {
@@ -106,7 +107,7 @@ const DropzoneComponent = ({
         ? '' 
         : <div {...getRootProps({style})}>
             <input {...getInputProps()} />
-            <div>Drag and drop your images here.</div>
+            <div>{t('drag')}</div>
           </div>
       }
       <aside>

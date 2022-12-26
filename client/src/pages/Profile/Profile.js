@@ -12,6 +12,7 @@ import moment from 'moment'
 import trash from '../../ui/trash.png'
 import addBtn from '../../ui/addBtn.png'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 
 const Profile = ({
   data
@@ -23,6 +24,7 @@ const Profile = ({
   const {request} = useHttp()
   const context = useContext(Context)
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
+  const { t } = useTranslation()
 
   useEffect(() => {
     if(data) {
@@ -101,7 +103,7 @@ const Profile = ({
       className='d-flex justify-content-center align-items-center flex-column position-relative' 
       style={{padding: '60px 20px'}}
     >
-      <h1>My reviews</h1>
+      <h1>{t('myReviews')}</h1>
       <Link 
         to='/review' 
         className='position-absolute' 
@@ -119,7 +121,7 @@ const Profile = ({
         style={{top: '10px', right: '20px'}}
         onClick={handleLogoutBtnClick} 
       >
-        Logout
+        {t('logout')}
       </Button>
       
       <div className='d-flex justify-content-between align-items-center flex-row gap-4'>  
@@ -134,13 +136,13 @@ const Profile = ({
           />
         </button>
         <Form.Select onChange={handleFilterCategoryChange}>
-          <option value=''>Filter by category</option>
+          <option value=''>{t('filterCategory')}</option>
           <option value='films'>Films</option> 
           <option value='books'>Books</option> 
           <option value='games'>Games</option>    
         </Form.Select>
         <Form.Select onChange={handleSortChange}>
-          <option value=''>Sort by</option>
+          <option value=''>{t('sort')}</option>
           <option value='newer'>Newer</option>
           <option value='older'>Older</option> 
           <option value='more'>More rated</option>
@@ -152,7 +154,7 @@ const Profile = ({
             <thead>
               <tr>
                 <th scope='col' className='d-flex gap-2 flex-row justify-content-start align-items-center'>
-                  Check
+                  {t('check')}
                   <input 
                     id='selectAll'
                     type={'checkbox'}
@@ -160,13 +162,13 @@ const Profile = ({
                     checked={isCheckAll}
                   />
                 </th>
-                <th scope='col'>Name</th>
-                  <th scope='col'>Publication date</th>
-                  <th scope='col'>Your review score</th>
+                <th scope='col'>{t('name')}</th>
+                  <th scope='col'>{t('publish')}</th>
+                  <th scope='col'>{t('yourScore')}</th>
               </tr>
             </thead>
             <tbody>
-              {dataReviews.map((review, index) => {
+              {dataReviews.map((review) => {
                 return ( 
                   <tr key={review._id}>
                     <td>
@@ -183,7 +185,7 @@ const Profile = ({
               })}
             </tbody> 
           </Table>
-        : <p className='mt-2' style={{textAlign: 'center'}}>You haven't review...</p>
+        : <p className='mt-2' style={{textAlign: 'center'}}>{t('noReview')}</p>
       }    
     </div>
   )
