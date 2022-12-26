@@ -8,10 +8,8 @@ import {storage} from '../../firebase/index'
 import {ref, uploadBytes  } from 'firebase/storage'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import CloseButton from 'react-bootstrap/CloseButton'
-import ListGroup from 'react-bootstrap/ListGroup'
-import './style/tags.css'
 import { useTranslation } from 'react-i18next'
+import Tags from './components/Tags'
 
 const CreateReview = ({
   listTags
@@ -118,7 +116,7 @@ const CreateReview = ({
         <Form.Group 
           style={{width: '90%'}}
         >
-          <Form.Label htmlFor='title'>{t('title')}</Form.Label>
+          <Form.Label htmlFor='title'>{t('title')}*</Form.Label>
           <Form.Control 
             id='title' 
             value={inputTitleValue}
@@ -129,7 +127,7 @@ const CreateReview = ({
         <Form.Group 
           style={{width: '90%'}}
         >
-          <Form.Label>{t('category')}</Form.Label>
+          <Form.Label>{t('category')}*</Form.Label>
           <Form.Select 
             onChange={(event) => setCategoryValue(event.target.value)} 
             value={categoryValue}
@@ -144,7 +142,7 @@ const CreateReview = ({
         <Form.Group 
           style={{width: '90%'}}
         >
-          <Form.Label>{t('description')}</Form.Label>
+          <Form.Label>{t('description')}*</Form.Label>
           <Form.Control 
             as='textarea' 
             rows={5}
@@ -158,50 +156,16 @@ const CreateReview = ({
           style={{width: '90%'}}
           
         >
-          <Form.Label htmlFor='tags'>{t('tags')}</Form.Label>
-          <div className='tags-input' style={{width: '100%'}}>
-			      <ul id='tags'>
-				    {tags.map((tag, index) => (
-					    <li key={index} className='tag'>
-						    <span className='tag-title'>{tag.value}</span>
-						    <span className='tag-close-icon'
-							    onClick={() => handleDeleteTags(index)}
-						    >
-							    <CloseButton />
-						    </span>
-					    </li> 
-				    ))}
-			      </ul>
-            <div className='position-relative' style={{width: '100%'}}>
-			        <Form.Control
-				        type='text'
-				        onKeyUp={event => event.key === 'Enter' ? handleAddTags(event) : null}
-                onChange={(event) => setTagValue(event.target.value)}
-				        placeholder={t('pressEnter')}
-                style={{textTransform: 'lowercase', width: '100%'}}
-                value={tagValue}
-			        />
-              <ListGroup 
-                  as='ul' 
-                  className='position-absolute' 
-                  style={{width: '100%', top: '40px', maxHeight: '150px', height: 'auto', overflow: 'auto', padding: '0 8px'}}
-                >
-                  {tagValue && filterTags
-                    ? filterTags.map((tag, index) => {
-                      return ( 
-                        <ListGroup.Item 
-                          key={index} 
-                          as='li'
-                          onClick={(event) => handleTagsListClick(event)} 
-                        >
-                          {tag.value}
-                        </ListGroup.Item>
-                      )
-                    })
-                    : ''}
-              </ListGroup>
-		        </div>
-          </div>
+          <Form.Label htmlFor='tags'>{t('tags')}*</Form.Label>
+          <Tags 
+            tags={tags}
+            handleAddTags={handleAddTags}
+            handleTagsListClick={handleTagsListClick}
+            tagValue={tagValue}
+            handleDeleteTags={handleDeleteTags}
+            setTagValue={setTagValue}
+            filterTags={filterTags}
+          />
         </Form.Group>
 
         <Dropzone isResetImg={isResetImg}/>
@@ -210,7 +174,7 @@ const CreateReview = ({
           className='d-flex flex-column'
           style={{width: '90%'}}
         >
-          <p>{t('leaveRating')}:</p>
+          <p>{t('leaveRating')}*</p>
           <StarRating 
             rating={rating}
             setRating={setRating}

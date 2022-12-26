@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback, useContext} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import { useHttp } from '../../hooks/http.hook'
 import {useAuth} from '../../hooks/auth.hook'
 import { Context } from '../../context/Context'
@@ -97,6 +97,12 @@ const Profile = ({
     const response = await axios.get('http://5-180-180-221.cloud-xip.com:5000/auth/logout', {withCredentials: true}).catch(err => console.log(err))
     window.location.reload()
   }
+
+  useEffect(() => {
+    if(dataReviews) {
+      return isCheck.length === dataReviews.length ? setIsCheckAll(true) : setIsCheckAll(false)
+    }
+  }, [dataReviews, isCheck])
 
   return (
     <div 

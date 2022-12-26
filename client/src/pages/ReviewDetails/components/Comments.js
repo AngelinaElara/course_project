@@ -32,6 +32,7 @@ const Comments = ({
           }
           <Button 
             onClick={handleCommentBtnClick}
+            disabled={!isAuth}
           >
             {t('send')}
           </Button>

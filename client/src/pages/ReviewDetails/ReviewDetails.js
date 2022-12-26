@@ -22,13 +22,15 @@ const ReviewDetails = ({
 
   const handleCommentBtnClick = async () => {
     try {
-      const comment = {
-        from: userName, 
-        text: commentValue,
-        date: new Date(Date.now())
+      if(commentValue.length) {
+        const comment = {
+          from: userName, 
+          text: commentValue,
+          date: new Date(Date.now())
+        }
+        const sendData = await request(`review/comment/${review._id}`, 'PATCH', comment)
+        setCommentValue('')
       }
-      const sendData = await request(`review/comment/${review._id}`, 'PATCH', comment)
-      setCommentValue('')
     } catch (error) {
       console.log(error)
     }

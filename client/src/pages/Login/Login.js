@@ -6,6 +6,10 @@ import {useHttp} from '../../hooks/http.hook'
 import {Link, useNavigate} from 'react-router-dom'
 import OAuth from '../../components/OAuth/OAuth'
 import { useTranslation } from 'react-i18next'
+import {
+  validateInputEmailValue,
+  validateInputPasswordValue
+} from '../../utils/helpers'
 
 const Login = () => {
   const [inputEmailValue, setInputEmailValue] = useState('')
@@ -14,6 +18,20 @@ const Login = () => {
   const context = useContext(Context)
   const navigate = useNavigate()
   const { t } = useTranslation()
+
+  const inputEmailClassName = inputEmailValue.length
+    ? ` m-2 p-2 shadow-sm rounded ${validateInputEmailValue(inputEmailValue)
+      ? 'border-success'
+      : 'border-danger'
+    }`
+    : 'm-2 p-2 shadow-sm rounded border border-light'
+
+  const inputPasswordClassName = inputPasswordValue.length
+  ? ` m-2 p-2 shadow-sm rounded ${validateInputPasswordValue(inputPasswordValue)
+    ? 'border-success'
+    : 'border-danger'
+  }`
+  : 'm-2 p-2 shadow-sm rounded border border-light'
 
   const handleFormSubmit = async () => {
     try {
@@ -35,7 +53,7 @@ const Login = () => {
       <h1 className='text-secondary'>{t('login')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
         <Form.Control 
-          className='m-2 p-2 shadow-sm border border-light rounded' 
+          className={inputEmailClassName}
           style={{height: '40px'}} 
           type={'email'} 
           placeholder='E-mail'
@@ -44,7 +62,7 @@ const Login = () => {
           onChange={(event) => setInputEmailValue(event.target.value)}
         />
         <Form.Control 
-          className='m-2  p-2 shadow-sm border border-light rounded' 
+          className={inputPasswordClassName}
           style={{height: '40px'}} 
           type={'password'} 
           placeholder={t('password')}
