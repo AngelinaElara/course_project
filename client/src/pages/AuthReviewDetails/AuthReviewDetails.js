@@ -8,14 +8,17 @@ import { storage } from '../../firebase/index'
 import { ref, getDownloadURL} from 'firebase/storage'
 import Modal from './components/Modal'
 import photoLoad from '../../ui/photoLoad.png'
+import { useTranslation } from 'react-i18next'
 import './style/reviewDetails.css'
 
 const AuthReviewDetails = ({
-  data
+  data,
+  listTags
 }) => {
   const [review, setReview] = useState({})
   const [isModalActive, setIsModalActive] = useState(false)
   let {id}  = useParams()
+  const { t } = useTranslation()
   
   const handleBtnChangeClick = () => {
     setIsModalActive(true)
@@ -48,6 +51,8 @@ const AuthReviewDetails = ({
     }
   }, [review])
 
+  console.log(review.tags)
+
   if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
 
   return (
@@ -75,17 +80,17 @@ const AuthReviewDetails = ({
           <h2>{review.title}</h2>
           <p>{review.description}</p>
           <div className='d-flex flex-row gap-2'>
-            <p>Tags:</p>
+            <p>{t('tags')}:</p>
             <div className='d-flex flex-row gap-2'>
-              {review.tags.map(tag => <p>#{tag.value}</p>)}
+              {review.tags.map((tag, index) => <p key={index}>#{tag.value}</p>)}
             </div>
           </div>
           <p className='d-flex flex-row gap-2'>
-            You rating: {review.ratingAuth} 
+            {t('yourScore')}: {review.ratingAuth} 
             <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
           </p>
           <p className='d-flex flex-row gap-2'>
-            Users rating: {review.finalRating} 
+            {t('userRating')}: {review.finalRating} 
             <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
           </p>
         </Col>
@@ -95,10 +100,16 @@ const AuthReviewDetails = ({
         style={{right: '40px'}}
         onClick={handleBtnChangeClick}
       >
-        Change review
+        {t('changeReview')}
       </Button>
       {isModalActive 
-        ? <Modal review={review} setReview={setReview} setIsModalActive={setIsModalActive}/> 
+        ? <Modal 
+            review={review} 
+            setReview={setReview} 
+            setIsModalActive={setIsModalActive}
+            t={t}
+            allTags={listTags}
+          /> 
         : ''}
     </Container>
   )

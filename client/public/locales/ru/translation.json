@@ -35,5 +35,12 @@
   "password": "Пароль",
   "confirmPassword": "Подтвердите пароль",
   "google": "Войти с Google",
-  "vk": "Войти с VK"
+  "vk": "Войти с VK",
+  "users": "Пользователи",
+  "foundReviews": "Найденные обзоры",
+  "authorReviews": "Обзоры от автора",
+  "publishDate": "Дата публикации",
+  "noUsers": "Ещё нет пользователей",
+  "nameUser": "Имя пользователя",
+  "changeReview": "Изменить обзор"
 }

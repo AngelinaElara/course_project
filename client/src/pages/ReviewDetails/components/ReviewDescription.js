@@ -7,7 +7,6 @@ import { storage } from '../../../firebase/index'
 import { ref, getDownloadURL} from 'firebase/storage'
 import {ReactComponent as HeartIcon} from '../../../ui/heart.svg'
 import StarRating from '../../../components/StarRating'
-import {useAuth} from '../../../hooks/auth.hook'
 import { useTranslation } from 'react-i18next'
 
 const ReviewDescription = ({
@@ -20,8 +19,7 @@ const ReviewDescription = ({
   const [authorLikes, setAuthorLikes] = useState(0)
   const [rating, setRating] = useState(0)
   const {request} = useHttp() 
-  const {token} = useAuth()
-  const isAuth = !!token
+  const isAuth = !!userId
   const { t } = useTranslation()
  
   const handleLikeClick = async () => {
@@ -40,7 +38,7 @@ const ReviewDescription = ({
   }, [authorId])
 
   useEffect(() => {
-    if(!isAuth) setIsLikeDisabled(true)
+    !isAuth ? setIsLikeDisabled(true) : setIsLikeDisabled(false)
   }, [isAuth])
 
   useEffect(() => {
@@ -66,7 +64,7 @@ const ReviewDescription = ({
       })
     }
     if(review) {
-      const findRatingFromUser = review?.ratingUsers.find(user => user.userId === userId)
+      const findRatingFromUser = review?.ratingUsers?.find(user => user.userId === userId)
       if(findRatingFromUser) setRating(findRatingFromUser.rating)
     }
   }, [review])
@@ -98,7 +96,7 @@ const ReviewDescription = ({
           </div>
         </div>
         <p className='d-flex flex-row gap-2'>
-          {t("userRating")}: {review.finalRating} 
+          {t('userRating')}: {review.finalRating} 
           <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
         </p>
         <div className='d-flex gap-4 flex-row  align-items-center'>
@@ -124,7 +122,7 @@ const ReviewDescription = ({
               <HeartIcon 
                 width={'20px'}
                 height={'20px'} 
-                fill={isLikeDisabled ? 'red' : 'black'}
+                fill={'black'}
               />
               <span>{t('likeAuthor')}</span>
             </Button>

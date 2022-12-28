@@ -12,7 +12,6 @@ router.post(
       check('email', 'Invalid email').isEmail()
     ],
    async (req ,res) => {
-    console.log(req.body)
   try {
     const errors = validationResult(req)
 
@@ -42,8 +41,14 @@ router.post(
       {expiresIn: '1h'}
     )
 
-    res.json({token, UserId: user.id, name})
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 86400, 
+    })
+
+    res.json({UserId: user.id, name, role: user.role})
   } catch (e) {
+    console.log(e)
     res.status(500).json({message: 'Oooops. Something went wrong...'})
   }
 })
@@ -66,15 +71,21 @@ router.post('/login', async (req, res) => {
       config.jwtSecret,
       {expiresIn: '1h'}
     )
-    res.json({token, UserId: user.id, name: user.name})
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 86400, 
+    })
+    return res.status(200).json({UserId: user.id, name: user.name, role: user.role})
   } catch (e) {
-    res.status(500).json({message: 'Oooops. Something went wrong...'})
+    console.log(e);
+    res.status(500).json({message: 'Something went wrong!'})
   }
 })
 
 router.get('/logout', function(req, res, next) {
   req.session = null
-  res.clearCookie('session')
+  res.clearCookie('session', 'jwt')
   res.end()
   req.logout(function(err) {
     if (err) { return next(err) }

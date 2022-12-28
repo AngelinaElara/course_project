@@ -9,7 +9,7 @@
   "likeAuthor": "Like the author",
   "rateReview": "Rate the review",
   "send": "Send",
-  "comments": "Comments",
+  "comments": "Comments", 
   "myReviews": "My reviews",
   "logout": "Logout",
   "filterCategory": "Filter by category",
@@ -35,5 +35,12 @@
   "password": "Password",
   "confirmPassword": "Confirm password",
   "google": "Sing in with Google",
-  "vk": "Sign in with VK"
+  "vk": "Sign in with VK",
+  "users": "Users",
+  "foundReviews": "Found reviews",
+  "authorReviews": "Author's reviews",
+  "publishDate": "Publish date",
+  "noUsers": "No users",
+  "nameUser": "User name",
+  "changeReview": "Change review"
 }

@@ -2,16 +2,15 @@ import {useState, useEffect, useContext} from 'react'
 import { useHttp } from '../../hooks/http.hook'
 import {useAuth} from '../../hooks/auth.hook'
 import { Context } from '../../context/Context'
-import Table from 'react-bootstrap/Table'
-import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { storage } from '../../firebase/index'
 import { ref, deleteObject } from 'firebase/storage'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
-import trash from '../../ui/trash.png'
 import addBtn from '../../ui/addBtn.png'
 import axios from 'axios'
+import UserProfile from './UserProfile/UserProfile'
+import AdminProfile from './AdminProfile/AdminProfile'
 import { useTranslation } from 'react-i18next'
 
 const Profile = ({
@@ -33,7 +32,7 @@ const Profile = ({
     }
   }, [data])
 
-  const handleSelectAllCheckboxes = e => {
+  const handleSelectAllCheckboxes = () => {
     setIsCheckAll(!isCheckAll)
     setIsCheck(dataReviews.map(review => review._id))
     if (isCheckAll) {
@@ -41,8 +40,8 @@ const Profile = ({
     } 
   } 
   
-  const handleClickOneCheckbox = e => {
-    const { id, checked } = e.target
+  const handleClickOneCheckbox = (event) => {
+    const { id, checked } = event.target
     setIsCheck([...isCheck, id])
     if (!checked) {
       setIsCheck(isCheck.filter(item => item !== id))
@@ -109,18 +108,21 @@ const Profile = ({
       className='d-flex justify-content-center align-items-center flex-column position-relative' 
       style={{padding: '60px 20px'}}
     >
-      <h1>{t('myReviews')}</h1>
-      <Link 
-        to='/review' 
-        className='position-absolute' 
-        style={{top: '15px', left: '20px'}}
-      > 
-        <img 
-          src={addBtn}
-          alt='Add new review'
-          style={{width: '40px', height: '40px'}}
-        />
-      </Link>
+      <h1>{context.role === 'admin' ? t('users') : t('myReviews')}</h1>
+      {context.role === 'admin' 
+        ? '' 
+        : <Link 
+            to='/review' 
+            className='position-absolute' 
+            style={{top: '15px', left: '20px'}}
+          > 
+            <img 
+              src={addBtn}
+              alt='Add new review'
+              style={{width: '40px', height: '40px'}}
+            />
+          </Link>
+      }
       <Button 
         variant='secondary' 
         className='position-absolute' 
@@ -129,70 +131,25 @@ const Profile = ({
       >
         {t('logout')}
       </Button>
-      
-      <div className='d-flex justify-content-between align-items-center flex-row gap-4'>  
-        <button 
-          className='btn d-flex justify-content-center align-items-center'
-          onClick={handleDeleteBtn}
-        >
-          <img 
-            src={trash}
-            alt='trash icon'
-            style={{ width: '50px', height: '50px' }}
+
+      {context.role === 'admin' 
+        ? <AdminProfile 
+            tableStyle={tableStyle}
           />
-        </button>
-        <Form.Select onChange={handleFilterCategoryChange}>
-          <option value=''>{t('filterCategory')}</option>
-          <option value='films'>Films</option> 
-          <option value='books'>Books</option> 
-          <option value='games'>Games</option>    
-        </Form.Select>
-        <Form.Select onChange={handleSortChange}>
-          <option value=''>{t('sort')}</option>
-          <option value='newer'>Newer</option>
-          <option value='older'>Older</option> 
-          <option value='more'>More rated</option>
-          <option value='lower'>Lower rating</option>
-        </Form.Select>
-      </div>
-      {dataReviews.length 
-        ? <Table style={tableStyle}>
-            <thead>
-              <tr>
-                <th scope='col' className='d-flex gap-2 flex-row justify-content-start align-items-center'>
-                  {t('check')}
-                  <input 
-                    id='selectAll'
-                    type={'checkbox'}
-                    onChange={handleSelectAllCheckboxes} 
-                    checked={isCheckAll}
-                  />
-                </th>
-                <th scope='col'>{t('name')}</th>
-                  <th scope='col'>{t('publish')}</th>
-                  <th scope='col'>{t('yourScore')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataReviews.map((review) => {
-                return ( 
-                  <tr key={review._id}>
-                    <td>
-                      <input id={review._id} checked={isCheck.includes(review._id)} onChange={handleClickOneCheckbox} type={'checkbox'} />
-                    </td>
-                    <td><Link to={`/profile/${review._id}`}>{review.title}</Link></td>
-                    <td>{moment(review.publishDate).format('MMMM Do YYYY, h:mm:ss a')}</td>
-                    <td className='d-flex flex-row gap-2'>
-                      {review.ratingAuth} 
-                      <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span> 
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody> 
-          </Table>
-        : <p className='mt-2' style={{textAlign: 'center'}}>{t('noReview')}</p>
-      }    
+        : <UserProfile 
+            tableStyle={tableStyle}
+            dataReviews={dataReviews}
+            isCheck={isCheck}
+            isCheckAll={isCheckAll}
+            handleClickOneCheckbox={handleClickOneCheckbox}
+            handleSelectAllCheckboxes={handleSelectAllCheckboxes}
+            handleDeleteBtn={handleDeleteBtn}
+            handleFilterCategoryChange={handleFilterCategoryChange}
+            handleSortChange={handleSortChange}
+          />
+      }
+      
+       
     </div>
   )
 }

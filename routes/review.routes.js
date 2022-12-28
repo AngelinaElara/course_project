@@ -48,7 +48,7 @@ router.delete('/', async (req, res) => {
     console.log(e)
     res.status(400)
   }  
-})
+})  
 
 router.patch('/change/:id', async (req, res) => {
   try {
@@ -60,7 +60,7 @@ router.patch('/change/:id', async (req, res) => {
         if (err){ 
         console.log(err)
         }
-      })
+      }).clone()
   } catch (error) {
     console.log(error)
     res.status(400)

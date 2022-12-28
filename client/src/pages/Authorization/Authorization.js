@@ -62,7 +62,7 @@ const Authorization = () => {
         }
         const data = await request('auth/register', 'POST', form)
         setIsFormReset(true)
-        context.login(data.token, data.UserId, data.name)
+        context.login(data.token, data.UserId, data.name, data.role)
         navigate('/')
       }
     } catch (error) {
@@ -105,7 +105,7 @@ const Authorization = () => {
           type={'text'} 
           placeholder={t('nameLog')}
           name='name'
-          value={inputNameValue}
+          value={inputNameValue} 
           onChange={(event) => setInputNameValue(event.target.value)}
         />
         <input

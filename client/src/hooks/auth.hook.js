@@ -4,25 +4,25 @@ import {useNavigate} from 'react-router-dom'
 const storageName = 'userData'
 
 export const useAuth = () => {
-  const [token, setToken] = useState(null)
   const [userId, setUserId] = useState(null)
   const [userName, setUserName] = useState(null)
+  const [role, setRole] = useState(null)
   const navigate = useNavigate()
 
-  const login = useCallback((jwtToken, id, name) => {
-    setToken(jwtToken)
+  const login = useCallback(( id, name, getRole) => {
     setUserId(id)
     setUserName(name)
+    setRole(getRole)
 
     localStorage.setItem(storageName, JSON.stringify({
-      userId: id, token: jwtToken, userName: name
+      userId: id, userName: name, role: getRole
     }))
   }, [])
 
   const logout = useCallback(() => {
-    setToken(null)
     setUserId(null)
     setUserName(null)
+    setRole(null)
 
     localStorage.removeItem(storageName)
     navigate('/')
@@ -31,10 +31,10 @@ export const useAuth = () => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem(storageName) || '{}')
 
-    if(data && data.token) {
-      login(data.token, data.userId, data.userName)
+    if(data && data.userId) {
+      login(data.userId, data.userName, data.role)
     }
   }, [login])
 
-  return {token, login, logout, userId, userName}
+  return {login, logout, userId, userName, role}
 }

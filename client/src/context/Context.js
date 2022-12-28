@@ -4,7 +4,6 @@ function noop () {}
 
 export const Context = createContext({
   name: null,
-  token: null,
   userId: null,
   login: noop,
   logout: noop,
@@ -13,5 +12,6 @@ export const Context = createContext({
   imageUrl: null,
   isImage: false,
   lightTheme: true,
-  language: 'en'
+  language: 'en',
+  role: ''
 })

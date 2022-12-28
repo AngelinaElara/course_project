@@ -14,10 +14,10 @@ const App = () => {
   const [isImage, setIsImage] = useState(false)
   const [tags, setTags] = useState([])
   const {request} = useHttp()
-  const {token, login, logout, userId, userName} = useAuth()
+  const {login, logout, userId, userName, role} = useAuth()
   const {ratingAuth, imageUrl} = useReview()
-  const isAuth = !!token
-  const routes = useRoutes(isAuth, tags, data)
+  const isAuth = !!userId
+  const routes = useRoutes(isAuth, tags, data, role)
   const styleBody = lightTheme 
     ? {maxHeight: '100vh', overflowY: 'auto', background: 'lavender', color: 'black'} 
     : {maxHeight: '100vh', overflowY: 'auto', background: '#505050', color: 'white'}
@@ -50,7 +50,7 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      userName, token, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme, language
+      userName, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme, language, role
     }}>
       <div 
         style={styleBody} 

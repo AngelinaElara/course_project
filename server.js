@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const path = require('path')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-
+const passport = require('passport')
 const cookieSession = require('cookie-session')
 
 require('./auth/passport')
@@ -13,7 +13,6 @@ require('./auth/passportVk')
 
 const apiGoogle = require('./routes/loginWithGoogle')
 const apiVk = require('./routes/loginWithVk')
-const passport = require('passport')
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -22,6 +21,7 @@ app.use(bodyParser.json())
 app.use(express.json({extended: true}))
 app.use('/auth', require('./routes/auth.routes'))
 app.use('/review', require('./routes/review.routes'))
+app.use('/users', require('./routes/user.routes'))
 // app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
 app.use(cors({ origin: 'http://5-180-180-221.cloud-xip.com:5000', credentials: true }))
 app.use(

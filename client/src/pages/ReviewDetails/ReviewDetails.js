@@ -14,11 +14,10 @@ const ReviewDetails = ({
   const [review, setReview] = useState({})
   const [commentValue, setCommentValue] = useState('')
   const [commentsArray, setCommentsArray] = useState([])
-  const [quantityCreatorLike, setQuantityCreatorLike] = useState(0)
   let {id}  = useParams()
   const {request} = useHttp()
-  const {userId, userName, token} = useAuth()
-  const isAuth = !!token
+  const {userId, userName} = useAuth()
+  const isAuth = !!userId
 
   const handleCommentBtnClick = async () => {
     try {

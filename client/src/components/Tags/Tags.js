@@ -1,24 +1,49 @@
+import { useState, useMemo } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import CloseButton from 'react-bootstrap/CloseButton'
 import { useTranslation } from 'react-i18next'
 import './tags.css'
 
-const Tags = ({
+const Tags = ({ 
+  allTags,
   tags,
-  handleAddTags,
-  handleTagsListClick,
-  tagValue,
-  handleDeleteTags,
-  setTagValue,
-  filterTags
+  setTags
 }) => {
+  const [tagValue, setTagValue] = useState('')
+  const [filterTags, setFilterTags] = useState([])
   const { t } = useTranslation()
+
+  const handleDeleteTags = (indexToRemove) => {
+    setTags([...tags.filter((_, index) => index !== indexToRemove)])
+  }
+  
+  const handleAddTags = event => {
+    if (event.target.value !== '') {
+      setTags([...tags, {value: event.target.value, count: 0}])
+      setTagValue('')
+    }
+  }
+
+  const handleTagsListClick = (event) => {
+    setTags([...tags, {value: event.target.textContent, count: 0}])
+    setTagValue('')
+    console.log(tags)
+  }
+
+  useMemo(() => {
+    if(tagValue && allTags) {
+      const foundTags = allTags.filter(tag => {
+        return tag.value.toLowerCase().includes(tagValue.toLowerCase())
+      })
+      setFilterTags(foundTags)
+    }
+  }, [tagValue])
 
   return (
     <div className='tags-input' style={{width: '100%'}}>
 		  <ul id='tags'>
-		    {tags.map((tag, index) => (
+		    {tags && tags.map((tag, index) => (
 		      <li  key={index} className='tag'>
 		        <span className='tag-title'>{tag.value}</span>
 		        <span className='tag-close-icon'

@@ -1,4 +1,5 @@
-import {useState, useContext, useEffect, useMemo} from 'react'
+import {useState, useContext, useEffect} from 'react'
+import {useParams} from 'react-router-dom'
 import Dropzone from '../../components/Dropzone'
 import StarRating from '../../components/StarRating'
 import {Context} from '../../context/Context'
@@ -9,7 +10,7 @@ import {ref, uploadBytes  } from 'firebase/storage'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useTranslation } from 'react-i18next'
-import Tags from './components/Tags'
+import Tags from '../../components/Tags/Tags'
 
 const CreateReview = ({
   listTags
@@ -18,8 +19,6 @@ const CreateReview = ({
   const [categoryValue, setCategoryValue] = useState('')
   const [inputDescriptionValue, setInputDescriptionValue] = useState('')
   const [tags, setTags] = useState([])
-  const [tagValue, setTagValue] = useState('')
-  const [filterTags, setFilterTags] = useState([])
   const [isResetImg, setIsResetImg] = useState(false)
   const [rating, setRating] = useState(0)
   const [isFromReset, setIsFormReset] = useState(false)
@@ -32,17 +31,7 @@ const CreateReview = ({
   }
   const storageRef = ref(storage, `reviews/c${randomId}`)
   const { t } = useTranslation()
-
-  const handleDeleteTags = (indexToRemove) => {
-    setTags([...tags.filter((_, index) => index !== indexToRemove)])
-  }
-
-  const handleAddTags = event => {
-		if (event.target.value !== '') {
-			setTags([...tags, {value: event.target.value, count: 0}])
-			event.target.value = ''
-		}
-	}
+  let {id}  = useParams()
 
   const handleSubmitButtonClick = async (event) => {
     event.preventDefault()
@@ -56,7 +45,7 @@ const CreateReview = ({
       try {
         const review = {
           from: userName,
-          idFrom: userId,
+          idFrom: id ? id : userId,
           title : inputTitleValue,
           category: categoryValue,
           description: inputDescriptionValue,
@@ -78,11 +67,6 @@ const CreateReview = ({
     }
   }
 
-  const handleTagsListClick = (event) => {
-    setTags([...tags, {value: event.target.textContent, count: 0}])
-    setTagValue('')
-  }
-
   useEffect(() => {
     if(isFromReset) {
       setInputTitleValue('')
@@ -93,15 +77,6 @@ const CreateReview = ({
       setRating(0)
     }
   }, [isFromReset])
-
-  useMemo(() => {
-    if(tagValue && listTags) {
-      const foundTags = listTags.filter(tag => {
-        return tag.value.toLowerCase().includes(tagValue.toLowerCase())
-      })
-      setFilterTags(foundTags)
-    }
-  }, [tagValue])
 
   return (
     <div 
@@ -158,13 +133,9 @@ const CreateReview = ({
         >
           <Form.Label htmlFor='tags'>{t('tags')}*</Form.Label>
           <Tags 
+            allTags={listTags}
             tags={tags}
-            handleAddTags={handleAddTags}
-            handleTagsListClick={handleTagsListClick}
-            tagValue={tagValue}
-            handleDeleteTags={handleDeleteTags}
-            setTagValue={setTagValue}
-            filterTags={filterTags}
+            setTags={setTags}
           />
         </Form.Group>
 
@@ -181,7 +152,7 @@ const CreateReview = ({
             lengthArray={10}
           />
         </div>
-        
+         
         <Button 
           className='mt-2' 
           type='submit'

@@ -40,7 +40,7 @@ const Login = () => {
         password: inputPasswordValue
       }     
       const data = await request('/auth/login', 'POST', form)
-      context.login(data.token, data.UserId, data.name)
+      context.login(data.UserId, data.name, data.role)
       navigate('/')
       window.location.reload()
     } catch (error) {

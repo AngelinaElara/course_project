@@ -23,7 +23,7 @@ const TagsList = () => {
   return (
     <Container>
       <Row>
-        <ReviewList data={dataTags} title={`Found reviews by tag: ${tag}`}/>
+        <ReviewList data={dataTags} title={`Found reviews`}/>
       </Row>
     </Container>
   )

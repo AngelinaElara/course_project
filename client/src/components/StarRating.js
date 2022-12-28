@@ -34,11 +34,11 @@ const StarRating = ({
   }
 
   useEffect(() => {
-    if(!isAuth) setIsButtonDisabled(true)
+    !isAuth ? setIsButtonDisabled(true) : setIsButtonDisabled(false) 
   }, [isAuth])
 
   useEffect(() => {
-    if(rating) setIsButtonDisabled(true)
+    rating ? setIsButtonDisabled(true) : setIsButtonDisabled(false)
   }, [rating])
 
   return (
