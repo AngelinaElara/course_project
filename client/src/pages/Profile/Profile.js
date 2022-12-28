@@ -19,14 +19,14 @@ const Profile = ({
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
   const [dataReviews, setDataReviews] = useState([])
-  const {userId} = useAuth() 
+  const {userId, role} = useAuth() 
   const {request} = useHttp()
   const context = useContext(Context)
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
   const { t } = useTranslation()
 
   useEffect(() => {
-    if(data) {
+    if(data && role === 'user') {
       const userReviews = data.filter(review => review.idFrom === userId)
       setDataReviews(userReviews) 
     }
@@ -98,9 +98,9 @@ const Profile = ({
   }
 
   useEffect(() => {
-    if(dataReviews) {
+    if(dataReviews.length) {
       return isCheck.length === dataReviews.length ? setIsCheckAll(true) : setIsCheckAll(false)
-    }
+    } 
   }, [dataReviews, isCheck])
 
   return (

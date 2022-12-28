@@ -78,7 +78,7 @@ const ReviewList = ({
                {/* if admin clecked on review we redirected on change review page  */}
                 <Link 
                   to={userId ? `/profile/${review._id}` : `/${review._id}`} 
-                  className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-2' : ''} 
+                  className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-6' : ''} 
                   style={context.lightTheme ? {textDecoration: 'none', color: 'black'} : {textDecoration: 'none', color: 'white'}}
                 >
                   <div>

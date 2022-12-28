@@ -87,7 +87,7 @@ const ReviewDescription = ({
         : ''
       } 
       <Col sm className='d-flex flex-column gap-3'>
-        <h2>{review.title}</h2>
+        <h2 style={{marginTop: '15px'}}>{review.title}</h2>
         <p>{review.description}</p>
         <div className='d-flex flex-row gap-2'>
           <p>{t('tags')}</p>

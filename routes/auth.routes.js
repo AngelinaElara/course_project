@@ -36,7 +36,7 @@ router.post(
     await user.save()
 
     const token = jwt.sign(
-      {userId: user.id},
+      {userId: user.id}, 
       config.jwtSecret,
       {expiresIn: '1h'}
     )
@@ -53,19 +53,25 @@ router.post(
   }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', 
+  [
+    check('email', 'Enter correct email').normalizeEmail().isEmail(),
+    check('password', 'Enter correct password').exists()
+  ],
+   async (req, res) => {
   try {
     const {email, password} = req.body
     const user = await User.findOne({email})
     
     if(!user) {
-      return res.result(400).json({message: 'User was not find'})
+      return res.status(400).json({message: 'User was not find. You need to register.'})
     }
 
-    const isMatch = bcrypt.compare(password, user.password) 
+    const isMatch = await bcrypt.compare(password, user.password) 
     if(!isMatch) {
       return res.status(400).json({message: 'Invalid password'})
     }
+
     const token = jwt.sign(
       {userId: user.id},
       config.jwtSecret,
@@ -78,20 +84,24 @@ router.post('/login', async (req, res) => {
     })
     return res.status(200).json({UserId: user.id, name: user.name, role: user.role})
   } catch (e) {
-    console.log(e);
+    console.log(e)
     res.status(500).json({message: 'Something went wrong!'})
   }
 })
 
 router.get('/logout', function(req, res, next) {
-  req.session = null
-  res.clearCookie('session', 'jwt')
-  res.end()
-  req.logout(function(err) {
-    if (err) { return next(err) }
-    console.log(req.logout)
-    res.redirect('/')
-  })
+  try {
+    req.session = null 
+    res.clearCookie('session', 'jwt')
+    res.end()
+    req.logout(function(err) {
+      if (err) { return next(err) }
+      console.log(req.logout)
+      res.redirect('/')
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }) 
 
 module.exports = router

@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react'
+import {useState, useContext, useEffect} from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Context } from '../../context/Context'
@@ -14,7 +14,8 @@ import {
 const Login = () => {
   const [inputEmailValue, setInputEmailValue] = useState('')
   const [inputPasswordValue, setInputPasswordValue] = useState('')
-  const {request} = useHttp()
+  const [warning, setWarning] = useState('') 
+  const {request, error} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -48,10 +49,20 @@ const Login = () => {
     }
   }
 
+  useEffect(()=> {
+    if(error) {
+      setWarning(error)
+      setTimeout(() => {
+        setWarning('')
+      }, 3000)
+    }
+  }, [error])
+
   return (
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}>
       <h1 className='text-secondary'>{t('login')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
+        <div style={{color: 'red'}}>{warning}</div>
         <Form.Control 
           className={inputEmailClassName}
           style={{height: '40px'}} 

@@ -19,7 +19,8 @@ const Authorization = () => {
   const [inputConfirmPasswordValue, setInputConfirmPasswordValue] = useState('')
   const [isFormReset, setIsFormReset] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
-  const {request} = useHttp()
+  const [warning, setWarning] = useState('') 
+  const {request, error} = useHttp()
   const context = useContext(Context)
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -62,13 +63,22 @@ const Authorization = () => {
         }
         const data = await request('auth/register', 'POST', form)
         setIsFormReset(true)
-        context.login(data.token, data.UserId, data.name, data.role)
+        context.login(data.UserId, data.name, data.role)
         navigate('/')
       }
-    } catch (error) {
+    } catch (error) { 
       console.error(error)
     }
   }
+
+  useEffect(()=> {
+    if(error) {
+      setWarning(error)
+      setTimeout(() => {
+        setWarning('')
+      }, 3000)
+    }
+  }, [error])
 
   useEffect(() => {
     if (isFormReset) {
@@ -99,7 +109,8 @@ const Authorization = () => {
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}> 
       <h1 className='text-secondary'>{t('authorization')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
-        <input 
+        <div style={{color: 'red'}}>{warning}</div>
+        <Form.Control 
           className={inputNameClassName}
           style={{height: '40px', outline: 'none'}} 
           type={'text'} 
@@ -108,7 +119,7 @@ const Authorization = () => {
           value={inputNameValue} 
           onChange={(event) => setInputNameValue(event.target.value)}
         />
-        <input
+        <Form.Control
           className={inputEmailClassName}
           style={{height: '40px', outline: 'none'}} 
           type={'email'} 
@@ -117,7 +128,7 @@ const Authorization = () => {
           value={inputEmailValue}
           onChange={(event) => setInputEmailValue(event.target.value)}
         />
-        <input
+        <Form.Control
           className={inputPasswordClassName}
           style={{height: '40px', outline: 'none'}} 
           type={'password'} 
@@ -126,7 +137,7 @@ const Authorization = () => {
           value={inputPasswordValue}
           onChange={(event) => setInputPasswordValue(event.target.value)}
         />
-        <input
+        <Form.Control
           className={inputConfirmPasswordClassName} 
           style={{height: '40px', outline: 'none'}} 
           type={'password'} 

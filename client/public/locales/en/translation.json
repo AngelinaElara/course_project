@@ -42,5 +42,7 @@
   "publishDate": "Publish date",
   "noUsers": "No users",
   "nameUser": "User name",
-  "changeReview": "Change review"
+  "changeReview": "Change review", 
+  "block": "Blocked",
+  "unBlock": "Not blocked"
 }
