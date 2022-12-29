@@ -44,5 +44,6 @@
   "nameUser": "User name",
   "changeReview": "Change review", 
   "block": "Blocked",
-  "unBlock": "Not blocked"
+  "unBlock": "Not blocked",
+  "notReview": "You cannot create reviews because you are blocked"
 }

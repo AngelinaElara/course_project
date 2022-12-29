@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
@@ -14,7 +15,9 @@ const UserProfile = ({
   handleSelectAllCheckboxes,
   handleDeleteBtn,
   handleFilterCategoryChange,
-  handleSortChange
+  handleSortChange,
+  request, 
+  userId
 }) => {
   const { t } = useTranslation()
 

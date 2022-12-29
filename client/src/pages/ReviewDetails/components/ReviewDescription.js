@@ -13,7 +13,7 @@ const ReviewDescription = ({
   review,
   userId,
   reviewId,
-  authorId
+  authorId,
 }) => {
   const [isLikeDisabled, setIsLikeDisabled] = useState(false)
   const [authorLikes, setAuthorLikes] = useState(0)
@@ -38,12 +38,12 @@ const ReviewDescription = ({
   }, [authorId])
 
   useEffect(() => {
-    !isAuth ? setIsLikeDisabled(true) : setIsLikeDisabled(false)
-  }, [isAuth])
-
-  useEffect(() => {
     getAuthLikes()
   }, [getAuthLikes])
+
+  useEffect(() => {
+    !isAuth ? setIsLikeDisabled(true) : setIsLikeDisabled(false)
+  }, [isAuth])
 
   useEffect(() => {
     if(review.img) {

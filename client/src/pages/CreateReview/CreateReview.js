@@ -13,7 +13,8 @@ import { useTranslation } from 'react-i18next'
 import Tags from '../../components/Tags/Tags'
 
 const CreateReview = ({
-  listTags
+  listTags,
+  currentUserBlocked
 }) => {
   const [inputTitleValue, setInputTitleValue] = useState('')
   const [categoryValue, setCategoryValue] = useState('')
@@ -77,6 +78,8 @@ const CreateReview = ({
       setRating(0)
     }
   }, [isFromReset])
+
+  if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
 
   return (
     <div 

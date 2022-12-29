@@ -9,7 +9,8 @@ import ReviewDescription from './components/ReviewDescription'
 import Comments from './components/Comments'
 
 const ReviewDetails = ({
-  data
+  data,
+  currentUserBlocked
 }) => {
   const [review, setReview] = useState({})
   const [commentValue, setCommentValue] = useState('')
@@ -63,6 +64,7 @@ const ReviewDetails = ({
           userId={userId}
           reviewId={id}
           authorId={review.idFrom}
+          currentUserBlocked={currentUserBlocked}
         />
       </Row> 
       <Row style={{marginTop: '40px'}}>

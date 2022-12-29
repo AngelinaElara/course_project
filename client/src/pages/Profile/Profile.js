@@ -14,7 +14,8 @@ import AdminProfile from './AdminProfile/AdminProfile'
 import { useTranslation } from 'react-i18next'
 
 const Profile = ({
-  data
+  data,
+  currentUserBlocked
 }) => {
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
@@ -109,7 +110,7 @@ const Profile = ({
       style={{padding: '60px 20px'}}
     >
       <h1>{context.role === 'admin' ? t('users') : t('myReviews')}</h1>
-      {context.role === 'admin' 
+      {context.role === 'admin' || currentUserBlocked
         ? '' 
         : <Link 
             to='/review' 
@@ -146,6 +147,8 @@ const Profile = ({
             handleDeleteBtn={handleDeleteBtn}
             handleFilterCategoryChange={handleFilterCategoryChange}
             handleSortChange={handleSortChange}
+            request={request}
+            userId={userId}
           />
       }
       

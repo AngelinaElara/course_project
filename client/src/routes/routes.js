@@ -17,7 +17,8 @@ export const useRoutes = (
   isAuth,
   tags,
   data,
-  role
+  role,
+  currentUserBlocked
 ) => {
   if (isAuth && role === 'admin') {
     return (
@@ -76,19 +77,19 @@ export const useRoutes = (
         />
         <Route 
           path='/:id' 
-          element={<ReviewDetails data={data}/>} 
+          element={<ReviewDetails data={data} currentUserBlocked={currentUserBlocked}/>} 
         />
         <Route 
           path='/review' 
-          element={<CreateReview listTags={tags}/>} 
+          element={<CreateReview listTags={tags} currentUserBlocked={currentUserBlocked}/>} 
         />
         <Route 
           path='/profile' 
-          element={<Profile data={data}/>} 
+          element={<Profile data={data} currentUserBlocked={currentUserBlocked}/> } 
         />
         <Route 
           path='/profile/:id' 
-          element={<AuthReviewDetails data={data}/>} 
+          element={<AuthReviewDetails data={data} />} 
         />
         <Route path='/search' element={<TagsList />}/>
       </Routes>

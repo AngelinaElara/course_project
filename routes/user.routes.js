@@ -13,11 +13,22 @@ router.get('/', async(req, res) => {
   }
 })
 
+router.get('/:id', async (req, res) => {
+  try {
+    const {id} = req.params || {}
+    const currentUser = await User.findById(id)
+    const blocked = currentUser.blocked
+    res.json({blocked})
+  } catch (error) {
+    console.log(error) 
+  }
+})
+
 router.patch('/changeblock', async(req, res) => {
   console.log(req.body)
   try {
     const {blocked, id} = req.body
-    const upId = id.map(i => new mongoose.Types.ObjectId(i) )
+    const upId = id.map(i => new mongoose.Types.ObjectId(i) ) 
     await User.updateMany({_id: {$in: upId}}, {$set: {blocked}})
   } catch (error) {
     console.log(error)
