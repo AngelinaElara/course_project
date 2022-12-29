@@ -90,6 +90,10 @@ const ReviewList = ({
                       </span>
                     </p>
                     <p className='d-flex flex-row gap-2'>
+                      {t('authRating')}: {review.ratingAuth} 
+                      <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
+                    </p>
+                    <p className='d-flex flex-row gap-2'>
                       {t('userRating')}: {review.finalRating} 
                       <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
                     </p>

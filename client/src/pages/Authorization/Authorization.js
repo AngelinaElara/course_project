@@ -65,6 +65,7 @@ const Authorization = () => {
         setIsFormReset(true)
         context.login(data.UserId, data.name, data.role)
         navigate('/')
+        window.location.reload()
       }
     } catch (error) { 
       console.error(error)

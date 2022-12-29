@@ -20,7 +20,7 @@ const Comments = ({
       <Form style={{padding: '10px', width: '70%'}}>
       <p style={{fontWeight: '600', fontSize: '20px'}}>{t('comments')}</p>
         <Form.Group className='d-flex flex-row gap-2' style={{position: 'relative'}}>
-          {isAuth && currentUserBlocked
+          {isAuth && !currentUserBlocked
             ? <Form.Control 
                 value={commentValue} 
                 onChange={(event) => setCommentValue(event.target.value)}
@@ -33,7 +33,7 @@ const Comments = ({
           }
           <Button 
             onClick={handleCommentBtnClick}
-            disabled={!isAuth || (isAuth && !currentUserBlocked)}
+            disabled={!isAuth || currentUserBlocked ? true : false}
           >
             {t('send')}
           </Button>

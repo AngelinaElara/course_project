@@ -75,6 +75,7 @@ const ReviewDetails = ({
           handleCommentBtnClick={handleCommentBtnClick}
           commentsArray={commentsArray}
           userId={userId}
+          currentUserBlocked={currentUserBlocked}
         />
       </Row>
     </Container>
