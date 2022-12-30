@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect} from 'react'
+import {useState, useContext, useEffect, useRef} from 'react'
 import {useParams} from 'react-router-dom'
 import Dropzone from '../../components/Dropzone'
 import StarRating from '../../components/StarRating'
@@ -11,6 +11,30 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useTranslation } from 'react-i18next'
 import Tags from '../../components/Tags/Tags'
+import JoditEditor from 'jodit-react'
+
+const config = {
+  width: 'auto',
+  buttons: ['source', '|',
+  'bold',
+  'strikethrough',
+  'underline',
+  'italic', '|',
+  'ul',
+  'ol', '|',
+  'outdent', 'indent',  '|',
+  'font',
+  'fontsize',
+  'brush',
+  'paragraph', '|',
+  'link', '|',
+  'align', 'undo', 'redo', '|',
+  'hr',
+  'eraser',
+  'copyformat', '|',
+  'fullsize',
+  'print']
+}
 
 const CreateReview = ({
   listTags,
@@ -33,13 +57,14 @@ const CreateReview = ({
   const storageRef = ref(storage, `reviews/c${randomId}`)
   const { t } = useTranslation()
   let {id}  = useParams()
+  const editor = useRef(null)
 
   const handleSubmitButtonClick = async (event) => {
     event.preventDefault()
     if(userName.length && 
       inputTitleValue.length &&
       categoryValue.length &&
-      inputDescriptionValue.length &&
+      inputDescriptionValue &&
       tags.length &&
       rating !== 0
       ) {
@@ -66,6 +91,11 @@ const CreateReview = ({
         console.log(error)
       }
     }
+  }
+
+  const handleInputDescriptionChange = (value) => {
+    setInputDescriptionValue(value)
+    console.log(inputDescriptionValue)
   }
 
   useEffect(() => {
@@ -121,18 +151,19 @@ const CreateReview = ({
           style={{width: '90%'}}
         >
           <Form.Label>{t('description')}*</Form.Label>
-          <Form.Control 
-            as='textarea' 
-            rows={5}
-            maxLength={1500}
-            value={inputDescriptionValue}
-            onChange={(event) => setInputDescriptionValue(event.target.value)}
-          /> 
+          <div style={{color: 'black'}}>
+            <JoditEditor
+              ref={editor}
+              config={config}
+              tabIndex={1}
+              value={''}
+              onChange={(newContent) => handleInputDescriptionChange(newContent)}
+            />
+          </div>
         </Form.Group>
 
         <Form.Group 
           style={{width: '90%'}}
-          
         >
           <Form.Label htmlFor='tags'>{t('tags')}*</Form.Label>
           <Tags 

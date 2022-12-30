@@ -88,7 +88,7 @@ const ReviewDescription = ({
       } 
       <Col sm className='d-flex flex-column gap-3'>
         <h2 style={{marginTop: '15px'}}>{review.title}</h2>
-        <p>{review.description}</p>
+        <div dangerouslySetInnerHTML={{__html: review.description}}></div>
         <div className='d-flex flex-row gap-2'>
           <p>{t('tags')}</p>
           <div className='d-flex flex-row gap-2'>
@@ -106,7 +106,7 @@ const ReviewDescription = ({
         <div className='d-flex gap-4 flex-row  align-items-center'>
           <div className='d-flex gap-2 flex-row justify-content-center align-items-center'>
             {t('reviewFrom')}: 
-            <span style={{textTransform: 'capitalize'}}>
+            <span style={{textTransform: 'capitalize'}}> 
               {review.from}
             </span>
             {authorLikes}

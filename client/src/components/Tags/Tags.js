@@ -28,7 +28,6 @@ const Tags = ({
   const handleTagsListClick = (event) => {
     setTags([...tags, {value: event.target.textContent, count: 0}])
     setTagValue('')
-    console.log(tags)
   }
 
   useMemo(() => {
