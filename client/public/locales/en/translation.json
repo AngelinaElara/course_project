@@ -18,7 +18,7 @@
   "check": "Check",
   "name": "Name",
   "publish": "Publish date",
-  "yourScore": "Your review score",
+  "yourScore": "Your score",
   "noReview": "You haven't review...",
   "newReview": "New review",
   "title": "Title",
@@ -46,5 +46,6 @@
   "changeReview": "Change review", 
   "block": "Blocked",
   "unBlock": "Not blocked",
-  "notReview": "You cannot create reviews because you are blocked"
+  "notReview": "You cannot create reviews because you are blocked",
+  "pdf": "Download review in PDF"
 }

@@ -10,11 +10,10 @@ import moment from 'moment'
 import {useParams} from 'react-router-dom'
 
 const ReviewList = ({
-  data,
-  title
+  title,
+  data
 }) => {
   const [langTitle, setLangTitle] = useState('')
-  const [listData, setListData] = useState([])
   const context = useContext(Context)
   const listStyle = context.lightTheme 
     ? {background: '#ccccff', color: 'black'} 
@@ -24,7 +23,6 @@ const ReviewList = ({
 
   useEffect(() => {
     if(data) {
-      setListData(data)
       data.map(review => {
         if(review.img) {
           getDownloadURL(ref(storage, `reviews/${review.randomId}`))
@@ -59,15 +57,15 @@ const ReviewList = ({
   useEffect(() => {
     if(userId) {
       const filterUserReview = data.filter(review => review.idFrom === userId)
-      setListData(filterUserReview)
+      data(filterUserReview)
     }
   }, [userId])
   
   return (
     <div style={{marginTop: '20px'}}>
       <h1 style={{fontSize: '25px'}}>{langTitle}</h1>
-      {listData 
-        ? listData.map((review)=> {
+      {data 
+        ? data.map((review)=> {
           return (
             <ListGroup as='ul' style={{marginTop: '20px'}}>
               <ListGroup.Item 
@@ -90,11 +88,11 @@ const ReviewList = ({
                       </span>
                     </p>
                     <p className='d-flex flex-row gap-2'>
-                      {t('authRating')}: {review.ratingAuth} 
+                      <p>{t('authRating')}: {review.ratingAuth}</p> 
                       <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
                     </p>
                     <p className='d-flex flex-row gap-2'>
-                      {t('userRating')}: {review.finalRating} 
+                      <p>{t('userRating')}: {review.finalRating} </p>
                       <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
                     </p>
                     <p className='d-flex flex-row gap-2' style={{color: '#787878', fontSize: '12px'}}>
@@ -105,7 +103,10 @@ const ReviewList = ({
                     </p>
                   </div>
                   {review.img  
-                    ? <div style={{width: '200px', height: '100px', overflow: 'hidden'}}>
+                    ? <div 
+                        style={{width: '200px', height: '100px', overflow: 'hidden'}}
+                        className='d-flex align-items-center justify-content-center'
+                      >
                         <img 
                           style={{height: '100%'}}
                           id={review.randomId}

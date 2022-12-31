@@ -13,5 +13,6 @@ export const Context = createContext({
   isImage: false,
   lightTheme: true,
   language: 'en',
-  role: ''
+  role: '',
+  tagsList: null,
 })

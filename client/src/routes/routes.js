@@ -15,41 +15,38 @@ import ReviewList from '../components/ReviewList'
 
 export const useRoutes = (
   isAuth,
-  tags,
-  data,
-  role,
-  currentUserBlocked
+  role
 ) => {
   if (isAuth && role === 'admin') {
     return (
       <Routes>
         <Route 
           path='*' 
-          element={<Main tags={tags} data={data} />} 
+          element={<Main />} 
         />
         <Route 
           path='/' 
-          element={<Main tags={tags} data={data}/>} 
+          element={<Main />} 
         />
         <Route 
           path='/:id' 
-          element={<AuthReviewDetails data={data} listTags={tags}/>} 
+          element={<AuthReviewDetails />} 
         />
         <Route 
           path='/review/:id' 
-          element={<CreateReview listTags={tags}/>} 
+          element={<CreateReview />} 
         />
         <Route 
           path='/profile' 
-          element={<Profile data={data}/>} 
+          element={<Profile />} 
         />
         <Route 
           path='/user/review/:id' 
-          element={<AuthReviewDetails data={data}/>} 
+          element={<AuthReviewDetails />} 
         />
         <Route 
           path='/profile/:id' 
-          element={<AuthReviewDetails data={data}/>} 
+          element={<AuthReviewDetails />} 
         />
         <Route path='/search' element={<TagsList />}/>
         <Route 
@@ -57,7 +54,7 @@ export const useRoutes = (
           element={
             <Container>
               <Row>
-                <ReviewList data={data} title={"Author's reviews"}/>
+                <ReviewList title={"Author's reviews"}/>
               </Row>
             </Container>
           } 
@@ -69,27 +66,27 @@ export const useRoutes = (
       <Routes>
         <Route 
           path='*' 
-          element={<Main tags={tags} data={data} />} 
+          element={<Main />} 
         />
         <Route 
           path='/' 
-          element={<Main tags={tags} data={data}/>} 
+          element={<Main/>} 
         />
         <Route 
           path='/:id' 
-          element={<ReviewDetails data={data} currentUserBlocked={currentUserBlocked}/>} 
+          element={<ReviewDetails />} 
         />
         <Route 
           path='/review' 
-          element={<CreateReview listTags={tags} currentUserBlocked={currentUserBlocked}/>} 
+          element={<CreateReview />} 
         />
         <Route 
           path='/profile' 
-          element={<Profile data={data} currentUserBlocked={currentUserBlocked}/> } 
+          element={<Profile /> } 
         />
         <Route 
           path='/profile/:id' 
-          element={<AuthReviewDetails data={data} />} 
+          element={<AuthReviewDetails />} 
         />
         <Route path='/search' element={<TagsList />}/>
       </Routes>
@@ -100,15 +97,15 @@ export const useRoutes = (
     <Routes>
       <Route 
         path='*' 
-        element={<Main tags={tags} data={data}/>} 
+        element={<Main />} 
       />
       <Route 
         path='/' 
-        element={<Main tags={tags} data={data}/>} 
+        element={<Main />} 
       />
       <Route 
         path='/:id' 
-        element={<ReviewDetails data={data}/>} 
+        element={<ReviewDetails />} 
       />
       <Route path='/login' element={<Login />} />
       <Route path='/authorization' element={<Authorization />} />

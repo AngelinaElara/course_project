@@ -1,4 +1,7 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback, useContext} from 'react'
+import { useHttp } from '../../hooks/http.hook'
+import {useAuth} from '../../hooks/auth.hook'
+import { Context } from '../../context/Context'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -11,25 +14,31 @@ import photoLoad from '../../ui/photoLoad.png'
 import { useTranslation } from 'react-i18next'
 import './style/reviewDetails.css'
 
-const AuthReviewDetails = ({
-  data,
-  listTags
-}) => {
+const AuthReviewDetails = () => {
+  const context = useContext(Context)
   const [review, setReview] = useState({})
   const [isModalActive, setIsModalActive] = useState(false)
+  const {userId} = useAuth()
+  const {request} = useHttp()
   let {id}  = useParams()
   const { t } = useTranslation()
+
+  const fetchReview = useCallback(async () => {
+    try { 
+      let getData = await request(`/review/${id}`, 'GET')
+      setReview(getData)
+    } catch (e) {
+      console.error(e)
+    } 
+  }, [userId, request])
   
   const handleBtnChangeClick = () => {
     setIsModalActive(true)
   }
 
-  useEffect(() => {
-    if(data) {
-      const findedReview = data.find(review => review._id  === id)
-      setReview(findedReview)
-    }
-  }, [data])
+  useEffect(() => {  
+    fetchReview()  
+  }, [fetchReview]) 
 
   useEffect(() => {
     if(review.img) {
@@ -50,8 +59,6 @@ const AuthReviewDetails = ({
       })
     }
   }, [review])
-
-  console.log(review.tags)
 
   if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
 
@@ -78,7 +85,7 @@ const AuthReviewDetails = ({
         } 
         <Col sm>
           <h2>{review.title}</h2>
-          <p>{review.description}</p>
+          <div dangerouslySetInnerHTML={{__html: review.description}}></div>
           <div className='d-flex flex-row gap-2'>
             <p>{t('tags')}:</p>
             <div className='d-flex flex-row gap-2'>
@@ -108,7 +115,6 @@ const AuthReviewDetails = ({
             setReview={setReview} 
             setIsModalActive={setIsModalActive}
             t={t}
-            allTags={listTags}
           /> 
         : ''}
     </Container>

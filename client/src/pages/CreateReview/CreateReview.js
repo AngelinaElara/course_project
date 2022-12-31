@@ -1,4 +1,4 @@
-import {useState, useContext, useEffect, useRef} from 'react'
+import {useState, useContext, useEffect, useRef, useCallback} from 'react'
 import {useParams} from 'react-router-dom'
 import Dropzone from '../../components/Dropzone'
 import StarRating from '../../components/StarRating'
@@ -36,21 +36,20 @@ const config = {
   'print']
 }
 
-const CreateReview = ({
-  listTags,
-  currentUserBlocked
-}) => {
+const CreateReview = () => {
   const [inputTitleValue, setInputTitleValue] = useState('')
   const [categoryValue, setCategoryValue] = useState('')
   const [inputDescriptionValue, setInputDescriptionValue] = useState('')
   const [tags, setTags] = useState([])
+  const [listTags, setListTags] = useState([])
   const [isResetImg, setIsResetImg] = useState(false)
   const [rating, setRating] = useState(0)
   const [isFromReset, setIsFormReset] = useState(false)
-  const context = useContext(Context)
+  const [data, setData] = useState([])
   const {userId, userName} = useAuth()
   const {request} = useHttp()
   const randomId = Date.now().toString(16) + Math.floor(Math.random() * 100000)
+  const context = useContext(Context)
   const metadata = {
     contentType: 'image/jpeg',
   }
@@ -58,6 +57,15 @@ const CreateReview = ({
   const { t } = useTranslation()
   let {id}  = useParams()
   const editor = useRef(null)
+
+  const handlegetListTags = useCallback(async () => {
+    try {
+      let getData = await request('/review', 'GET')
+      setData(getData)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [request])
 
   const handleSubmitButtonClick = async (event) => {
     event.preventDefault()
@@ -95,7 +103,6 @@ const CreateReview = ({
 
   const handleInputDescriptionChange = (value) => {
     setInputDescriptionValue(value)
-    console.log(inputDescriptionValue)
   }
 
   useEffect(() => {
@@ -109,7 +116,25 @@ const CreateReview = ({
     }
   }, [isFromReset])
 
-  if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
+  useEffect(() => {
+    handlegetListTags()
+  }, [handlegetListTags])
+
+  useEffect(() => {
+    if(data) { 
+      data.map(review => listTags.push(review.tags))
+      const removeDuplicateObject = listTags.flat().reduce((acc, i) => {
+        if(!acc.find(tag => tag.value == i.value)) {
+          acc.push(i)
+        }
+        return acc
+      }, [])
+      console.log(removeDuplicateObject)
+      setListTags(removeDuplicateObject)
+    }
+  }, [data])
+
+  // if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
 
   return (
     <div 

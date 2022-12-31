@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react'
+import {useState, useEffect, useContext, useCallback} from 'react'
 import { useHttp } from '../../hooks/http.hook'
 import {useAuth} from '../../hooks/auth.hook'
 import { Context } from '../../context/Context'
@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button'
 import { storage } from '../../firebase/index'
 import { ref, deleteObject } from 'firebase/storage'
 import {Link} from 'react-router-dom'
-import moment from 'moment'
 import addBtn from '../../ui/addBtn.png'
 import axios from 'axios'
 import UserProfile from './UserProfile/UserProfile'
@@ -14,24 +13,38 @@ import AdminProfile from './AdminProfile/AdminProfile'
 import { useTranslation } from 'react-i18next'
 
 const Profile = ({
-  data,
-  currentUserBlocked
 }) => {
   const [isCheckAll, setIsCheckAll] = useState(false)
+  const [data, setData] = useState([])
   const [isCheck, setIsCheck] = useState([])
   const [dataReviews, setDataReviews] = useState([])
-  const {userId, role} = useAuth() 
+  const [currentUserBlocked, setCurrentUserBlocked] = useState(false)
+  const {userId} = useAuth() 
   const {request} = useHttp()
   const context = useContext(Context)
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
   const { t } = useTranslation()
 
-  useEffect(() => {
-    if(data && role === 'user') {
-      const userReviews = data.filter(review => review.idFrom === userId)
-      setDataReviews(userReviews) 
-    }
-  }, [data])
+  const fetchReviews = useCallback(async () => {
+    try { 
+      let getData = await request(`/review/get/${userId}`, 'GET') 
+      setDataReviews(getData)
+      setData(getData)
+    } catch (e) {
+      console.error(e)
+    } 
+  }, [userId, request]) 
+  
+  const fetchCurrentUser = useCallback(async () => {
+    try { 
+      if(userId) {
+        const user = await request(`/users/${userId}`, 'GET')
+        setCurrentUserBlocked(user.blocked)
+      }
+    } catch (e) {
+      console.error(e)
+    }  
+  }, [request, userId])
 
   const handleSelectAllCheckboxes = () => {
     setIsCheckAll(!isCheckAll)
@@ -90,6 +103,7 @@ const Profile = ({
         })
       }
     }
+    window.location.reload()
   }
 
   const handleLogoutBtnClick = async () => {
@@ -97,6 +111,14 @@ const Profile = ({
     const response = await axios.get('http://5-180-180-221.cloud-xip.com:5000/auth/logout', {withCredentials: true}).catch(err => console.log(err))
     window.location.reload()
   }
+
+  useEffect(() => { 
+    fetchReviews()
+  }, [fetchReviews])
+
+  useEffect(() => {
+    fetchCurrentUser()
+  }, [fetchCurrentUser])
 
   useEffect(() => {
     if(dataReviews.length) {
@@ -113,7 +135,7 @@ const Profile = ({
       {context.role === 'admin' || currentUserBlocked
         ? '' 
         : <Link 
-            to='/review' 
+            to={`/review`}
             className='position-absolute' 
             style={{top: '15px', left: '20px'}}
           > 

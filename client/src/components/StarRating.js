@@ -8,8 +8,7 @@ const StarRating = ({
   lengthArray,
   isUserClick,
   userId,
-  reviewId,
-  isAuth
+  reviewId
 }) => {
   const [hover, setHover] = useState(0)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
@@ -32,10 +31,6 @@ const StarRating = ({
       console.log(error)
     }
   }
-
-  useEffect(() => {
-    !isAuth ? setIsButtonDisabled(true) : setIsButtonDisabled(false) 
-  }, [isAuth])
 
   useEffect(() => {
     rating ? setIsButtonDisabled(true) : setIsButtonDisabled(false)

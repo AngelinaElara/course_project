@@ -8,17 +8,35 @@ import Row from 'react-bootstrap/Row'
 import ReviewDescription from './components/ReviewDescription'
 import Comments from './components/Comments'
 
-const ReviewDetails = ({
-  data,
-  currentUserBlocked
-}) => {
+const ReviewDetails = () => {
   const [review, setReview] = useState({})
   const [commentValue, setCommentValue] = useState('')
   const [commentsArray, setCommentsArray] = useState([])
+  const [currentUserBlocked, setCurrentUserBlocked] = useState(false)
   let {id}  = useParams()
   const {request} = useHttp()
   const {userId, userName} = useAuth()
   const isAuth = !!userId
+
+  const fetchReview = useCallback(async () => {
+    try { 
+      let getData = await request(`/review/${id}`, 'GET')
+      setReview(getData)
+    } catch (e) {
+      console.error(e)
+    } 
+  }, [id])
+
+  const fetchCurrentUser = useCallback(async () => {
+    try { 
+      if(userId) {
+        const user = await request(`/users/${userId}`, 'GET')
+        setCurrentUserBlocked(user.blocked)
+      }
+    } catch (e) {
+      console.error(e)
+    }  
+  }, [request, userId])
 
   const handleCommentBtnClick = async () => {
     try {
@@ -36,12 +54,13 @@ const ReviewDetails = ({
     }
   }
 
+  useEffect(() => {  
+    fetchReview() 
+  }, [fetchReview])
+
   useEffect(() => {
-    if(data) {
-      const review = data.find(review => review._id === id)
-      setReview(review)
-    }
-  }, [data])
+    fetchCurrentUser()
+  }, [fetchCurrentUser])
 
   useEffect(() => {
     setInterval(async () => {

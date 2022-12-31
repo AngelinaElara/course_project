@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react'
+import {useState, useContext, useCallback, useEffect, useRef} from 'react'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import CloseButton from 'react-bootstrap/CloseButton'
@@ -10,21 +10,47 @@ import {useHttp} from '../../../hooks/http.hook'
 import {Context} from '../../../context/Context'
 import {storage} from '../../../firebase/index'
 import {ref, uploadBytes  } from 'firebase/storage'
+import JoditEditor from 'jodit-react'
+
+const config = {
+  width: 'auto',
+  buttons: ['source', '|',
+  'bold',
+  'strikethrough',
+  'underline',
+  'italic', '|',
+  'ul',
+  'ol', '|',
+  'outdent', 'indent',  '|',
+  'font',
+  'fontsize',
+  'brush',
+  'paragraph', '|',
+  'link', '|',
+  'align', 'undo', 'redo', '|',
+  'hr',
+  'eraser',
+  'copyformat', '|',
+  'fullsize',
+  'print']
+}
 
 const Modal = ({
   review,
   setReview,
-  t,
-  allTags
+  t
 }) => {
+  const [data, setData] = useState([])
   const [inputTitleValue, setInputTitleValue] = useState(review.title)
   const [categoryValue, setCategoryValue] = useState(review.category)
-  const [inputDescriptionValue, setInputDescriptionValue] = useState(review.description)
+  const [inputDescriptionInitialValue, setInputDescriptionInitialValue] = useState(review.description)
   const [tags, setTags] = useState(review.tags)
+  const [allTags, setAllTags] = useState([])
   const [rating, setRating] = useState(review.ratingAuth)
   const reviewId = review._id
   const {request} = useHttp()
   const context = useContext(Context)
+  const editor = useRef(null)
   const metadata = {
     contentType: 'image/jpeg',
   }
@@ -32,6 +58,15 @@ const Modal = ({
   const styleModal = context.lightTheme 
     ? {border: '1px solid gray', borderRadius: '5px', background: 'white', width: '80%', padding: '10px', color: 'black'} 
     : {border: '1px solid gray', borderRadius: '5px', background: '#A0A0A0', width: '80%', padding: '10px', color: 'white'}
+
+    const handleGetListTags = useCallback(async () => {
+      try {
+        let getData = await request('/review', 'GET')
+        setData(getData)
+      } catch (error) {
+        console.log(error)
+      }
+    }, [request])
 
   const handleCloseBtnClick = () => {
     setReview(false)
@@ -42,12 +77,11 @@ const Modal = ({
       const modifiedReview = {
         title : inputTitleValue,
         category: categoryValue,
-        description: inputDescriptionValue,
+        description: inputDescriptionInitialValue,
         tags: tags, 
         img: context.isImage,
         ratingAuth: rating,
       } 
-      console.log(tags)
       if(context.imageUrl !== null) {
         uploadBytes(storageRef, context.imageUrl, metadata).then((snapshot) => {
           console.log('Uploaded a blob or file!')
@@ -59,6 +93,27 @@ const Modal = ({
       console.error(error)
     }
   } 
+
+  const handleInputDescriptionChange = (value) => {
+    setInputDescriptionInitialValue(value)
+  }
+
+  useEffect(() => {
+    handleGetListTags()
+  }, [handleGetListTags])
+
+   useEffect(() => {
+    if(data) { 
+      data.map(review => allTags.push(review.tags))
+      const removeDuplicateObject = allTags.flat().reduce((acc, i) => {
+        if(!acc.find(tag => tag.value == i.value)) {
+          acc.push(i)
+        }
+        return acc
+      }, [])
+      setAllTags(removeDuplicateObject)
+    }
+  }, [data])
 
   return (
     <div 
@@ -104,13 +159,16 @@ const Modal = ({
           <Form.Group 
             style={{width: '90%'}}
           >
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control 
-              as='textarea' 
-              rows={5}
-              value={inputDescriptionValue}
-              onChange={(event) => setInputDescriptionValue(event.target.value)}
-            /> 
+          <Form.Label>{t('description')}*</Form.Label>
+            <div style={{color: 'black'}}>
+              <JoditEditor
+                value={inputDescriptionInitialValue}
+                ref={editor}
+                config={config}
+                tabIndex={1}
+                onChange={(newContent) => handleInputDescriptionChange(newContent)}
+              />
+            </div>
           </Form.Group>
 
           <Form.Group 

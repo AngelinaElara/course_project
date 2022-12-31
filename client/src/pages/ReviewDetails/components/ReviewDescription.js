@@ -132,18 +132,24 @@ const ReviewDescription = ({
             </Button>
           </div>
         </div>
-        <div>
-          <span>{t('rateReview')}</span>
-          <StarRating 
-            lengthArray={5}
-            rating={rating}
-            setRating={setRating}
-            isUserClick={true}
-            userId={userId}
-            reviewId={reviewId}
-            isAuth={isAuth}
-          />
-        </div>
+        {!userId 
+          ? '' 
+          : <div>
+              <span>{t('rateReview')}</span>
+              <StarRating 
+                lengthArray={5}
+                rating={rating}
+                setRating={setRating}
+                isUserClick={true}
+                userId={userId}
+                reviewId={reviewId}
+                isAuth={isAuth}
+              />
+            </div>
+        }
+        {review.img 
+          ? <Button>{t('pdf')}</Button>
+          : ''}
       </Col>
     </>
   )
