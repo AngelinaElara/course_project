@@ -1,10 +1,11 @@
-import {useState, useEffect, useContext, useMemo} from 'react'
+import {useState, useEffect, useContext, useMemo, useCallback} from 'react'
 import Container from 'react-bootstrap/Container'
 import Navbar from 'react-bootstrap/Navbar'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import {Link} from 'react-router-dom'
 import { useAuth } from '../hooks/auth.hook'
+import { useHttp } from '../hooks/http.hook'
 import { Context } from '../context/Context'
 import user from '../ui/user.png'
 import enter from '../ui/enter.png'
@@ -14,16 +15,26 @@ import { useTranslation } from 'react-i18next'
 
 const Header = ({
   isLightTheme,
-  setIsLightTheme,
-  data
+  setIsLightTheme
 }) => {
+  const [data, setData] = useState([])
   const [filterData, setFilterData] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const {userId} = useAuth()
+  const {request} = useHttp()
   const isAuth = !!userId
   const context = useContext(Context)
   const headerStyle = isLightTheme ? {height: '60px', background: '#b0c4de'} : {height: '60px', background: '#202020'}
   const { t } = useTranslation()
+
+  const handleGetData = useCallback(async () => {
+    try { 
+      let getData = await request('/review', 'GET') 
+      setData(getData)
+    } catch (e) {
+      console.error(e)
+    }  
+  }, [request])
 
   useMemo(() => {
     const found = []
@@ -57,6 +68,10 @@ const Header = ({
     setSearchValue('')
     setFilterData([]) 
   }
+
+  useEffect(() => {
+    handleGetData()
+  }, [handleGetData]) 
 
   useEffect(() => {
     localStorage.setItem('theme', context.lightTheme)

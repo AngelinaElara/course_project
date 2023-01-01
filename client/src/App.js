@@ -9,7 +9,6 @@ import { Context } from './context/Context'
 const App = () => {
   const [lightTheme, setLightTheme] = useState(JSON.parse(localStorage.getItem('theme') || true))
   const [language, setLanguage] = useState(JSON.parse(localStorage.getItem('language')) || 'en')
-  const [data, setData] = useState([])
   const [isImage, setIsImage] = useState(false)
   const [tagsList, setTagsList] = useState([])
   const {login, logout, userId, userName, role} = useAuth()
@@ -28,7 +27,7 @@ const App = () => {
         style={styleBody} 
         className='position-fixed fixed-top fixed-right fixed-left fixed-bottom'
       >
-        <Header isLightTheme={lightTheme} setIsLightTheme={setLightTheme} data={data}/>
+        <Header isLightTheme={lightTheme} setIsLightTheme={setLightTheme}/>
         {routes}
       </div>
     </Context.Provider>

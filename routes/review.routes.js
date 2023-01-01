@@ -30,6 +30,30 @@ router.post('/create', async (req, res) => {
   }
 })
 
+router.get('/get/:id', async (req, res) => { 
+  try { 
+    const {id} = req.params || {}
+    if(!id) throw new Error('Wrong params!')
+    const reviews = await Review.find({ 'idFrom': { $in: id } })
+    res.json(reviews)   
+  } catch (e) { 
+    console.log(e)
+    res.status(400)
+  }  
+})
+
+router.get('/:id', async (req, res) => { 
+  try { 
+    const {id} = req.params || {}
+    if(!id) throw new Error('Wrong params!')
+    const review = await Review.findById(id)
+    res.json(review)   
+  } catch (e) { 
+    console.log(e)
+    res.status(400)
+  }  
+})
+
 router.get('/', async (req, res) => {
   try {
     const reviews = await Review.find()

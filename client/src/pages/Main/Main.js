@@ -16,7 +16,7 @@ const Main = () => {
   const [tags, setTags] = useState([])
   const {request} = useHttp()
 
-  const fetchAllReviews = useCallback(async () => {
+  const handleGetData = useCallback(async () => {
     try { 
       let getData = await request('/review', 'GET') 
       setData(getData)
@@ -59,8 +59,8 @@ const Main = () => {
   }, [data])
 
   useEffect(() => {
-    fetchAllReviews()
-  }, [fetchAllReviews])
+    handleGetData()
+  }, [handleGetData])
 
   return (
     <Container style={{padding: '60px 20px'}} className='position-relative'>

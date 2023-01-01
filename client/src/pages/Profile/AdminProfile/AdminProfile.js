@@ -171,7 +171,7 @@ const AdminProfile = ({
               })}
             </tbody>
           </Table>
-        : <div>No users</div>
+        : ''
       }
     </>
   )

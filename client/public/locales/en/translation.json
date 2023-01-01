@@ -47,5 +47,9 @@
   "block": "Blocked",
   "unBlock": "Not blocked",
   "notReview": "You cannot create reviews because you are blocked",
-  "pdf": "Download review in PDF"
+  "pdf": "Download review in PDF",
+  "newer": "Newer",
+  "older": "Older",
+  "moreRated": "More rated",
+  "lowerRating": "Lower rating"
 }

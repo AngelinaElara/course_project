@@ -118,7 +118,7 @@ const Profile = ({
 
   useEffect(() => {
     fetchCurrentUser()
-  }, [fetchCurrentUser])
+  }, [fetchCurrentUser]) 
 
   useEffect(() => {
     if(dataReviews.length) {

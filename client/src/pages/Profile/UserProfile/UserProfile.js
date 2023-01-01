@@ -42,10 +42,10 @@ const UserProfile = ({
         </Form.Select>
         <Form.Select onChange={handleSortChange}>
           <option value=''>{t('sort')}</option>
-          <option value='newer'>Newer</option>
-          <option value='older'>Older</option> 
-          <option value='more'>More rated</option>
-          <option value='lower'>Lower rating</option>
+          <option value='newer'>{t('newer')}</option>
+          <option value='older'>{t('older')}</option> 
+          <option value='more'>{t('moreRated')}</option>
+          <option value='lower'>{t('lowerRating')}</option>
         </Form.Select>
       </div>
       {dataReviews.length 
