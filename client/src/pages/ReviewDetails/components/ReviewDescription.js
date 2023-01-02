@@ -24,8 +24,9 @@ const ReviewDescription = ({
  
   const handleLikeClick = async () => {
     setAuthorLikes(prev => prev+1)
-    const sendLike = await request(`review/like/${reviewId}`, 'PATCH', {userId, authorId})
     setIsLikeDisabled(true)
+    console.log(isLikeDisabled)
+    const sendLike = await request(`review/like/${reviewId}`, 'PATCH', {userId, authorId})
   } 
 
   const getAuthLikes = useCallback(async () => {
@@ -40,10 +41,6 @@ const ReviewDescription = ({
   useEffect(() => {
     getAuthLikes()
   }, [getAuthLikes])
-
-  useEffect(() => {
-    !isAuth ? setIsLikeDisabled(true) : setIsLikeDisabled(false)
-  }, [isAuth])
 
   useEffect(() => {
     if(review.img) {
@@ -66,10 +63,11 @@ const ReviewDescription = ({
     if(review) {
       const findRatingFromUser = review?.ratingUsers?.find(user => user.userId === userId)
       if(findRatingFromUser) setRating(findRatingFromUser.rating)
+      review.liked.includes(userId) ? setIsLikeDisabled(true) : setIsLikeDisabled(false)
     }
   }, [review])
 
-  return (
+  return ( 
     <>
       {review.img 
         ? <Col sm>
@@ -116,21 +114,24 @@ const ReviewDescription = ({
               fill={'red'}
             />
           </div>
-          <div>
-            <Button 
-              variant='light' 
-              className='d-flex flex-row gap-2 align-items-center'
-              onClick={handleLikeClick}
-              disabled={isLikeDisabled}
-            >
-              <HeartIcon 
-                width={'20px'}
-                height={'20px'} 
-                fill={'black'}
-              />
-              <span>{t('likeAuthor')}</span>
-            </Button>
-          </div>
+          {!userId 
+          ? '' 
+          : <div>
+              <Button 
+                variant='light' 
+                className='d-flex flex-row gap-2 align-items-center'
+                onClick={handleLikeClick}
+                disabled={isLikeDisabled}
+              >
+                <HeartIcon 
+                  width={'20px'}
+                  height={'20px'} 
+                  fill={'black'}
+                />
+                <span>{t('likeAuthor')}</span>
+              </Button>
+            </div>
+          }
         </div>
         {!userId 
           ? '' 

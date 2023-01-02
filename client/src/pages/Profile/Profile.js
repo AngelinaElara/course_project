@@ -25,7 +25,7 @@ const Profile = ({
   const tableStyle = context.lightTheme ? {color: 'black'} : {color: 'white'}
   const { t } = useTranslation()
 
-  const fetchReviews = useCallback(async () => {
+  const handleGetUsersReviews = useCallback(async () => {
     try { 
       let getData = await request(`/review/get/${userId}`, 'GET') 
       setDataReviews(getData)
@@ -35,11 +35,11 @@ const Profile = ({
     } 
   }, [userId, request]) 
   
-  const fetchCurrentUser = useCallback(async () => {
+  const handleGetCurrentUserStatus = useCallback(async () => {
     try { 
       if(userId) {
-        const user = await request(`/users/${userId}`, 'GET')
-        setCurrentUserBlocked(user.blocked)
+        const blocked = await request(`/users/${userId}`, 'GET')
+        setCurrentUserBlocked(blocked)
       }
     } catch (e) {
       console.error(e)
@@ -113,12 +113,12 @@ const Profile = ({
   }
 
   useEffect(() => { 
-    fetchReviews()
-  }, [fetchReviews])
+    handleGetUsersReviews()
+  }, [handleGetUsersReviews])
 
   useEffect(() => {
-    fetchCurrentUser()
-  }, [fetchCurrentUser]) 
+    handleGetCurrentUserStatus()
+  }, [handleGetCurrentUserStatus]) 
 
   useEffect(() => {
     if(dataReviews.length) {

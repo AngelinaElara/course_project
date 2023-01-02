@@ -39,7 +39,6 @@ const ReviewList = ({
   // when an admin clicks on a user, he gets a list of his reviews
   useEffect(() => {
     if(data) {
-      console.log(data)
       setGetData(data)
     } else {
       handleGetData()

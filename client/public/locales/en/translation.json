@@ -51,5 +51,9 @@
   "newer": "Newer",
   "older": "Older",
   "moreRated": "More rated",
-  "lowerRating": "Lower rating"
+  "lowerRating": "Lower rating",
+  "admin": "Give admin rights",
+  "newCategory": "Add new category",
+  "status": "Status",
+  "latinLetters": "Only latin letters"
 }

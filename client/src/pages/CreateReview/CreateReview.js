@@ -46,6 +46,8 @@ const CreateReview = () => {
   const [rating, setRating] = useState(0)
   const [isFromReset, setIsFormReset] = useState(false)
   const [data, setData] = useState([])
+  const [categories, setCategories] = useState([])
+  const [currentUserBlocked, setCurrentUserBlocked] = useState(false)
   const {userId, userName} = useAuth()
   const {request} = useHttp()
   const randomId = Date.now().toString(16) + Math.floor(Math.random() * 100000)
@@ -58,10 +60,28 @@ const CreateReview = () => {
   let {id}  = useParams()
   const editor = useRef(null)
 
-  const handlegetListTags = useCallback(async () => {
+  const handleGetListTags = useCallback(async () => {
     try {
       let getData = await request('/review', 'GET')
       setData(getData)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [request])
+
+  const handleGetCurrentUserStatus = useCallback(async () => {
+    try {
+      const blocked = await request(`/users/${userId}`, 'GET')
+      setCurrentUserBlocked(blocked)
+    } catch(error) {
+      console.log(error)
+    }
+  }, [userId, request])
+
+  const handleGetCategories = useCallback(async () => {
+    try {
+      const getCategories = await request('/category/all', 'GET')
+      setCategories(getCategories)
     } catch (error) {
       console.log(error)
     }
@@ -117,8 +137,16 @@ const CreateReview = () => {
   }, [isFromReset])
 
   useEffect(() => {
-    handlegetListTags()
-  }, [handlegetListTags])
+    handleGetCurrentUserStatus()
+  }, [handleGetCurrentUserStatus])
+
+  useEffect(() => {
+    handleGetListTags()
+  }, [handleGetListTags])
+
+  useEffect(() => {
+    handleGetCategories()
+  }, [handleGetCategories])
 
   useEffect(() => {
     if(data) { 
@@ -129,12 +157,11 @@ const CreateReview = () => {
         }
         return acc
       }, [])
-      console.log(removeDuplicateObject)
       setListTags(removeDuplicateObject)
     }
   }, [data])
 
-  // if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
+  if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
 
   return (
     <div 
@@ -161,15 +188,23 @@ const CreateReview = () => {
           style={{width: '90%'}}
         >
           <Form.Label>{t('category')}*</Form.Label>
-          <Form.Select 
-            onChange={(event) => setCategoryValue(event.target.value)} 
-            value={categoryValue}
-          >
-            <option value=''></option>
-            <option value='films'>Films</option>
-            <option value='books'>Books</option>
-            <option value='games'>Games</option>
-          </Form.Select>
+            <Form.Select 
+              onChange={(event) => setCategoryValue(event.target.value)} 
+              value={categoryValue}
+              style={{textTransform: 'capitalize'}}
+            >
+              <option value=''></option>
+              {categories && categories.map(category => {
+                return (
+                  <option
+                    value={category.category}
+                    style={{textTransform: 'capitalize'}} 
+                  >
+                    {category.category}
+                  </option>
+                )
+              })}
+            </Form.Select>
         </Form.Group>
 
         <Form.Group 

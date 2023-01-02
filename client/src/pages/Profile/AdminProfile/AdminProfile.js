@@ -8,6 +8,7 @@ import addBtn from '../../../ui/addBtn.png'
 import trash from '../../../ui/trash.png'
 import block from '../../../ui/block.png'
 import unblock from '../../../ui/ublock.png'
+import CreateCategory from './components/CreateCategory'
 
 const AdminProfile = ({
   tableStyle
@@ -15,6 +16,7 @@ const AdminProfile = ({
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
   const [users, setUsers] = useState([])
+  const [isNewCategoryOpen, setIsNewCategoryOpen] = useState(false)
   const {request} = useHttp()
   const { t } = useTranslation()
 
@@ -47,7 +49,7 @@ const AdminProfile = ({
     }
   }
 
-  const handleBlockUser =  async (e) => {
+  const handleBlockUser =  async () => {
     try {
       if(isCheck.length) {
         window.location.reload()
@@ -58,7 +60,7 @@ const AdminProfile = ({
     }
   }
 
-  const handleUnblockUser =  async (e) => {
+  const handleUnblockUser =  async () => {
     try {
       if(isCheck.length) {
         window.location.reload()
@@ -69,7 +71,22 @@ const AdminProfile = ({
     }
   }
 
-  const fetchUsers = useCallback(async () => {
+  const handleGiveAdminRights = async () => {
+    try {
+      if(isCheck.length) {
+        window.location.reload()
+        const makeAdmin = await request('/users/admin', 'PATCH', {id: isCheck, role: 'admin'})
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleNewCategoryButtonClick = () => {
+    setIsNewCategoryOpen(true)
+  }
+
+  const handleFetchUsers = useCallback(async () => {
     try { 
       let getUsers = await request('/users/', 'GET') 
       setUsers(getUsers)
@@ -79,8 +96,8 @@ const AdminProfile = ({
   }, [request])
   
   useEffect(() => {
-    fetchUsers()
-  }, [fetchUsers])
+    handleFetchUsers()
+  }, [handleFetchUsers])
 
   useEffect(() => {
     if(users.length) {
@@ -115,22 +132,28 @@ const AdminProfile = ({
         >
           <img style={{ width: '20px', height: '20px'}} src={unblock} alt='unblock icon'/>
         </button>
+        <Button variant='light' onClick={handleGiveAdminRights}>
+          {t('admin')}
+        </Button>
+        <Button onClick={handleNewCategoryButtonClick}>
+          {t('newCategory')}
+        </Button> 
       </div>
       {users.length 
         ? <Table style={tableStyle}>
             <thead>
               <tr>
                 <th scope='col' className='d-flex gap-2 flex-row justify-content-start align-items-center'>
-                  Check
+                  {t('check')}
                   <input 
-                    id='selectAll'
+                    id='selectAll' 
                     type={'checkbox'}
                     onChange={handleSelectAllCheckboxes} 
                     checked={isCheckAll}
                   />
                 </th>
                 <th scope='col'>{t('nameUser')}</th>
-                <th scope='col'>Status</th>
+                <th scope='col'>{t('status')}</th>
                 <th scope='col'></th>
               </tr>
             </thead>
@@ -173,6 +196,7 @@ const AdminProfile = ({
           </Table>
         : ''
       }
+      {isNewCategoryOpen ? <CreateCategory setIsNewCategoryOpen={setIsNewCategoryOpen}/> : ''}
     </>
   )
 }

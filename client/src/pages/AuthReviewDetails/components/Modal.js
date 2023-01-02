@@ -1,4 +1,5 @@
 import {useState, useContext, useCallback, useEffect, useRef} from 'react'
+import { useNavigate } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import CloseButton from 'react-bootstrap/CloseButton'
@@ -47,9 +48,11 @@ const Modal = ({
   const [tags, setTags] = useState(review.tags)
   const [allTags, setAllTags] = useState([])
   const [rating, setRating] = useState(review.ratingAuth)
+  const [categories, setCategories] = useState([])
   const reviewId = review._id
   const {request} = useHttp()
   const context = useContext(Context)
+  const navigate = useNavigate()
   const editor = useRef(null)
   const metadata = {
     contentType: 'image/jpeg',
@@ -68,8 +71,18 @@ const Modal = ({
       }
     }, [request])
 
+    const handleGetCategories = useCallback(async () => {
+      try {
+        const getCategories = await request('/category/all', 'GET')
+        setCategories(getCategories)
+      } catch (error) {
+        console.log(error)
+      }
+    }, [request])
+
   const handleCloseBtnClick = () => {
     setReview(false)
+    navigate('/')
   }  
 
   const handleSubmitBtnClick = async () => {
@@ -101,6 +114,10 @@ const Modal = ({
   useEffect(() => {
     handleGetListTags()
   }, [handleGetListTags])
+
+  useEffect(() => {
+    handleGetCategories()
+  }, [handleGetCategories])
 
    useEffect(() => {
     if(data) { 
@@ -148,11 +165,19 @@ const Modal = ({
             <Form.Select 
               onChange={(event) => setCategoryValue(event.target.value)} 
               value={categoryValue}
+              style={{textTransform: 'capitalize'}}
             >
               <option></option>
-              <option value='films'>Films</option>
-              <option value='books'>Books</option>
-              <option value='games'>Games</option>
+              {categories && categories.map(category => {
+                return (
+                  <option
+                    value={category.category}
+                    style={{textTransform: 'capitalize'}} 
+                  >
+                    {category.category}
+                  </option>
+                )
+              })}
             </Form.Select>
           </Form.Group>
 
