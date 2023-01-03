@@ -19,7 +19,21 @@ const UserProfile = ({
   request, 
   userId
 }) => {
+  const [categories, setCategories] = useState([])
   const { t } = useTranslation()
+
+  const handleGetCategories = useCallback(async () => {
+    try {
+      const getCategories = await request('/category/all', 'GET')
+      setCategories(getCategories)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [request])
+
+  useEffect(() => {
+    handleGetCategories()
+  }, [handleGetCategories])
 
   return (
     <>
@@ -34,11 +48,21 @@ const UserProfile = ({
             style={{ width: '50px', height: '50px' }}
           />
         </button>
-        <Form.Select onChange={handleFilterCategoryChange}>
+        <Form.Select 
+          onChange={handleFilterCategoryChange} 
+          style={{textTransform: 'capitalize'}}
+        >
           <option value=''>{t('filterCategory')}</option>
-          <option value='films'>Films</option> 
-          <option value='books'>Books</option> 
-          <option value='games'>Games</option>    
+          {categories && categories.map(category => {
+            return (
+              <option
+                value={category.category}
+                style={{textTransform: 'capitalize'}} 
+              >
+                {category.category}
+              </option>
+            )
+          })}    
         </Form.Select>
         <Form.Select onChange={handleSortChange}>
           <option value=''>{t('sort')}</option>

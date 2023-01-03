@@ -1,5 +1,6 @@
 import {useState, useEffect, useCallback} from 'react'
 import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import photoLoad from '../../../ui/photoLoad.png'
 import { useHttp } from '../../../hooks/http.hook'
@@ -8,12 +9,14 @@ import { ref, getDownloadURL} from 'firebase/storage'
 import {ReactComponent as HeartIcon} from '../../../ui/heart.svg'
 import StarRating from '../../../components/StarRating'
 import { useTranslation } from 'react-i18next'
+import  jsPDF  from 'jspdf'
+import html2canvas from 'html2canvas'
 
 const ReviewDescription = ({
   review,
   userId,
   reviewId,
-  authorId,
+  authorId
 }) => {
   const [isLikeDisabled, setIsLikeDisabled] = useState(false)
   const [authorLikes, setAuthorLikes] = useState(0)
@@ -29,7 +32,7 @@ const ReviewDescription = ({
     const sendLike = await request(`review/like/${reviewId}`, 'PATCH', {userId, authorId})
   } 
 
-  const getAuthLikes = useCallback(async () => {
+  const handleGetAuthLikes = useCallback(async () => {
     try { 
       const getLikes = await request(`/review/authlikes/${authorId}`, 'GET')
       setAuthorLikes(getLikes)
@@ -38,9 +41,26 @@ const ReviewDescription = ({
     } 
   }, [authorId])
 
+  const handlePdfBtnClick = async () => {
+    let img
+    await html2canvas(document.querySelector('.pdf'), {
+      allowTaint: true,
+      useCORS: true,
+      format: 'a4'
+    }).then((canvas) => {
+      const imgWidth = 550
+      const imgHeight = canvas.height * imgWidth / canvas.width
+      img = canvas.toDataURL(
+        'image/png')
+      const doc = new jsPDF('p','pt','a4') 
+      doc.addImage(img, 'PNG', 10, 10, imgWidth, imgHeight)
+      doc.save('review.pdf')
+    })
+  }
+
   useEffect(() => {
-    getAuthLikes()
-  }, [getAuthLikes])
+    handleGetAuthLikes()
+  }, [handleGetAuthLikes])
 
   useEffect(() => {
     if(review.img) {
@@ -70,29 +90,43 @@ const ReviewDescription = ({
   return ( 
     <>
       {review.img 
-        ? <Col sm>
+        ? <Col sm className='pdf d-flex flex-row gap-4'>
             <div
               className='d-flex justify-content-center align-items-center img-container'
             >
               <img 
+                className='img'
                 style={{height: '100%'}}
                 id={`${review.randomId}`}
                 src={photoLoad}
                 alt={'img'}
               /> 
             </div>
+            <div style={{width: '50%'}}>
+              <h2>{review.title}</h2>
+              <div dangerouslySetInnerHTML={{__html: review.description}}></div>
+              <div className='d-flex flex-row gap-2'>
+                <p>{t('tags')}</p>
+                <div className='d-flex flex-row gap-2'>
+                  {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
+                </div>
+              </div>
+            </div>
           </Col>
-        : ''
+        : <Col sm className='d-flex flex-row'>
+            <div>
+              <h2>{review.title}</h2>
+              <div dangerouslySetInnerHTML={{__html: review.description}}></div>
+              <div className='d-flex flex-row gap-2'>
+                <p>{t('tags')}</p>
+                <div className='d-flex flex-row gap-2'>
+                  {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
+                </div>
+              </div>
+            </div>
+          </Col>
       } 
-      <Col sm className='d-flex flex-column gap-3'>
-        <h2 style={{marginTop: '15px'}}>{review.title}</h2>
-        <div dangerouslySetInnerHTML={{__html: review.description}}></div>
-        <div className='d-flex flex-row gap-2'>
-          <p>{t('tags')}</p>
-          <div className='d-flex flex-row gap-2'>
-            {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
-          </div>
-        </div>
+      <Row sm className='d-flex flex-column gap-3 mt-2'>
         <p className='d-flex flex-row gap-2'>
           {t('authRating')}: {review.ratingAuth} 
           <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
@@ -114,6 +148,7 @@ const ReviewDescription = ({
               fill={'red'}
             />
           </div>
+          {/* if the user is not registered */}
           {!userId 
           ? '' 
           : <div>
@@ -133,6 +168,7 @@ const ReviewDescription = ({
             </div>
           }
         </div>
+        {/* if the user is not registered */}
         {!userId 
           ? '' 
           : <div>
@@ -149,9 +185,9 @@ const ReviewDescription = ({
             </div>
         }
         {review.img 
-          ? <Button>{t('pdf')}</Button>
+          ? <Button onClick={handlePdfBtnClick} style={{width: '40%'}}>{t('pdf')}</Button>
           : ''}
-      </Col>
+      </Row>
     </>
   )
 }

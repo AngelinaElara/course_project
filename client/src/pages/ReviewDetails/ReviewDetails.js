@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useContext, useMemo } from 'react'
 import {useParams} from 'react-router-dom'
 import { useHttp } from '../../hooks/http.hook'
 import { useAuth } from '../../hooks/auth.hook'
-import {Context} from '../../context/Context'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import ReviewDescription from './components/ReviewDescription'
@@ -18,7 +17,7 @@ const ReviewDetails = () => {
   const {userId, userName} = useAuth()
   const isAuth = !!userId
 
-  const fetchReview = useCallback(async () => {
+  const handleFetchReview = useCallback(async () => {
     try { 
       let getData = await request(`/review/${id}`, 'GET')
       setReview(getData)
@@ -27,7 +26,7 @@ const ReviewDetails = () => {
     } 
   }, [id])
 
-  const fetchCurrentUser = useCallback(async () => {
+  const handleFetchCurrentUser = useCallback(async () => {
     try { 
       if(userId) {
         const user = await request(`/users/${userId}`, 'GET')
@@ -55,12 +54,12 @@ const ReviewDetails = () => {
   }
 
   useEffect(() => {  
-    fetchReview() 
-  }, [fetchReview])
+    handleFetchReview() 
+  }, [handleFetchReview])
 
   useEffect(() => {
-    fetchCurrentUser()
-  }, [fetchCurrentUser])
+    handleFetchCurrentUser()
+  }, [handleFetchCurrentUser])
 
   useEffect(() => {
     setInterval(async () => {
@@ -77,7 +76,7 @@ const ReviewDetails = () => {
       className='position-relative'
       style={{padding: '60px 20px'}}
     >
-      <Row>
+      <Row className='wrapper'>
         <ReviewDescription 
           review={review}
           userId={userId}
