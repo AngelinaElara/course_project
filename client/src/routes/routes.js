@@ -12,6 +12,7 @@ import Success from '../components/OAuth/components/Success'
 import Error from '../components/OAuth/components/Error'
 import TagsList from '../pages/TagsList/TagsList'
 import ReviewList from '../components/ReviewList'
+import UserProfile from '../pages/Profile/UserProfile/UserProfile'
 
 export const useRoutes = (
   isAuth,
@@ -33,7 +34,7 @@ export const useRoutes = (
           element={<AuthReviewDetails />} 
         />
         <Route 
-          path='/review/:id' 
+          path='/new/:id' 
           element={<CreateReview />} 
         />
         <Route 
@@ -41,24 +42,14 @@ export const useRoutes = (
           element={<Profile />} 
         />
         <Route 
-          path='/user/review/:id' 
-          element={<AuthReviewDetails />} 
+          path='/profile/:id' 
+          element={<UserProfile />} 
         />
         <Route 
-          path='/profile/:id' 
+          path='/review/:id' 
           element={<AuthReviewDetails />} 
         />
         <Route path='/search' element={<TagsList />}/>
-        <Route 
-          path='/user/:id' 
-          element={
-            <Container>
-              <Row>
-                <ReviewList title={"Author's reviews"}/>
-              </Row>
-            </Container>
-          } 
-        />
       </Routes>
     )
   } else if(isAuth && role === 'user') {
@@ -77,7 +68,7 @@ export const useRoutes = (
           element={<ReviewDetails />} 
         />
         <Route 
-          path='/review' 
+          path='/new' 
           element={<CreateReview />} 
         />
         <Route 
@@ -85,7 +76,7 @@ export const useRoutes = (
           element={<Profile /> } 
         />
         <Route 
-          path='/profile/:id' 
+          path='/review/:id' 
           element={<AuthReviewDetails />} 
         />
         <Route path='/search' element={<TagsList />}/>

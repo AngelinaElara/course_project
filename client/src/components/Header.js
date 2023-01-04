@@ -11,6 +11,7 @@ import user from '../ui/user.png'
 import enter from '../ui/enter.png'
 import sun from '../ui/sun.png'
 import moon from '../ui/moon.png'
+import logo from '../ui/logo.png'
 import { useTranslation } from 'react-i18next'
 
 const Header = ({
@@ -83,7 +84,13 @@ const Header = ({
     >
       <Navbar expand='lg' className='d-flex justify-content-between align-items-center'>
         <Container>
-          <Link to='/'>Logo</Link>
+          <Link to='/'>
+            <img 
+              src={logo}
+              alt='logo'
+              // style={{width: '55px', height: '55px'}}
+            />
+          </Link>
 
           <Form className='d-flex justify-content-center align-items-center gap-2 position-relative' style={{width: '50%'}}>
             <Form.Control 

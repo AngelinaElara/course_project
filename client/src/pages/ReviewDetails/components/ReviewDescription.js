@@ -58,11 +58,7 @@ const ReviewDescription = ({
     })
   }
 
-  useEffect(() => {
-    handleGetAuthLikes()
-  }, [handleGetAuthLikes])
-
-  useEffect(() => {
+  const handleGetImg = useCallback(() => {
     if(review.img) {
       getDownloadURL(ref(storage, `reviews/${review.randomId}`))
       .then((url) => {
@@ -80,6 +76,14 @@ const ReviewDescription = ({
         console.log(error)
       })
     }
+  }, [review])
+
+  useEffect(() => {
+    handleGetAuthLikes()
+  }, [handleGetAuthLikes])
+
+  useEffect(() => {
+    handleGetImg()
     if(review) {
       const findRatingFromUser = review?.ratingUsers?.find(user => user.userId === userId)
       if(findRatingFromUser) setRating(findRatingFromUser.rating)
@@ -106,7 +110,7 @@ const ReviewDescription = ({
               <h2>{review.title}</h2>
               <div dangerouslySetInnerHTML={{__html: review.description}}></div>
               <div className='d-flex flex-row gap-2'>
-                <p>{t('tags')}</p>
+                <p>{t('tags')}:</p>
                 <div className='d-flex flex-row gap-2'>
                   {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
                 </div>
@@ -118,7 +122,7 @@ const ReviewDescription = ({
               <h2>{review.title}</h2>
               <div dangerouslySetInnerHTML={{__html: review.description}}></div>
               <div className='d-flex flex-row gap-2'>
-                <p>{t('tags')}</p>
+                <p>{t('tags')}:</p>
                 <div className='d-flex flex-row gap-2'>
                   {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
                 </div>

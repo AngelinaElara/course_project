@@ -9,9 +9,11 @@ import trash from '../../../ui/trash.png'
 import block from '../../../ui/block.png'
 import unblock from '../../../ui/ublock.png'
 import CreateCategory from './components/CreateCategory'
+import {ReactComponent as Heart} from '../../../ui/heart.svg'
 
 const AdminProfile = ({
-  tableStyle
+  tableStyle,
+  handleLogoutBtnClick
 }) => {
   const [isCheckAll, setIsCheckAll] = useState(false)
   const [isCheck, setIsCheck] = useState([])
@@ -19,6 +21,15 @@ const AdminProfile = ({
   const [isNewCategoryOpen, setIsNewCategoryOpen] = useState(false)
   const {request} = useHttp()
   const { t } = useTranslation()
+
+  const handleFetchUsers = useCallback(async () => {
+    try { 
+      let getUsers = await request('/users/', 'GET') 
+      setUsers(getUsers)
+    } catch (e) {
+      console.error(e)
+    }  
+  }, [request])
 
    const handleSelectAllCheckboxes = () => {
     setIsCheckAll(!isCheckAll)
@@ -86,15 +97,6 @@ const AdminProfile = ({
     setIsNewCategoryOpen(true)
   }
 
-  const handleFetchUsers = useCallback(async () => {
-    try { 
-      let getUsers = await request('/users/', 'GET') 
-      setUsers(getUsers)
-    } catch (e) {
-      console.error(e)
-    }  
-  }, [request])
-  
   useEffect(() => {
     handleFetchUsers()
   }, [handleFetchUsers])
@@ -106,7 +108,19 @@ const AdminProfile = ({
   }, [users, isCheck])
 
   return (
-    <>
+    <div 
+      className='d-flex justify-content-center align-items-center flex-column position-relative' 
+      style={{padding: '60px 20px'}}
+    >
+      <h1>{t('users')}</h1>
+      <Button 
+        variant='secondary' 
+        className='position-absolute' 
+        style={{top: '10px', right: '20px'}}
+        onClick={handleLogoutBtnClick} 
+      >
+        {t('logout')} 
+      </Button>
       <div className='d-flex justify-content-between align-items-center flex-row gap-4'>  
         <button 
           className='btn d-flex justify-content-center align-items-center'
@@ -169,10 +183,15 @@ const AdminProfile = ({
                         type={'checkbox'} 
                       />
                     </td>
-                    <td>
-                      <Link to={`/user/${user._id}`}>
+                    <td className='d-flex flex-row gap-2'>
+                      <Link to={`/profile/${user._id}`}>
                         {user.name}
-                      </Link></td>
+                      </Link>
+                      <div className='d-flex flex-row gap-1 align-items-center'>
+                        {user.likes}
+                        <Heart style={{width: '10px', height: '10px', fill: 'red'}}/>
+                      </div>
+                    </td>
                     <td>{user.blocked ? t('block') : t('unBlock')}</td>
                     {user.blocked 
                       ? ''
@@ -197,7 +216,7 @@ const AdminProfile = ({
         : ''
       }
       {isNewCategoryOpen ? <CreateCategory setIsNewCategoryOpen={setIsNewCategoryOpen}/> : ''}
-    </>
+    </div>
   )
 }
 
