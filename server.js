@@ -18,7 +18,7 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.use(express.json({extended: true}))
+app.use(express.json({extended: true})) 
 app.use('/auth', require('./routes/auth.routes'))
 app.use('/review', require('./routes/review.routes'))
 app.use('/users', require('./routes/user.routes'))

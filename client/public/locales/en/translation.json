@@ -55,5 +55,10 @@
   "admin": "Give admin rights",
   "newCategory": "Add new category",
   "status": "Status",
-  "latinLetters": "Only latin letters"
+  "latinLetters": "Only latin letters",
+  "confirmEmail": "Your email is being verified",
+  "sendMessage": "We have sent a confirmation email to your email",
+  "wasLogin": "You was login",
+  "closePage": "Please, close this window",
+  "wasn'tLogin": "You wasn't login"
 }

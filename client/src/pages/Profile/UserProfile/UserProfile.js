@@ -205,10 +205,13 @@ const UserProfile = ({
         </Form.Select>
       </div>
       {dataReviews.length 
-        ? <Table style={tableStyle}>
+        ? <Table style={tableStyle} className='table-borderless'>
             <thead>
               <tr>
-                <th scope='col' className='d-flex gap-2 flex-row justify-content-start align-items-center'>
+                <th 
+                  scope='col' 
+                  className='d-flex gap-2 flex-row justify-content-start align-items-center'
+                >
                   {t('check')}
                   <input 
                     id='selectAll'

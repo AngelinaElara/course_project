@@ -154,7 +154,7 @@ const AdminProfile = ({
         </Button> 
       </div>
       {users.length 
-        ? <Table style={tableStyle}>
+        ? <Table style={tableStyle} className='table-borderless'>
             <thead>
               <tr>
                 <th scope='col' className='d-flex gap-2 flex-row justify-content-start align-items-center'>

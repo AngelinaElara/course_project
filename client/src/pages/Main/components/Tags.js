@@ -14,7 +14,7 @@ const Tags = ({tags}) => {
   }
 
   return (
-    <div style={{marginTop: '30px'}}>
+    <div style={{marginTop: '30px', background: '#ccccff', padding: '10px', borderRadius: '5px'}}>
       <p style={{fontWeight: '500'}}>{t('tags')}</p>
       <TagCloud
         minSize={12}

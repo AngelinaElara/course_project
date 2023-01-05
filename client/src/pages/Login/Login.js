@@ -35,6 +35,7 @@ const Login = () => {
   : 'm-2 p-2 shadow-sm rounded border border-light'
 
   const handleFormSubmit = async () => {
+    console.log(inputEmailValue)
     try {
       const form = {
         email: inputEmailValue,

@@ -13,6 +13,7 @@ import Error from '../components/OAuth/components/Error'
 import TagsList from '../pages/TagsList/TagsList'
 import ReviewList from '../components/ReviewList'
 import UserProfile from '../pages/Profile/UserProfile/UserProfile'
+import ConfirmEmail from '../pages/ConfirmEmail/ConfirmEmail'
 
 export const useRoutes = (
   isAuth,
@@ -103,6 +104,7 @@ export const useRoutes = (
       <Route path='/login/success' element={<Success />} />
       <Route path='/login/error' element={<Error />} />
       <Route path='/search' element={<TagsList />}/>
+      <Route path='/verify' element={<ConfirmEmail />}/>
     </Routes>
   )
 }

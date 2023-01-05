@@ -15,7 +15,6 @@ passport.use(new VkStrategy({
   scope: ['profile', 'email']
 }, async (req, accessToken, refreshToken, profile, cb) => {
   try {
-    console.log(profile)
     const email = profile.emails[0].value
     const name = profile.name.givenName
     const user = await User.findOne({email}) 
@@ -30,7 +29,7 @@ passport.use(new VkStrategy({
       req.user = userDB
       return cb(null, userDB)
     } else {
-      const user = new User({name, email})
+      const user = new User({name, email, confirmed: true})
       await user.save()
       const token = jwt.sign(
         {userId: user.id},

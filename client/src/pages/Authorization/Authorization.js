@@ -19,10 +19,8 @@ const Authorization = () => {
   const [inputConfirmPasswordValue, setInputConfirmPasswordValue] = useState('')
   const [isFormReset, setIsFormReset] = useState(false)
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
-  const [warning, setWarning] = useState('') 
+  const [notification, setNotification] = useState('') 
   const {request, error} = useHttp()
-  const context = useContext(Context)
-  const navigate = useNavigate()
   const { t } = useTranslation()
 
   const inputNameClassName = inputNameValue.length
@@ -62,10 +60,8 @@ const Authorization = () => {
           password: inputPasswordValue,
         }
         const data = await request('auth/register', 'POST', form)
+        setNotification(t('sendMessage'))
         setIsFormReset(true)
-        context.login(data.UserId, data.name, data.role)
-        navigate('/')
-        window.location.reload()
       }
     } catch (error) { 
       console.error(error)
@@ -74,9 +70,9 @@ const Authorization = () => {
 
   useEffect(()=> {
     if(error) {
-      setWarning(error)
+      setNotification(error)
       setTimeout(() => {
-        setWarning('')
+        setNotification('')
       }, 3000)
     }
   }, [error])
@@ -110,7 +106,7 @@ const Authorization = () => {
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}> 
       <h1 className='text-secondary'>{t('authorization')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
-        <div style={{color: 'red'}}>{warning}</div>
+        <p style={{width: '200px'}}>{notification}</p>
         <Form.Control 
           className={inputNameClassName}
           style={{height: '40px', outline: 'none'}} 

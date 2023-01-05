@@ -216,7 +216,7 @@ const CreateReview = () => {
               ref={editor}
               config={config}
               tabIndex={1}
-              value={''}
+              value={inputDescriptionValue}
               onChange={(newContent) => handleInputDescriptionChange(newContent)}
             />
           </div>

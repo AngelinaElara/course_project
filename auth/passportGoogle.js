@@ -29,7 +29,7 @@ passport.use(new GoogleStrategy({
       req.user = userDB
       return cb(null, userDB)
     } else {
-      const user = new User({name, email})
+      const user = new User({name, email, confirmed: true})
       await user.save()
       const token = jwt.sign(
         {userId: user.id},
