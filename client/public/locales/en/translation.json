@@ -61,5 +61,6 @@
   "wasLogin": "You was login",
   "closePage": "Please, close this window",
   "wasn'tLogin": "You wasn't login",
-  "notification": "Your review has been published"
+  "notification": "Your review has been published",
+  "wrong": "Something went wrong"
 }

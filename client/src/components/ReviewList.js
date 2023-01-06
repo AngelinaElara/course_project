@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next'
 import moment from 'moment'
 
 const ReviewList = ({
-  data
+  data,
+  title
 }) => {
   const [getData, setGetData] = useState([])
   const context = useContext(Context)
@@ -51,10 +52,10 @@ const ReviewList = ({
   useEffect(() => {
     handleSetImg()
   }, [getData])
-  
+
   return (
     <div style={{marginTop: '20px'}}>
-      <h1 style={{fontSize: '25px'}}>{t('foundReviews')}</h1>
+      <h1 style={{fontSize: '25px'}}>{title ? t('foundReviews') : ''}</h1>
       {getData 
         ? getData.map((review)=> {
           return (
@@ -71,7 +72,7 @@ const ReviewList = ({
                 >
                   <div style={{minWidth: '150px'}}>
                     <h2 style={{fontSize: '20px'}}>{review.title}</h2>
-                    <p className='d-flex gap-2 flex-row'>
+                    <p className='d-flex gap-2 flex-row' >
                       {t('category')}:
                       <span style={{textTransform: 'capitalize'}}>
                         {review.category}
@@ -81,7 +82,7 @@ const ReviewList = ({
                       <p>{t('authRating')}: {review.ratingAuth}</p> 
                       <p style={{color: 'rgb(255, 187, 0)'}}>&#9733;</p>
                     </p>
-                    <p className='d-flex flex-row  align-items-center justify-content-start gap-1'>
+                    <p className='d-flex flex-row align-items-center justify-content-start gap-1'>
                       <p >{t('userRating')}: {review.finalRating}</p>
                       <p style={{color: 'rgb(255, 187, 0)'}}>&#9733;</p>
                     </p>

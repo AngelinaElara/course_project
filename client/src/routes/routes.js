@@ -47,7 +47,10 @@ export const useRoutes = (
           path='/review/:id' 
           element={<AuthReviewDetails />} 
         />
-        <Route path='/search' element={<TagsList />}/>
+        <Route 
+          path='/search' 
+          element={<TagsList title={'foundReviews'}/>}
+        />
       </Routes>
     )
   } else if(isAuth && role === 'user') {
@@ -77,7 +80,10 @@ export const useRoutes = (
           path='/review/:id' 
           element={<AuthReviewDetails />} 
         />
-        <Route path='/search' element={<TagsList />}/>
+        <Route 
+          path='/search' 
+          element={<TagsList title='foundReviews'/>} 
+        />
       </Routes>
     )
   }

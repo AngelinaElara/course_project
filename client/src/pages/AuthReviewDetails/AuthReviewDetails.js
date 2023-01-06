@@ -1,7 +1,5 @@
-import {useState, useEffect, useCallback, useContext} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import { useHttp } from '../../hooks/http.hook'
-import {useAuth} from '../../hooks/auth.hook'
-import { Context } from '../../context/Context'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -15,10 +13,8 @@ import { useTranslation } from 'react-i18next'
 import './style/reviewDetails.css'
 
 const AuthReviewDetails = () => {
-  const context = useContext(Context)
   const [review, setReview] = useState({})
   const [isModalActive, setIsModalActive] = useState(false)
-  const {userId} = useAuth()
   const {request} = useHttp()
   let {id}  = useParams()
   const { t } = useTranslation()
@@ -30,7 +26,7 @@ const AuthReviewDetails = () => {
     } catch (e) {
       console.error(e)
     } 
-  }, [userId, request])
+  }, [id, request])
   
   const handleBtnChangeClick = () => {
     setIsModalActive(true)
@@ -60,7 +56,7 @@ const AuthReviewDetails = () => {
     }
   }, [review])
 
-  if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
+  if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>{t('wrong')}...</h1>
 
   return (
     <Container 

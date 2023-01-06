@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import ReviewDescription from './components/ReviewDescription'
 import Comments from './components/Comments'
+import { useTranslation } from 'react-i18next'
 
 const ReviewDetails = () => {
   const [review, setReview] = useState({})
@@ -16,6 +17,7 @@ const ReviewDetails = () => {
   const {request} = useHttp()
   const {userId, userName} = useAuth()
   const isAuth = !!userId
+  const { t } = useTranslation()
 
   const handleFetchReview = useCallback(async () => {
     try { 
@@ -69,7 +71,7 @@ const ReviewDetails = () => {
     }, 2000)
   }, [])
 
-  if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>Something went wrong...</h1>
+  if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>{t('wrong')}...</h1> 
 
   return (
     <Container 

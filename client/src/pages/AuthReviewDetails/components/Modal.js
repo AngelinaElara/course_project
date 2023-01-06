@@ -82,7 +82,7 @@ const Modal = ({
 
   const handleCloseBtnClick = () => {
     setReview(false)
-    navigate(`/review/${review._id}`)
+    navigate(`/profile/${review._id}`)
   }  
 
   const handleSubmitBtnClick = async () => {

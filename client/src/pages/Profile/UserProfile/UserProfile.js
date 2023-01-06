@@ -41,7 +41,7 @@ const UserProfile = ({
     } catch (e) {
       console.error(e)
     } 
-  }, [userId, request]) 
+  }, [userId, request, id]) 
 
   const handleGetCategories = useCallback(async () => {
     try {
