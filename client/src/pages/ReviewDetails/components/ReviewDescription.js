@@ -109,28 +109,22 @@ const ReviewDescription = ({
             <div style={{width: '50%'}}>
               <h2>{review.title}</h2>
               <div dangerouslySetInnerHTML={{__html: review.description}}></div>
-              <div className='d-flex flex-row gap-2'>
-                <p>{t('tags')}:</p>
-                <div className='d-flex flex-row gap-2'>
-                  {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
-                </div>
-              </div>
             </div>
           </Col>
         : <Col sm className='d-flex flex-row'>
             <div>
               <h2>{review.title}</h2>
               <div dangerouslySetInnerHTML={{__html: review.description}}></div>
-              <div className='d-flex flex-row gap-2'>
-                <p>{t('tags')}:</p>
-                <div className='d-flex flex-row gap-2'>
-                  {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
-                </div>
-              </div>
             </div>
           </Col>
       } 
       <Row sm className='d-flex flex-column gap-3 mt-2'>
+        <div className='d-flex gap-2'>
+          <p>{t('tags')}:</p>
+          <div className='d-flex gap-2'>
+            {review?.tags?.map((tag, index) => <p key={index}>#{tag.value}</p>)}
+          </div>
+        </div>
         <p className='d-flex flex-row gap-2'>
           {t('authRating')}: {review.ratingAuth} 
           <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
