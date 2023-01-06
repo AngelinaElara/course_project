@@ -69,7 +69,7 @@ const ReviewList = ({
                   className={review.img ? 'd-flex flex-row justify-content-between align-items-start gap-6' : ''} 
                   style={context.lightTheme ? {textDecoration: 'none', color: 'black'} : {textDecoration: 'none', color: 'white'}}
                 >
-                  <div>
+                  <div style={{minWidth: '150px'}}>
                     <h2 style={{fontSize: '20px'}}>{review.title}</h2>
                     <p className='d-flex gap-2 flex-row'>
                       {t('category')}:
@@ -77,13 +77,13 @@ const ReviewList = ({
                         {review.category}
                       </span>
                     </p>
-                    <p className='d-flex flex-row gap-2'>
+                    <p className='d-flex flex-row align-items-center justify-content-start gap-1'>
                       <p>{t('authRating')}: {review.ratingAuth}</p> 
-                      <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
+                      <p style={{color: 'rgb(255, 187, 0)'}}>&#9733;</p>
                     </p>
-                    <p className='d-flex flex-row gap-2'>
-                      <p>{t('userRating')}: {review.finalRating} </p>
-                      <span style={{color: 'rgb(255, 187, 0)'}}>&#9733;</span>
+                    <p className='d-flex flex-row  align-items-center justify-content-start gap-1'>
+                      <p >{t('userRating')}: {review.finalRating}</p>
+                      <p style={{color: 'rgb(255, 187, 0)'}}>&#9733;</p>
                     </p>
                     <p className='d-flex flex-row gap-2' style={{color: '#787878', fontSize: '12px'}}>
                       {t('publishDate')}:

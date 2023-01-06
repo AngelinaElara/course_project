@@ -12,6 +12,7 @@ import Button from 'react-bootstrap/Button'
 import { useTranslation } from 'react-i18next'
 import Tags from '../../components/Tags/Tags'
 import JoditEditor from 'jodit-react'
+import Notification from './components/Notification'
 
 const config = {
   width: 'auto',
@@ -48,6 +49,7 @@ const CreateReview = () => {
   const [data, setData] = useState([])
   const [categories, setCategories] = useState([])
   const [currentUserBlocked, setCurrentUserBlocked] = useState(false)
+  const [isNotification, setIsNotification] = useState(false)
   const {userId, userName} = useAuth()
   const {request} = useHttp()
   const randomId = Date.now().toString(16) + Math.floor(Math.random() * 100000)
@@ -115,6 +117,7 @@ const CreateReview = () => {
         }
         const data = await request('/review/create', 'POST', review)
         setIsFormReset(true)
+        setIsNotification(true)
       } catch (error) {
         console.log(error)
       }
@@ -161,11 +164,21 @@ const CreateReview = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    if(isNotification) {
+      setTimeout(() => {
+        setIsNotification(false)
+      }, 3000)
+    }
+  }, [isNotification])
+
+  console.log(isNotification)
+
   if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
 
   return (
     <div 
-      className='d-flex justify-content-center align-items-center flex-column' 
+      className='d-flex justify-content-center align-items-center flex-column position-relative' 
       style={{paddingTop: '60px'}}
     >
       <h1 style={{marginTop: '10px'}}>{t('newReview')}</h1>
@@ -255,6 +268,8 @@ const CreateReview = () => {
           {t('leaveFeedback')}
         </Button>
       </Form>
+
+      {isNotification ? <Notification t={t} /> : ''} 
     </div>
   )
 }

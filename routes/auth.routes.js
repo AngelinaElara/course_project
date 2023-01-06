@@ -8,15 +8,14 @@ const config = require('config')
 const router = Router()
 const nodemailer = require('nodemailer')
 const path = require('path')
-const ck = require('ckey')
 
 let transporter = nodemailer.createTransport({
-  host: ck.HOST,
-  port: ck.PORT,
+  host: config.get('HOST'),
+  port: config.get('PORT'),
   secure: false,
   auth: {
-    user: ck.USER,
-    pass: ck.PASSWORD
+    user: config.get('USER'),
+    pass: config.get('PASSWORD')
   },
   tls: {rejectUnauthorized: false}
 })
@@ -58,7 +57,7 @@ router.post(
       html: `
         <h1>${name}! Thank you for your registration</h1>
         <p>Please confirm your Email</p>
-        <a href='http://localhost:3000/verify?token=${emailToken}/'>Verify your Email</a>
+        <a href='http://5-180-180-221.cloud-xip.com:5000/verify?token=${emailToken}/'>Verify your Email</a>
       `
     }
 

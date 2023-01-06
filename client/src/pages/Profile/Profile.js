@@ -6,8 +6,7 @@ import UserProfile from './UserProfile/UserProfile'
 import AdminProfile from './AdminProfile/AdminProfile'
 import axios from 'axios'
 
-const Profile = ({
-}) => {
+const Profile = () => {
   const {userId} = useAuth() 
   const {request} = useHttp()
   const context = useContext(Context)
@@ -32,7 +31,7 @@ const Profile = ({
             userId={userId}
             handleLogoutBtnClick={handleLogoutBtnClick}
           />
-        }
+        } 
     </>
   )
 }

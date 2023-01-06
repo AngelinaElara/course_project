@@ -9,10 +9,8 @@ import { Context } from './context/Context'
 const App = () => {
   const [lightTheme, setLightTheme] = useState(JSON.parse(localStorage.getItem('theme') || true))
   const [language, setLanguage] = useState(JSON.parse(localStorage.getItem('language')) || 'en')
-  const [isImage, setIsImage] = useState(false)
-  const [tagsList, setTagsList] = useState([])
   const {login, logout, userId, userName, role} = useAuth()
-  const {ratingAuth, imageUrl} = useReview()
+  const {imageUrl, isImage} = useReview()
   const isAuth = !!userId
   const routes = useRoutes(isAuth, role)
   const styleBody = lightTheme 
@@ -21,7 +19,7 @@ const App = () => {
 
   return (
     <Context.Provider value={{
-      userName, userId, login, logout, isAuth, ratingAuth, imageUrl, isImage, lightTheme, language, role, tagsList
+      userName, userId, login, logout, isAuth, imageUrl, isImage, lightTheme, language, role
     }}>
       <div 
         style={styleBody} 

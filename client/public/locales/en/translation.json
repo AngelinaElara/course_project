@@ -60,5 +60,6 @@
   "sendMessage": "We have sent a confirmation email to your email",
   "wasLogin": "You was login",
   "closePage": "Please, close this window",
-  "wasn'tLogin": "You wasn't login"
+  "wasn'tLogin": "You wasn't login",
+  "notification": "Your review has been published"
 }

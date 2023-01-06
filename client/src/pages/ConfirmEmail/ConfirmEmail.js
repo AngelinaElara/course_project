@@ -1,4 +1,4 @@
-import {useEffect, useCallback, useState, useContext} from 'react'
+import {useEffect, useCallback, useContext} from 'react'
 import { useHttp } from '../../hooks/http.hook'
 import {useSearchParams, useNavigate} from 'react-router-dom'
 import { Context } from '../../context/Context'
@@ -23,7 +23,7 @@ const ConfirmEmail = () => {
     } catch(error) {
       console.log(error)
     }
-  }, [request])
+  }, [request, token])
 
   useEffect(() => {
     handleConfirmUser()

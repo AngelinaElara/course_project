@@ -65,9 +65,9 @@ const Main = () => {
   return (
     <Container style={{padding: '60px 20px'}} className='position-relative'>
       <Row className='gy-5'>
-        <Col sm={4} className='d-flex flex-column align-items-start'>
+        <Col sm={4} className='d-flex flex-column align-items-start gap-2'>
           <SelectLanguage />
-          {tags ? <Tags tags={tags}/> : ''}
+          {tags.length ? <Tags tags={tags}/> : ''}
         </Col>
         <Col sm={8}>
           <ButtonsReviews 

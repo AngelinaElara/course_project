@@ -147,7 +147,7 @@ const UserProfile = ({
       style={{padding: '60px 20px'}}
     >
       <h1>{t('myReviews')}</h1>
-      {currentUserBlocked
+      {currentUserBlocked || id
         ? '' 
         : <Link 
             to={`/new`}
@@ -161,14 +161,17 @@ const UserProfile = ({
             />
           </Link>
       }
-      <Button 
-        variant='secondary' 
-        className='position-absolute' 
-        style={{top: '10px', right: '20px'}}
-        onClick={handleLogoutBtnClick} 
-      >
-        {t('logout')}
-      </Button>
+      {id 
+        ? '' 
+        : <Button 
+            variant='secondary' 
+            className='position-absolute' 
+            style={{top: '10px', right: '20px'}}
+            onClick={handleLogoutBtnClick} 
+          >
+            {t('logout')}
+          </Button>
+      }
       <div className='d-flex justify-content-between align-items-center flex-row gap-4'>  
         <button 
           className='btn d-flex justify-content-center align-items-center'

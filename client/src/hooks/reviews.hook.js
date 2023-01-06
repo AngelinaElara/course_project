@@ -1,13 +1,13 @@
 import {useState, useCallback, useEffect} from 'react'
 
 export const useReview = () => {
-  const [ratingAuth, setRatingAuth] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
+  const [isImage, setIsImage] = useState(false)
 
-  const setData = useCallback((rating, url) => {
-    setRatingAuth(rating)
+  const setData = useCallback(( url, image) => {
     setImageUrl(url)
+    setIsImage(image)
   }, [])
 
-  return {setData, ratingAuth, imageUrl}
+  return {setData, imageUrl, isImage}
 }

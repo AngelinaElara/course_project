@@ -8,11 +8,9 @@ export const Context = createContext({
   login: noop,
   logout: noop,
   isAuth: false,
-  ratingAuth: null,
   imageUrl: null,
   isImage: false,
   lightTheme: true,
   language: 'en',
-  role: '',
-  tagsList: null,
+  role: ''
 })

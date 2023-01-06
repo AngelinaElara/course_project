@@ -82,7 +82,7 @@ const Modal = ({
 
   const handleCloseBtnClick = () => {
     setReview(false)
-    navigate('/')
+    navigate(`/review/${review._id}`)
   }  
 
   const handleSubmitBtnClick = async () => {
@@ -92,7 +92,8 @@ const Modal = ({
         category: categoryValue,
         description: inputDescriptionInitialValue,
         tags: tags, 
-        img: context.isImage,
+        // If the user does not change the image, then the value from the database remains, otherwise true (changed the image)
+        img: !context.isImage ? review.img : context.isImage,
         ratingAuth: rating,
       } 
       if(context.imageUrl !== null) {

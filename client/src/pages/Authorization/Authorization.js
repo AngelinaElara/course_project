@@ -1,5 +1,5 @@
-import {useState, useEffect, useContext} from 'react'
-import {Link, useNavigate} from 'react-router-dom'
+import {useState, useEffect} from 'react'
+import {Link} from 'react-router-dom'
 import {useHttp} from '../../hooks/http.hook'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -8,7 +8,6 @@ import {
   validateInputEmailValue,
   validateInputPasswordValue
 } from '../../utils/helpers'
-import { Context } from '../../context/Context'
 import OAuth from '../../components/OAuth/OAuth'
 import { useTranslation } from 'react-i18next'
 
@@ -106,7 +105,7 @@ const Authorization = () => {
     <div className='d-flex flex-column justify-content-center align-items-center' style={{padding: '80px 0'}}> 
       <h1 className='text-secondary'>{t('authorization')}</h1>
       <Form className='d-flex flex-column justify-content-center align-items-center border p-3 rounded shadow-lg mb-5'>
-        <p style={{width: '200px'}}>{notification}</p>
+        <p style={{width: '200px', fontSize: '12px'}}>{notification}</p>
         <Form.Control 
           className={inputNameClassName}
           style={{height: '40px', outline: 'none'}} 

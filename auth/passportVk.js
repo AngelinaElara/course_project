@@ -25,18 +25,18 @@ passport.use(new VkStrategy({
         config.jwtSecret,
         {expiresIn: '1h'}
       )
-      const userDB = {token, UserId: user.id, name: user.name}
+      const userDB = {UserId: user.id, name: user.name, role: user.role}
       req.user = userDB
       return cb(null, userDB)
     } else {
-      const user = new User({name, email, confirmed: true})
+      const user = new User({name, email, confirmed: true, role: 'user'})
       await user.save()
       const token = jwt.sign(
         {userId: user.id},
         config.jwtSecret,
         {expiresIn: '1h'}
       )
-      const userDB = {token, UserId: user.id, name: user.name}
+      const userDB = {UserId: user.id, name: user.name, role: user.role}
       req.user = userDB
       return cb(null, userDB)
     }

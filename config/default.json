@@ -7,5 +7,9 @@
   "GITHUB_ID": "8b5cacca463a84c27193",
   "GITHUB_SECRET_KEY": "3d88ddfc47fd5b00f8863f30907227fb07d1045a",
   "VK_ID": "51509782",
-  "VK_SECRET_KEY": "PJlWpD9g0nxHLDt0NjzF"
+  "VK_SECRET_KEY": "PJlWpD9g0nxHLDt0NjzF",
+  "HOST": "smtp.gmail.com",
+  "PORT": "587",
+  "USER": "youchoice25@gmail.com",
+  "PASSWORD": "xzunncybrlajraqw"
 } 

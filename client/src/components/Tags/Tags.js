@@ -18,7 +18,7 @@ const Tags = ({
     setTags([...tags.filter((_, index) => index !== indexToRemove)])
   }
   
-  const handleAddTags = event => {
+  const handleAddTags = (event) => {
     if (event.target.value !== '') {
       setTags([...tags, {value: event.target.value, count: 0}])
       setTagValue('')

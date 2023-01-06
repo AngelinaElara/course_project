@@ -149,7 +149,9 @@ const AdminProfile = ({
         <Button variant='light' onClick={handleGiveAdminRights}>
           {t('admin')}
         </Button>
-        <Button onClick={handleNewCategoryButtonClick}>
+        <Button 
+          onClick={handleNewCategoryButtonClick}
+        >
           {t('newCategory')}
         </Button> 
       </div>
@@ -197,7 +199,7 @@ const AdminProfile = ({
                       ? ''
                       : <td>
                         <Link 
-                          to={`/review/${user._id}`} 
+                          to={`/new/${user._id}`} 
                           style={{top: '15px', left: '20px'}}
                         > 
                           <img 

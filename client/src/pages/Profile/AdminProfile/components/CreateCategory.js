@@ -61,7 +61,11 @@ const CreateCategory = ({
             className={isError ? 'border-danger' : ''}
           />
           <div style={{color: 'red', fontSize: '12px'}}>{warning}</div>
-          <Button onClick={handleAddCategoryClick}>{t('newCategory')}</Button>
+          <Button 
+            onClick={handleAddCategoryClick}
+          >
+            {t('newCategory')}
+          </Button>
       </Container>
     </div>
   )

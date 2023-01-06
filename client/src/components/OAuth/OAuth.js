@@ -17,9 +17,8 @@ const OAuth = () => {
       .catch((err) => {
         navigate('/login/error')
       })
-
     if (response && response.data) {
-      context.login(response.data.token, response.data.UserId, response.data.name)
+      context.login(response.data.UserId, response.data.name, response.data.role)
       window.location.reload()
     }
   }
