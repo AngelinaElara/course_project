@@ -56,7 +56,7 @@ const AuthReviewDetails = () => {
     }
   }, [review])
 
-  if(!Object.keys(review).length) return <h1 className='mt-2' style={{textAlign: 'center'}}>{t('wrong')}...</h1>
+  if(!review) return <h1 className='mt-2' style={{textAlign: 'center'}}>{t('wrong')}...</h1>
 
   return (
     <Container 

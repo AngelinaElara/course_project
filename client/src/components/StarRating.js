@@ -33,7 +33,7 @@ const StarRating = ({
   }
 
   useEffect(() => {
-    rating ? setIsButtonDisabled(true) : setIsButtonDisabled(false)
+    rating > 0 ? setIsButtonDisabled(true) : setIsButtonDisabled(false)
   }, [rating])
 
   return (

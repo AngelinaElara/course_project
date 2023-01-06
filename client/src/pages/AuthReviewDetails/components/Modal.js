@@ -47,7 +47,7 @@ const Modal = ({
   const [inputDescriptionInitialValue, setInputDescriptionInitialValue] = useState(review.description)
   const [tags, setTags] = useState(review.tags)
   const [allTags, setAllTags] = useState([])
-  const [rating, setRating] = useState(review.ratingAuth)
+  const [rating, setRating] = useState(0)
   const [categories, setCategories] = useState([])
   const reviewId = review._id
   const {request} = useHttp()
@@ -82,7 +82,8 @@ const Modal = ({
 
   const handleCloseBtnClick = () => {
     setReview(false)
-    navigate(`/profile/${review._id}`)
+    window.location.reload()
+    navigate(`/review/${review._id}`)
   }  
 
   const handleSubmitBtnClick = async () => {
@@ -94,13 +95,15 @@ const Modal = ({
         tags: tags, 
         // If the user does not change the image, then the value from the database remains, otherwise true (changed the image)
         img: !context.isImage ? review.img : context.isImage,
-        ratingAuth: rating,
+        ratingAuth: rating > 0 ? rating : review.ratingAuth,
       } 
       if(context.imageUrl !== null) {
         uploadBytes(storageRef, context.imageUrl, metadata).then((snapshot) => {
           console.log('Uploaded a blob or file!')
         }) 
       }
+      window.location.reload()
+      navigate(`/review/${review._id}`)
       setReview(false)
       const sendData = await request(`/review/change/${reviewId}`, 'PATCH', modifiedReview)
     } catch (error) {

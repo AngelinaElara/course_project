@@ -172,8 +172,6 @@ const CreateReview = () => {
     }
   }, [isNotification])
 
-  console.log(isNotification)
-
   if(currentUserBlocked) return <h1 style={{textAlign: 'center', marginTop: '30px'}}>{t('notReview')}</h1>
 
   return (
