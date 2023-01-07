@@ -82,8 +82,8 @@ const Modal = ({
 
   const handleCloseBtnClick = () => {
     setReview(false)
+    navigate(`/profile`)
     window.location.reload()
-    navigate(`/review/${review._id}`)
   }  
 
   const handleSubmitBtnClick = async () => {
@@ -102,9 +102,9 @@ const Modal = ({
           console.log('Uploaded a blob or file!')
         }) 
       }
-      window.location.reload()
-      navigate(`/review/${review._id}`)
       setReview(false)
+      navigate(`/profile`) 
+      window.location.reload()
       const sendData = await request(`/review/change/${reviewId}`, 'PATCH', modifiedReview)
     } catch (error) {
       console.error(error)
